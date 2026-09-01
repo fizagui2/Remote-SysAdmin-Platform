@@ -6,7 +6,7 @@ Senior Project for **CSCI 4390 – Senior Project**
 
 * Francisco Izaguirre - GitGub: fizagui2
 * Luis Chavez - GitHub: LuisJC-creator
-* Mauricio Garza - GitHub: 
+* Mauricio Garza - GitHub: mgdgit
 * Omar Villalobos - GitHub: oumarvi76
 
 ## Overview
