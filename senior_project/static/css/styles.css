@@ -6,3 +6,11 @@ body{
     background:
         linear-gradient(180deg, #162036, #000000);
 }
+
+.dark-mode{
+    color:#000000;
+}
+
+.clear-mode{
+    color: #ffffff;
+}
