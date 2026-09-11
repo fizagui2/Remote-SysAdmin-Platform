@@ -1,4 +1,5 @@
-using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using WindowsAgent.Models;
 
 namespace WindowsAgent.Services;
@@ -16,7 +17,11 @@ public class ApiClient
 
     public async Task<string> SendSystemInfoAsync(SystemInfo systemInfo)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/agent/report/", systemInfo);
+        //serializing to a string first since django dev simple server does not accept chunked requests 
+        var json = JsonSerializer.Serialize(systemInfo);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("api/agent/report/", content);
         var body = await response.Content.ReadAsStringAsync();
         return $"{(int)response.StatusCode} {response.ReasonPhrase}: {body}";
     }
