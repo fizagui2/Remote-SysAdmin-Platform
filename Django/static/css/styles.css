@@ -1,20 +1,46 @@
+:root{
+    --base-color: white;
+    --base-variant: #e8e9ed;
+    --text-color: #111528;
+    --secondary-text:#232738;
+    --primary-color:#3a435d;
+    --accent-color:#0071ff;
+    --buttons-color:#1a003a;
+    --buttons-border:#b3a4ff;
+}
+
+.darkmode{
+    --base-color: white;
+    --base-variant: #e8e9ed;
+    --text-color:#111528;
+    --secondary-text:#232738;
+    --primary-color:#3a435d;
+    --accent-color:#0071ff;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
 body{
     margin:0;
     padding:0;
     font-family:'Roboto', sans-serif;
-    color:white;
+    color: var(--text-color);
     background:
         linear-gradient(180deg, #162036, #000000);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.dark-mode{
-    color:#000000;
+button{
+    color: var(--buttons-color);
+    border-width: 3px;
+    border-color: var(--buttons-border);
 }
 
-.clear-mode{
-    color: #ffffff;
-}
-
+/*DARKMODE STUFF*/
 #theme-switch{
     height: 50px;
     width: 50px;
@@ -26,4 +52,20 @@ body{
     position: fixed;
     top: 20px;
     right: 20px;
+}
+
+#theme-switch svg{
+    fill: var(--primary-color);
+}
+
+#theme-switch svg:last-child{
+    display: none;
+}
+
+.darkmode #theme-switch svg:first-child{
+    display: none;
+}
+
+.darkmode #theme-switch svg:last-child{
+    display: block;
 }
