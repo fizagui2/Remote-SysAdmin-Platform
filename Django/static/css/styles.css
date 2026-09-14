@@ -1,21 +1,24 @@
 :root{
     --base-color: white;
     --base-variant: #e8e9ed;
-    --text-color: #111528;
+    --text-color: #fefeff;
     --secondary-text:#232738;
     --primary-color:#3a435d;
     --accent-color:#0071ff;
     --buttons-color:#1a003a;
     --buttons-border:#b3a4ff;
+    --navbar-options:#080128;
+    --title:#b1d8fc;
 }
 
 .darkmode{
-    --base-color: white;
+    --base-color: rgb(0, 17, 53);
     --base-variant: #e8e9ed;
-    --text-color:#111528;
+    --text-color:#ffffff;
     --secondary-text:#232738;
     --primary-color:#3a435d;
     --accent-color:#0071ff;
+    --background:#120227;
 }
 
 
@@ -32,6 +35,10 @@ body{
     background:
         linear-gradient(180deg, #162036, #000000);
     transition: background-color 0.3s, color 0.3s;
+}
+
+h1{
+    color:var(--title);
 }
 
 button{
@@ -68,4 +75,15 @@ button{
 
 .darkmode #theme-switch svg:last-child{
     display: block;
+}
+
+/* Classes */
+.navbar_options {
+    background-color: var(--base-variant) !important;
+    color: var(--navbar-options);
+}
+
+.navbar_options .nav-link, 
+.navbar_options .navbar-brand {
+    color: var(--text-color);
 }
