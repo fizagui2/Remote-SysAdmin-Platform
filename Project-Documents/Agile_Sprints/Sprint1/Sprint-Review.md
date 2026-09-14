@@ -9,9 +9,9 @@ This sprint established the Django application and a Windows agent that sends ba
 ## Work completed
 
 - **Windows agent — Frank:** Collects the hostname and Windows version/build, prints the data as JSON, and sends it to Django once per launch. The sender and JSON request-format fix are merged.
-- **Django foundation — Omar and Luis:** Added the project structure, home page, shared templates, navigation, and styling. Luis moved the application into `Django/`. Login and dashboard routes still need to be connected.
+- **Django foundation — Omar and Luis:** Added the project structure, home page, shared templates, navigation, and styles files. Luis moved the application into `Django/`. Login and dashboard routes still need to be connected.
 - **Report receiver — Frank, unmerged:** Added `POST /api/agent/report/` and `/agent/` to display the latest report. Data stays in memory, is overwritten by the next report, and is lost on restart.
-- **Dashboard — Omar, unmerged:** Added dashboard layout, sample content, and theme styling. It is not yet connected to agent data.
+- **Dashboard — Omar, unmerged:** Added dashboard, home and login layout with navbar & footer (sample content), and theme styling. It is not yet connected to agent data. Also, implemented dark/clear mode working in templates using JavaScript (static/js/darkmode.js).
 
 ## Agent reporting
 
