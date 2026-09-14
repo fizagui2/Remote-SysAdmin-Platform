@@ -5,16 +5,17 @@
     --secondary-text:#5f6270;
     --primary-color:#3a435d;
     --accent-color:#0071ff;
-    --buttons-color:#1a003a;
+    --buttons-color:#200328;
     --buttons-border:#b3a4ff;
     --navbar-options:#080128;
     --title:#b1d8fc;
-    --background: #ffffff;
+    --background: 
+        linear-gradient(180deg, #eff8fd, #fefefe); 
 }
 
 .darkmode{
     --base-color: #120227;
-    --base-variant: #24113a;
+    --base-variant: #060226;
     --text-color:#ffffff;
     --secondary-text:#c5c5c5;
     --primary-color:#8c9eff;
@@ -22,7 +23,9 @@
     --buttons-color: #ffffff;
     --buttons-border: #8c7cff;
     --navbar-options: #ffffff;
-    --background:#120227;
+    --background:
+        linear-gradient(180deg, #162036, #000000);
+    /* #120227; */
 }
 
 
@@ -36,8 +39,7 @@ body{
     padding:0;
     font-family:'Roboto', sans-serif;
     color: var(--text-color);
-    background:
-        linear-gradient(180deg, #162036, #000000);
+    background:var(--background);
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -45,11 +47,7 @@ h1{
     color:var(--title);
 }
 
-button{
-    color: var(--buttons-color);
-    border-width: 3px;
-    border-color: var(--buttons-border);
-}
+
 
 /*DARKMODE STUFF*/
 #theme-switch{
@@ -61,7 +59,7 @@ button{
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
 }
 
@@ -91,3 +89,8 @@ button{
     color: var(--text-color);
 }
 
+.general-button{
+    color: var(--buttons-color);
+    border-width: 3px;
+    border-color: var(--buttons-border);
+}
