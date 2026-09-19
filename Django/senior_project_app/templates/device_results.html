@@ -1,0 +1,13 @@
+{% extends 'base_dshb.html' %}
+{% block title %} Test Results {% endblock %}
+
+{% block content %}
+<div class="computer-container">
+    <h1>Computer: </h1>
+    <p>Comp Information here</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/devices.js' %}"></script>
+{% endblock %}

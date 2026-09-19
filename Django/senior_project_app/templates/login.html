@@ -1,31 +1,30 @@
 {% extends 'base.html' %}
+{% block title %} 👤Login👤 {% endblock %}
 {% block content %}
+<div class="container-sm text-center login-container">
+    <h1 class="mb-5">Sign in</h1>
+    <div class="form-outline mb-4 row" data-mdb-input-initialized="true">
+        <label class="form-label col" for="typeEmailX-2">Email</label>
+        <input type="email" id="typeEmailX-2" class="form-control form-control-lg col-6">
 
-<div class="container-sm card-body p-5 text-center">
-    <h3 class="mb-5">Sign in</h3>
+    </div>
 
-    <div data-mdb-input-init="" class="form-outline mb-4" data-mdb-input-initialized="true">
-    <input type="email" id="typeEmailX-2" class="form-control form-control-lg">
-    <label class="form-label" for="typeEmailX-2" style="margin-left: 0px;">Email</label>
-    <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 40px;"></div><div class="form-notch-trailing"></div></div></div>
-
-    <div data-mdb-input-init="" class="form-outline mb-4" data-mdb-input-initialized="true">
-    <input type="password" id="typePasswordX-2" class="form-control form-control-lg">
-    <label class="form-label" for="typePasswordX-2" style="margin-left: 0px;">Password</label>
-    <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64px;"></div><div class="form-notch-trailing"></div></div></div>
+    <div class="form-outline mb-4 row" data-mdb-input-initialized="true">
+        <label class="form-label col" for="typePasswordX-2">Password</label>
+        <input type="password" id="typePasswordX-2" class="form-control form-control-lg col-6">
+        <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64px;"></div>
+            <div class="form-notch-trailing"></div>
+        </div>
+    </div>
 
     <div class="form-check d-flex justify-content-start mb-4">
     <input class="form-check-input" type="checkbox" value="" id="form1Example3">
     <label class="form-check-label" for="form1Example3"> Remember password </label>
     </div>
 
-    <button data-mdb-button-init="" data-mdb-ripple-init="" class="btn btn-primary btn-lg btn-block" type="submit" data-mdb-button-initialized="true">Login</button>
-
+    <button data-mdb-button-init="" data-mdb-ripple-init="" class="btn general-button rounded-pill px-3" type="submit" data-mdb-button-initialized="true">Login</button>
     <hr class="my-4">
-
     <button class="btn general-button rounded-pill px-3" type="submit" data-mdb-button-initialized="true"><i class="fab fa-google me-2"></i> Sign in with google</button>
-    
-
 </div>
-
 {% endblock %}
