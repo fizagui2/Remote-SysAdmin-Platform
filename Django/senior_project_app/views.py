@@ -5,6 +5,9 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 latest_report = {}
+latest_heartbeat = {}
+latest_performance = {}
+latest_processes = {}
 
 def home(request):
     return render(request, 'home.html', {})
@@ -41,5 +44,50 @@ def agent_report(request):
 
     return JsonResponse({"status": "received"})
 
+@csrf_exempt
+def agent_heartbeat(request):
+    global latest_heartbeat
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    latest_heartbeat = data
+    print("Received heartbeat:", data)
+    return JsonResponse({"status": "received"})
+
+@csrf_exempt
+def agent_performance(request):
+    global latest_performance
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    latest_performance = data
+    print("Received performance:", data)
+    return JsonResponse({"status": "received"})
+
+@csrf_exempt
+def agent_processes(request):
+    global latest_processes
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    latest_processes = data
+    print("Received process report:", data)
+    return JsonResponse({"status": "received"})
+
 def view_report(request):
-    return HttpResponse(f"<h1>Latest Agent Report</h1><pre>{latest_report}</pre>")
+    return HttpResponse(
+        "<h1>Latest Agent Report</h1>"
+        f"<h2>System Info</h2><pre>{latest_report}</pre>"
+        f"<h2>Heartbeat</h2><pre>{latest_heartbeat}</pre>"
+        f"<h2>Performance</h2><pre>{latest_performance}</pre>"
+        f"<h2>Processes</h2><pre>{latest_processes}</pre>"
+    )
