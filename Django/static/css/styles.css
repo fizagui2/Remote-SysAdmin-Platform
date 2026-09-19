@@ -5,11 +5,12 @@
     --secondary-text:#5f6270;
     --primary-color:#3a435d;
     --accent-color:#0071ff;
-    --buttons-color:#200328;
-    --buttons-border:#05072f;
+    --buttons-color:#9debff;
+    --buttons-text: #ffffff;
+    --buttons-border:#16b6f6;
     --navbar-options:#010020;
     --title:#021e38;
-    --hover-color: #00d1e0;
+    --hover-color: #012544;
     --background: 
         linear-gradient(180deg, #ffffff, #d0fdff); 
     --comp-gradient:
@@ -24,7 +25,8 @@
     --secondary-text:#c5c5c5;
     --primary-color:#8c9eff;
     --accent-color:#4d9aff;
-    --buttons-color: #ffffff;
+    --buttons-color: #090124;
+    --buttons-text: #ffffff;
     --buttons-border: #00aaff;
     --title:#80bbff;
     --hover-color: #7affe2;
@@ -92,19 +94,21 @@ h1{
 } */
 
 .navbar_options{
-    background-color: var(--background) !important;
+    background-color: var(--navbar-options) !important;
+    color: var(--base-color);
 }
 .navbar_options .navbar-brand,
 .navbar_options .nav-link, 
 .navbar_options .navbar-toggler {
-    background-color: var(--navbar-options) !important;
-    color: var(--text-color) !important;
+    background-color: var(--background) !important;
+    color: var(--base-color) !important;
 }
 
 
 .navbar_options .nav-link:hover,
 .navbar_options .nav-link:active {
     background-color: var(--hover-color) !important;
+    color:var(--base-variant) !important;
     border-radius: 4px;
     /* color: var(--accent-color) !important; */
 }
