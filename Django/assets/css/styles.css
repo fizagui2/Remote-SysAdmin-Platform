@@ -1,0 +1,124 @@
+:root{
+    --base-color: #ffffff;
+    --base-variant: #e8e9ed;
+    --text-color: #1f2231;
+    --secondary-text:#5f6270;
+    --primary-color:#3a435d;
+    --accent-color:#0071ff;
+    --buttons-color:#200328;
+    --buttons-border:#05072f;
+    --navbar-options:#010020;
+    --title:#021e38;
+    --background: 
+        linear-gradient(180deg, #ffffff, #d0fdff); 
+    --comp-gradient:
+        linear-gradient(270deg, #02154e, #c0ffff);
+    --login-cont-background:#04175b;
+}
+
+.darkmode{
+    --base-color: #120227;
+    --base-variant: #060226;
+    --text-color:#ffffff;
+    --secondary-text:#c5c5c5;
+    --primary-color:#8c9eff;
+    --accent-color:#4d9aff;
+    --buttons-color: #ffffff;
+    --buttons-border: #00aaff;
+    --title:#80bbff;
+    --navbar-options: #ffffff;
+    --background:
+        linear-gradient(180deg, #0e121d, #000000);
+    --comp-gradient:
+        linear-gradient(270deg, #d1ddff, #ffffff);
+    --login-cont-background:#f9f9fb;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:'Roboto', sans-serif;
+    color: var(--text-color);
+    background: var(--background);
+    transition: color 0.3s;
+}
+
+h1{
+    color:var(--title);
+}
+
+
+
+/*DARKMODE STUFF*/
+#theme-switch{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#theme-switch svg{
+    fill: var(--primary-color);
+}
+
+#theme-switch svg:last-child{
+    display: none;
+}
+
+.darkmode #theme-switch svg:first-child{
+    display: none;
+}
+
+.darkmode #theme-switch svg:last-child{
+    display: block;
+}
+
+/* Classes */
+.navbar_options {
+    background-color: var(--navbar-options) !important;
+}
+
+.navbar_options .nav-link, 
+.navbar_options .navbar-brand {
+    color: var(--text-color) !important;
+}
+
+
+.navbar_options .nav-link:hover,
+.navbar_options .nav-link:focus,
+.navbar_options .nav-link:active {
+    color: var(--accent-color) !important;
+}
+
+
+.general-button{
+    color: var(--buttons-color);
+    border-width: 3px;
+    border-color: var(--buttons-border);
+}
+
+.login-container{
+    background: var(--login-cont-background);
+    margin: 10px auto 10px auto;
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+}
+
+.computer-container{
+    background: var(--comp-gradient);
+    width: 200px;
+    height: 300px;
+}
