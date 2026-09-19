@@ -1,9 +1,17 @@
 namespace WindowsAgent.Models;
 
-//MVP Feature 1, fields are added as each piece of system info is collected 
-//hostname/version first; CPU, RAM, disk, IP, uptime, user, and MAC later on
+//MVP Feature 1 -- full identity payload sent once at agent startup
 public class SystemInfo
 {
     public string Hostname { get; set; } = string.Empty;
     public string WindowsVersion { get; set; } = string.Empty;
+    public string CpuModel { get; set; } = string.Empty;
+    public int CpuCores { get; set; }
+    public double TotalRamGb { get; set; }
+    public List<DriveReport> Drives { get; set; } = new();
+    public string IpAddress { get; set; } = string.Empty;
+    public double UptimeHours { get; set; }
+    public string LoggedInUser { get; set; } = string.Empty;
+    public string NetworkAdapter { get; set; } = string.Empty;
+    public string MacAddress { get; set; } = string.Empty;
 }
