@@ -28,6 +28,26 @@ def device_results(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+def agent_status(request):
+    return JsonResponse({
+        "report": {
+            "has_data": bool(latest_report),
+            "data": latest_report
+        },
+        "heartbeat": {
+            "has_data": bool(latest_heartbeat),
+            "data": latest_heartbeat
+        },
+        "performance": {
+            "has_data": bool(latest_performance),
+            "data": latest_performance
+        },
+        "processes": {
+            "has_data": bool(latest_processes),
+            "data": latest_processes
+        }
+    })
+
 @csrf_exempt
 def agent_report(request):
     global latest_report
