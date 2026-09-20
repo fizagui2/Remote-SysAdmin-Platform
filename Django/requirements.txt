@@ -1,0 +1,8 @@
+Django==6.1.1
+asgiref==3.12.1
+sqlparse==0.6.0
+
+# Postgres (Supabase) support
+psycopg[binary]
+dj-database-url
+python-dotenv
