@@ -10,22 +10,47 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Real credentials live in Django/.env, which is gitignored.
+# Copy .env.example to .env and fill it in.
+load_dotenv(BASE_DIR / '.env')
+
+
+def _env_flag(name, default):
+    return os.environ.get(name, default).strip().lower() in ('1', 'true', 'yes', 'on')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7j+kd1f4=_pv@n+h08@aifo0r13=-2$&-k8n#r85yb$vhn^)bh'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured(
+        'DJANGO_SECRET_KEY is not set. Copy Django/.env.example to Django/.env, '
+        'then generate a key with:\n'
+        '  python -c "from django.core.management.utils import '
+        'get_random_secret_key; print(get_random_secret_key())"'
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_flag('DJANGO_DEBUG', 'True')
 
-ALLOWED_HOSTS = ['*']
+# '*' is the development default. Set real hostnames in .env before deploying.
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
+    if host.strip()
+]
 
 
 # Application definition
@@ -73,12 +98,32 @@ WSGI_APPLICATION = 'senior_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASE_URL points at Supabase Postgres. Use the session pooler string
+# (port 5432, host aws-<n>-<region>.pooler.supabase.com), not the direct
+# connection: direct is IPv6-only on the free plan and will hang, then time
+# out, on the IPv4-only networks we develop on.
+#
+# Leaving it unset falls back to SQLite, so work that does not touch the
+# shared database is not blocked on credentials.
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            # Revisit once we know how the pooler holds up under the agent's
+            # reporting interval.
+            conn_max_age=0,
+            ssl_require=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
