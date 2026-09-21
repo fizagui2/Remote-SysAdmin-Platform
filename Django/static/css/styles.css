@@ -63,6 +63,11 @@ h1{
     color:var(--title);
 }
 
+img{
+    width:300px;
+    height: 300px;
+}
+
 /*DARKMODE STUFF*/
 #theme-switch{
     height: 50px;
@@ -139,10 +144,11 @@ h1{
 
 .login-container{
     background: var(--login-cont-background);
-    margin: 10px auto 10px auto;
-    padding: 20px;
+    margin: 40px auto;
+    padding: 30px;
     width: 400px;
-    height: 400px;
+    min-height: 400px;
+    box-sizing: border-box;
 }
 
 .computer-container{
@@ -154,3 +160,16 @@ h1{
 .footer-styles{
     color:var(--footer-text) !important;
 }
+
+
+
+
+/* .general-content-block{
+
+}
+
+.image-container{}
+
+.text-block{
+
+} */
