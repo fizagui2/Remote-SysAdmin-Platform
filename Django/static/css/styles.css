@@ -8,6 +8,8 @@
     --buttons-color:#9debff;
     --buttons-text: #ffffff;
     --buttons-border:#16b6f6;
+    --secondary-button-text: #18022e;
+    --secondary-buttons-border:#04012e;
     --navbar-options:#010020;
     --title:#021e38;
     --hover-color: #012544;
@@ -15,7 +17,8 @@
         linear-gradient(180deg, #ceeff3, #ffffff); 
     --comp-gradient:
         linear-gradient(270deg, #02154e, #c0ffff);
-    --login-cont-background:#04175b;
+    --login-cont-background:#abbdff;
+    --footer-text:#1d1d39;
 }
 
 .darkmode{
@@ -27,6 +30,8 @@
     --accent-color:#4d9aff;
     --buttons-color: #090124;
     --buttons-text: #ffffff;
+    --secondary-button-text: #1b0123;
+    --secondary-buttons-border:#5650fe;
     --buttons-border: #00aaff;
     --title:#80bbff;
     --hover-color: #7affe2;
@@ -36,6 +41,7 @@
     --comp-gradient:
         linear-gradient(270deg, #d1ddff, #ffffff);
     --login-cont-background:#f9f9fb;
+    --footer-text:#7070da;
 }
 
 
@@ -125,6 +131,12 @@ h1{
     border-color: var(--buttons-border);
 }
 
+.secondary-button{
+    color: var(--secondary-button-text);
+    border-width: 3px;
+    border-color: var(--secondary-buttons-border);
+}
+
 .login-container{
     background: var(--login-cont-background);
     margin: 10px auto 10px auto;
@@ -137,4 +149,8 @@ h1{
     background: var(--comp-gradient);
     width: 200px;
     height: 300px;
+}
+
+.footer-styles{
+    color:var(--footer-text) !important;
 }
