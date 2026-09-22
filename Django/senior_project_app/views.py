@@ -4,6 +4,11 @@ import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+latest_report = {}
+latest_heartbeat = {}
+latest_performance = {}
+latest_processes = {}
+
 def home(request):
     return render(request, 'home.html', {})
 
