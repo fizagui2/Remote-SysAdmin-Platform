@@ -27,6 +27,23 @@ public class ApiClient
     public Task<string> SendProcessReportAsync(ProcessReport processReport) =>
         PostAsync(processReport, "api/agent/processes/");
 
+    public Task<string> SendServiceReportAsync(ServiceReport serviceReport) =>
+        PostAsync(serviceReport, "api/agent/services/");
+
+    public Task<string> SendCommandResultAsync(CommandResult result) =>
+        PostAsync(result, "api/agent/commands/result/");
+
+    //Django can't reach the agent directly (it isn't a server), so instead the agent
+    //asks Django for any queued commands on the same interval as everything else
+    public async Task<List<AgentCommand>> GetPendingCommandsAsync(string hostname)
+    {
+        var response = await _httpClient.GetAsync($"api/agent/commands/?hostname={Uri.EscapeDataString(hostname)}");
+        response.EnsureSuccessStatusCode();
+
+        var body = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<List<AgentCommand>>(body) ?? new List<AgentCommand>();
+    }
+
     //serializing to a string first since django's dev server does not accept chunked requests
     //shared by every Send*Async method above so that fix only lives in one place
     private async Task<string> PostAsync<T>(T payload, string path)
