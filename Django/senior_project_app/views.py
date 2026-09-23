@@ -8,6 +8,9 @@ latest_report = {}
 latest_heartbeat = {}
 latest_performance = {}
 latest_processes = {}
+latest_services = {}
+pending_commands = []
+command_history = {}
 
 def home(request):
     return render(request, 'home.html', {})
@@ -48,6 +51,13 @@ def agent_status(request):
         }
     })
 
+
+
+
+
+
+
+# //////////////////////// Franks Testing Code ///////////////////////////////////////////////////
 @csrf_exempt
 def agent_report(request):
     global latest_report
@@ -103,6 +113,52 @@ def agent_processes(request):
     print("Received process report:", data)
     return JsonResponse({"status": "received"})
 
+@csrf_exempt
+def agent_services(request):
+    global latest_services
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    latest_services = data
+    print("Received service report:", data)
+    return JsonResponse({"status": "received"})
+
+@csrf_exempt
+def agent_commands(request):
+    global pending_commands
+    hostname = request.GET.get("hostname")
+    matching = [c for c in pending_commands if c.get("Hostname") == hostname]
+    pending_commands = [c for c in pending_commands if c.get("Hostname") != hostname]
+    return JsonResponse(matching, safe=False)
+
+@csrf_exempt
+def agent_command_result(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    command_history[data["CommandId"]] = data
+    print("Received command result:", data)
+    return JsonResponse({"status": "received"})
+
+def debug_queue_command(request):
+    command = {
+        "CommandId": len(pending_commands) + len(command_history) + 1,
+        "Command": request.GET.get("command"),
+        "Hostname": request.GET.get("hostname"),
+    }
+    if request.GET.get("pid"):
+        command["Pid"] = int(request.GET.get("pid"))
+    if request.GET.get("service_name"):
+        command["ServiceName"] = request.GET.get("service_name")
+    pending_commands.append(command)
+    return JsonResponse({"queued": command})
+
 def view_report(request):
     return HttpResponse(
         "<h1>Latest Agent Report</h1>"
@@ -110,4 +166,8 @@ def view_report(request):
         f"<h2>Heartbeat</h2><pre>{latest_heartbeat}</pre>"
         f"<h2>Performance</h2><pre>{latest_performance}</pre>"
         f"<h2>Processes</h2><pre>{latest_processes}</pre>"
+        f"<h2>Services</h2><pre>{latest_services}</pre>"
+        f"<h2>Pending Commands</h2><pre>{pending_commands}</pre>"
+        f"<h2>Command History</h2><pre>{command_history}</pre>"
     )
+# //////////////////////// Franks Testing Code ///////////////////////////////////////////////////
