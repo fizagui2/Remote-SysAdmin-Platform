@@ -10,6 +10,8 @@ var apiClient = new ApiClient(baseUrl);
 var systemInfoService = new SystemInfoService();
 var performanceService = new PerformanceService();
 var processService = new ProcessService();
+var serviceMonitorService = new ServiceMonitorService();
+var commandService = new CommandService();
 
 var hostname = Environment.MachineName;
 
@@ -37,6 +39,13 @@ while (true)
     var processReport = processService.Collect(hostname);
     await SendAsync(() => apiClient.SendProcessReportAsync(processReport), "processes");
 
+    var serviceReport = serviceMonitorService.Collect(hostname);
+    await SendAsync(() => apiClient.SendServiceReportAsync(serviceReport), "services");
+
+    //Features 5 and 7: check for queued commands (terminate a process, start/stop/
+    //restart a service), execute each one, and report back what happened
+    await ExecutePendingCommandsAsync();
+
     await Task.Delay(TimeSpan.FromSeconds(intervalSeconds));
 }
 
@@ -50,5 +59,22 @@ async Task SendAsync(Func<Task<string>> send, string label)
     catch (HttpRequestException ex)
     {
         Console.WriteLine($"[{label}] Could not reach server: {ex.Message}");
+    }
+}
+
+async Task ExecutePendingCommandsAsync()
+{
+    try
+    {
+        var commands = await apiClient.GetPendingCommandsAsync(hostname);
+        foreach (var command in commands)
+        {
+            var result = commandService.Execute(command);
+            await SendAsync(() => apiClient.SendCommandResultAsync(result), $"command {command.CommandId}");
+        }
+    }
+    catch (HttpRequestException ex)
+    {
+        Console.WriteLine($"[commands] Could not reach server: {ex.Message}");
     }
 }
