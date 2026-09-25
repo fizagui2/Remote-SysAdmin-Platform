@@ -7,6 +7,14 @@
     box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
 }
 
+.general-button:hover{
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 
+        0 0 25px var(--hover-color-darkmode-button),
+        0 0 25px var(--accent-color);
+}
+
+
 .secondary-button{
     color: var(--secondary-button-text);
     border-width: 3px;
