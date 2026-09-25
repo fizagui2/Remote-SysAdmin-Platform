@@ -10,7 +10,8 @@ urlpatterns = [
     path('aboutus/', views.about_us, name='aboutus'),
     path('dashboard/', views.dashboard, name="dashboard"),
     path('devices/', views.device_results, name="devices"),
-    
+    path('connected-devices/', views.device_roll_call, name="device_roll_call"),
+    path('device-ind/', views.individual_device, name="individual_device"),
     path('', views.home, name="home"),
     path('api/agent/status/', views.agent_status, name="agent_status"),
     path('api/agent/report/', views.agent_report, name="agent_report"),
