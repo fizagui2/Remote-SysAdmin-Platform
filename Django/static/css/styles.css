@@ -9,10 +9,11 @@
     --accent-color:#4d9aff;
     --buttons-color: #090124;
     --buttons-text: #ffffff;
+    --buttons-border: #00aaff;
+    --buttons-border-variant1: #662effdc;
+    --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
     --secondary-button-text: #1b0123;
     --secondary-buttons-border:#5650fe;
-    --buttons-border: #00aaff;
-    --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
     --title:#80bbff;
     --subtitle: #99b8d4;
     --extra-subtitle:#5eb1ff;
@@ -149,11 +150,23 @@
     color:var(--container-text);
 }
 /*//////////////////*/
+
+/* IMAGE CLASSES CONFIGURATIONS */
 .image-container{
     width:150px;
     min-height: 150px;
     margin: 10px auto;
     padding: 10px;
+}
+
+.image-small-container{
+    width: 120px;
+    min-height: 120px;
+}
+
+.image-icon-container{
+    width: 12px;
+    min-height: 12px;
 }
 
 .dashboard-layout{
@@ -164,4 +177,4 @@
 
 .text-block{
     padding: 10px;
-} 
+}
