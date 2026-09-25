@@ -1,0 +1,26 @@
+:root{
+    --base-color: #ffffff;
+    --base-variant: #e8e9ed;
+    --text-color: #1f2231;
+    --secondary-text:#5f6270;
+    --primary-color:#3a435d;
+    --accent-color:#0071ff;
+    --buttons-color:#9debff;
+    --buttons-text: #ffffff;
+    --buttons-border:#16b6f6;
+    --button-glow:0 0 15px rgba(106, 255, 208, 0.4); 
+    --secondary-button-text: #18022e;
+    --secondary-buttons-border:#04012e;
+    --navbar-options:#010020;
+    --title:#021e38;
+    --subtitle: #26517a;
+    --extra-subtitle:#226eb5;
+    --extra-subtitle-var1:#5dfdb2;
+    --container-title: #99c7ff;
+    --container-text: #ffffff;
+    --hover-color: #012544;
+    --background: linear-gradient(180deg, #ceeff3, #ffffff); 
+    --comp-gradient: radial-gradient(circle at 25% 70%, #4789a0 0%, #1b64ad 40%, #172554 75%, #101b45 100%);
+    --login-cont-background:#abbdff;
+    --footer-text:#1d1d39;
+}
