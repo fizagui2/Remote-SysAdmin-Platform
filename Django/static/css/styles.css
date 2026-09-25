@@ -25,7 +25,9 @@
     --background: linear-gradient(180deg, #0e121d, #000000);
     --darkmode-button-background: #4603d5b6;
     --comp-gradient: radial-gradient(circle at 25% 70%, #164e63 0%, #172554 40%, #11143d 75%, #060817 100%);
-    --login-cont-background:#f9f9fb;
+    --login-cont-background:#98b9f7;
+    --login-cont-glow: 0 5px 15px rgba(76, 177, 255, 0.774);
+    --login-cont-text: #1d2180;
     --footer-text:#7070da;
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
@@ -84,6 +86,16 @@
     width: 400px;
     min-height: 400px;
     box-sizing: border-box;
+    border-radius: 10%;
+    box-shadow: var(--login-cont-glow);
+}
+
+.login-header{
+    color: var(--base-color);
+}
+
+.login-text{
+    color: var(--login-cont-text);
 }
 
 .footer-styles{
