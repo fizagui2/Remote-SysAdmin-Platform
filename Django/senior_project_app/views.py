@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
+
+# FOR APIs
 import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -33,11 +38,15 @@ def _section(computer, field):
     value = getattr(computer, field) if computer else None
     return {"has_data": bool(value), "data": value or {}}
 
+# ==================== MAIN/HOME STUFF ====================
 def home(request):
     return render(request, 'home.html', {})
 
 def login(request):
     return render(request, 'login.html', {})
+
+def register(request):
+    return render(request, 'register.html', {})
 
 def plans_view(request):
     return render(request, 'plans.html', {})
@@ -45,12 +54,20 @@ def plans_view(request):
 def about_us(request):
     return render(request, 'about.html', {})
 
-def device_results(request):
-    return render(request, 'device_results.html', {})
-
+# ==================== DASHBOARD SHIT ====================
 # @login_required
 def dashboard(request):
     return render(request, 'dashboard.html', {})
+
+def device_roll_call(request):
+    return render(request, 'devices_showcase.html', {})
+
+def device_results(request):
+    return render(request, 'device_results.html', {})
+
+def individual_device(request):
+    return render(request, '', {})
+# =========================================================
 
 def agent_status(request):
     hostname = request.GET.get("hostname")
@@ -84,11 +101,6 @@ def agent_computers(request):
             for computer in computers
         ]
     })
-
-
-
-
-
 
 
 # //////////////////////// Franks Testing Code ///////////////////////////////////////////////////
