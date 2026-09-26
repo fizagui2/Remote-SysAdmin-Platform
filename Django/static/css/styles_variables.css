@@ -1,0 +1,31 @@
+:root{
+    --base-color: #ffffff;
+    --base-variant: #e8e9ed;
+    --text-color: #1f2231;
+    --secondary-text:#5f6270;
+    --primary-color:#290049d0;
+    --accent-color:#0071ff;
+    --buttons-color:#9debff;
+    --buttons-text: #ffffff;
+    --buttons-border:#16b6f6;
+    --buttons-border-variant1: #d1c0fe;
+    --button-glow:0 0 15px rgba(106, 255, 208, 0.4); 
+    --secondary-button-text: #18022e;
+    --secondary-buttons-border:#04012e;
+    --navbar-options:#010020;
+    --title:#021e38;
+    --subtitle: #26517a;
+    --extra-subtitle:#226eb5;
+    --extra-subtitle-var1:#5dfdb2;
+    --container-title: #99c7ff;
+    --container-text: #ffffff;
+    --hover-color: #012544;
+    --hover-color-darkmode-button:#b2f2fdca;
+    --background: linear-gradient(180deg, #ceeff3, #ffffff); 
+    --darkmode-button-background: #31ccd7b6;
+    --comp-gradient: radial-gradient(circle at 25% 70%, #4789a0 0%, #1b64ad 40%, #172554 75%, #101b45 100%);
+    --login-cont-background:#00007681;
+    --login-cont-glow: 0 5px 15px rgba(111, 72, 255, 0.774);
+    --login-cont-text: #622a8a;
+    --footer-text:#1d1d39;
+}
