@@ -12,12 +12,8 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
-from .models import Computer
+from .models import Computer, Command
 
-# Commands are still held in memory. Agent snapshots are stored per machine
-# on the Computer model.
-pending_commands = []
-command_history = {}
 
 def _save_snapshot(data, field):
     """Store data as the latest `field` payload for the machine that sent it.
@@ -174,11 +170,21 @@ def agent_services(request):
 
 @csrf_exempt
 def agent_commands(request):
-    global pending_commands
     hostname = request.GET.get("hostname")
-    matching = [c for c in pending_commands if c.get("Hostname") == hostname]
-    pending_commands = [c for c in pending_commands if c.get("Hostname") != hostname]
-    return JsonResponse(matching, safe=False)
+    pending = Command.objects.filter(computer__hostname=hostname, status="pending")
+
+    result = [
+        {
+            "CommandId": c.id,
+            "Command": c.command,
+            "Hostname": hostname,
+            "Pid": c.pid,
+            "ServiceName": c.service_name,
+        }
+        for c in pending
+    ]
+    pending.update(status="sent")
+    return JsonResponse(result, safe=False)
 
 @csrf_exempt
 def agent_command_result(request):
@@ -188,38 +194,101 @@ def agent_command_result(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
-    command_history[data["CommandId"]] = data
+
+    Command.objects.filter(id=data["CommandId"]).update(
+        status=data["Status"],
+        message=data["Message"],
+        completed_at=timezone.now(),
+    )
     print("Received command result:", data)
     return JsonResponse({"status": "received"})
 
 def debug_queue_command(request):
-    command = {
-        "CommandId": len(pending_commands) + len(command_history) + 1,
-        "Command": request.GET.get("command"),
-        "Hostname": request.GET.get("hostname"),
-    }
-    if request.GET.get("pid"):
-        command["Pid"] = int(request.GET.get("pid"))
-    if request.GET.get("service_name"):
-        command["ServiceName"] = request.GET.get("service_name")
-    pending_commands.append(command)
-    return JsonResponse({"queued": command})
+    hostname = request.GET.get("hostname")
+    computer, _ = Computer.objects.get_or_create(hostname=hostname)
+
+    pid = request.GET.get("pid")
+    command = Command.objects.create(
+        computer=computer,
+        command=request.GET.get("command"),
+        pid=int(pid) if pid else None,
+        service_name=request.GET.get("service_name") or None,
+    )
+    if request.GET.get("redirect"):
+        return redirect("view_report")
+    return JsonResponse({"queued_id": command.id})
+
+def _queue_form(hostname, command, label, *, pid=None, service_name=None):
+    #a small get method form that queues a command and comes back to this page
+    hidden = [
+        ("hostname", hostname),
+        ("command", command),
+        ("pid", pid),
+        ("service_name", service_name),
+        ("redirect", "1"),
+    ]
+    inputs = "".join(
+        f"<input type='hidden' name='{name}' value='{escape(str(value))}'>"
+        for name, value in hidden
+        if value is not None
+    )
+    return (
+        "<form method='get' action='/debug/queue-command/' style='display:inline'>"
+        f"{inputs}<button type='submit'>{label}</button></form>"
+    )
 
 def view_report(request):
     # Agent payloads are untrusted input, so everything is escaped before it
     # goes into the page.
     parts = ["<h1>Latest Agent Reports</h1>"]
     for computer in Computer.objects.order_by("hostname"):
-        parts.append(f"<h2>{escape(computer.hostname)}</h2><p>Last seen: {computer.last_seen}</p>")
+        hostname = computer.hostname
+        parts.append(f"<h2>{escape(hostname)}</h2><p>Last seen: {computer.last_seen}</p>")
         for label, field in (
             ("System Info", "latest_report"),
             ("Heartbeat", "latest_heartbeat"),
             ("Performance", "latest_performance"),
-            ("Processes", "latest_processes"),
-            ("Services", "latest_services"),
         ):
             parts.append(f"<h3>{label}</h3><pre>{escape(getattr(computer, field))}</pre>")
-    parts.append(f"<h2>Pending Commands</h2><pre>{escape(pending_commands)}</pre>")
-    parts.append(f"<h2>Command History</h2><pre>{escape(command_history)}</pre>")
+
+        parts.append("<h3>Processes</h3>")
+        processes = (computer.latest_processes or {}).get("Processes", [])
+        if processes:
+            parts.append("<table border='1' cellpadding='4'><tr><th>Name</th><th>PID</th><th>Memory (MB)</th><th></th></tr>")
+            for p in processes:
+                pid = p.get("Pid")
+                parts.append(
+                    f"<tr><td>{escape(str(p.get('Name')))}</td><td>{escape(str(pid))}</td>"
+                    f"<td>{escape(str(p.get('MemoryMb')))}</td>"
+                    f"<td>{_queue_form(hostname, 'terminate_process', 'Terminate', pid=pid)}</td></tr>"
+                )
+            parts.append("</table>")
+        else:
+            parts.append("<p>No process data yet.</p>")
+
+        parts.append("<h3>Services</h3>")
+        services = (computer.latest_services or {}).get("Services", [])
+        if services:
+            parts.append("<table border='1' cellpadding='4'><tr><th>Name</th><th>Display Name</th><th>Status</th><th></th></tr>")
+            for s in services:
+                name = s.get("Name")
+                buttons = "".join(
+                    _queue_form(hostname, cmd, label, service_name=name)
+                    for cmd, label in (
+                        ("start_service", "Start"),
+                        ("stop_service", "Stop"),
+                        ("restart_service", "Restart"),
+                    )
+                )
+                parts.append(
+                    f"<tr><td>{escape(str(name))}</td><td>{escape(str(s.get('DisplayName')))}</td>"
+                    f"<td>{escape(str(s.get('Status')))}</td><td>{buttons}</td></tr>"
+                )
+            parts.append("</table>")
+        else:
+            parts.append("<p>No service data yet.</p>")
+
+        commands = list(computer.commands.order_by("-created_at")[:10].values())
+        parts.append(f"<h3>Recent Commands</h3><pre>{escape(commands)}</pre>")
     return HttpResponse("".join(parts))
 # //////////////////////// Franks Testing Code ///////////////////////////////////////////////////

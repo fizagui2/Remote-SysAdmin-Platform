@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Computer, Command
 
-# Register your models here.
+admin.site.register(Computer)
+admin.site.register(Command)
