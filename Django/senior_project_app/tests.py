@@ -1,5 +1,10 @@
 import json
+from datetime import timedelta
+
 from django.test import TestCase
+from django.utils import timezone
+
+from .models import Computer
  
 class AgentEndpointTests(TestCase):
     """
@@ -17,7 +22,7 @@ class AgentEndpointTests(TestCase):
  
     def test_agent_report_stores_and_reflects_data(self):
         sample_report = {
-            "hostname": "TEST-PC-01",
+            "Hostname": "TEST-PC-01",
             "os_version": "Windows 11 Pro 23H2",
             "cpu": "Intel Core i7-12700K",
             "ram_gb": 32,
@@ -78,7 +83,7 @@ class AgentEndpointTests(TestCase):
  
     def test_agent_heartbeat_stores_and_reflects_data(self):
         sample_heartbeat = {
-            "hostname": "TEST-PC-01",
+            "Hostname": "TEST-PC-01",
             "status": "online",
             "uptime_seconds": 3600,
         }
@@ -96,7 +101,7 @@ class AgentEndpointTests(TestCase):
  
     def test_agent_performance_stores_and_reflects_data(self):
         sample_performance = {
-            "hostname": "TEST-PC-01",
+            "Hostname": "TEST-PC-01",
             "cpu_percent": 42.5,
             "memory_percent": 63.1,
             "disk_percent": 78.0,
@@ -115,7 +120,7 @@ class AgentEndpointTests(TestCase):
  
     def test_agent_processes_stores_and_reflects_data(self):
         sample_processes = {
-            "hostname": "TEST-PC-01",
+            "Hostname": "TEST-PC-01",
             "processes": [
                 {"pid": 1234, "name": "chrome.exe", "memory_mb": 512},
                 {"pid": 5678, "name": "explorer.exe", "memory_mb": 128},
@@ -161,7 +166,7 @@ class AgentEndpointTests(TestCase):
         self.assertEqual(response.status_code, 400)
  
     def test_view_report_renders_after_data_posted(self):
-        sample_report = {"hostname": "TEST-PC-01", "os_version": "Windows 11 Pro"}
+        sample_report = {"Hostname": "TEST-PC-01", "os_version": "Windows 11 Pro"}
         self.client.post(
             "/api/agent/report/",
             data=json.dumps(sample_report),
@@ -173,6 +178,70 @@ class AgentEndpointTests(TestCase):
         self.assertContains(response, "TEST-PC-01")
  
  
+class MultipleComputerTests(TestCase):
+    """
+    Several agents reporting at once must each keep their own data.
+
+    Before per-machine storage, every agent wrote into one shared slot per
+    endpoint, so the second machine to report replaced the first.
+    """
+
+    def post_json(self, url, payload):
+        return self.client.post(url, data=json.dumps(payload), content_type="application/json")
+
+    def test_two_computers_do_not_overwrite_each_other(self):
+        self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 12.5})
+        self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
+
+        pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
+        pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
+        self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 12.5)
+        self.assertEqual(pc_b["performance"]["data"]["CpuUsagePercent"], 87.0)
+
+    def test_new_payload_replaces_only_that_computers_data(self):
+        self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 12.5})
+        self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
+        self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 55.0})
+
+        pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
+        pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
+        self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 55.0)
+        self.assertEqual(pc_b["performance"]["data"]["CpuUsagePercent"], 87.0)
+        self.assertEqual(Computer.objects.count(), 2)
+
+    def test_computers_endpoint_lists_every_machine(self):
+        self.post_json("/api/agent/report/", {"Hostname": "PC-B", "WindowsVersion": "Windows 11 Pro"})
+        self.post_json("/api/agent/report/", {"Hostname": "PC-A", "WindowsVersion": "Windows 10 Home"})
+
+        computers = self.client.get("/api/agent/computers/").json()["computers"]
+        self.assertEqual([c["hostname"] for c in computers], ["PC-A", "PC-B"])
+        self.assertEqual(computers[0]["report"]["WindowsVersion"], "Windows 10 Home")
+        self.assertIsNotNone(computers[0]["last_seen"])
+
+    def test_payload_without_hostname_is_rejected(self):
+        response = self.post_json("/api/agent/performance/", {"CpuUsagePercent": 12.5})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Computer.objects.count(), 0)
+
+    def test_status_for_unknown_hostname_returns_404(self):
+        response = self.client.get("/api/agent/status/?hostname=NOT-A-PC")
+        self.assertEqual(response.status_code, 404)
+
+    def test_status_without_hostname_returns_most_recent_computer(self):
+        # last_seen is set directly rather than relying on two requests
+        # landing at measurably different times.
+        now = timezone.now()
+        Computer.objects.create(hostname="NEWER-PC", last_seen=now, latest_heartbeat={"Hostname": "NEWER-PC"})
+        Computer.objects.create(
+            hostname="OLDER-PC",
+            last_seen=now - timedelta(minutes=5),
+            latest_heartbeat={"Hostname": "OLDER-PC"},
+        )
+
+        status_data = self.client.get("/api/agent/status/").json()
+        self.assertEqual(status_data["hostname"], "NEWER-PC")
+
+
 class PageViewSmokeTests(TestCase):
     """Basic checks that the main (non-API) pages still render without errors."""
  
