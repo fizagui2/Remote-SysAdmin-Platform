@@ -83,10 +83,26 @@ async Task ExecutePendingCommandsAsync()
     try
     {
         var commands = await apiClient.GetPendingCommandsAsync(hostname);
+        if (commands.Count == 0) return;
+
         foreach (var command in commands)
         {
             var result = commandService.Execute(command);
             await SendAsync(() => apiClient.SendCommandResultAsync(result), $"command {command.CommandId}");
+        }
+
+        //A command just changed process or service state - push a fresh snapshot right
+        //away instead of waiting for the next reporting-loop tick, so the dashboard
+        //doesn't keep showing a process/service that no longer reflects reality.
+        if (commands.Any(c => c.Command == "terminate_process"))
+        {
+            var processReport = processService.Collect(hostname);
+            await SendAsync(() => apiClient.SendProcessReportAsync(processReport), "processes (post-command)");
+        }
+        if (commands.Any(c => c.Command is "start_service" or "stop_service" or "restart_service"))
+        {
+            var serviceReport = serviceMonitorService.Collect(hostname);
+            await SendAsync(() => apiClient.SendServiceReportAsync(serviceReport), "services (post-command)");
         }
     }
     catch (HttpRequestException ex)
