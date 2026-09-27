@@ -22,3 +22,4 @@ __pycache__/
 # .NET build output
 Windows-Agent/**/bin/
 Windows-Agent/**/obj/
+Windows-Agent/**/publish/
