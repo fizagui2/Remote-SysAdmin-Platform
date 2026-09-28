@@ -11,12 +11,13 @@
 - Added models
 - Agent report & test url/view
 - Added .exe file for the agent that includes the .net runtime
+- (Still pending more features to be updated to this file)
 
 
 ## Luis Chavez (Sprint #2)
 - Supabase & sqlite
 - Help with debugging and repo/code fixes
-- 
+- (Still pending more features to be updated to this file)
 
 # Website Logo:
 <img width="2000" height="2000" alt="RSA-logo" src="https://github.com/user-attachments/assets/856e8004-3495-44de-bd9c-7b63542360a7" />
