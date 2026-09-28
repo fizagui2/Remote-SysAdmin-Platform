@@ -121,6 +121,12 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
+            # SQLite locks the whole file, not rows. With the default DEFERRED
+            # mode, two agents' update_or_create calls both take a read lock,
+            # then deadlock upgrading to a write lock, and one fails with
+            # "database is locked". IMMEDIATE takes the write lock at BEGIN,
+            # so the second request waits its turn instead.
+            'OPTIONS': {'transaction_mode': 'IMMEDIATE'},
         }
     }
 
