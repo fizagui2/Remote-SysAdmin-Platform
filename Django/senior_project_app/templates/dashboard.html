@@ -1,7 +1,6 @@
 {% extends 'base_dshb.html' %}
 {% block title %}Dashboard{% endblock %}
-
-{% block content %}
+{% block content %} 
 
 
 <!--DEVICE CARD-->
@@ -27,5 +26,23 @@
         <h3 class="general-container-title">Processes</h3>
         <p id="processes-status">Loading...</p>
     </div>
+</div>
+
+<h2>Device Details (Test)</h2>
+<!-- devices-card (class for other container) -->
+<div class="devices-container">
+    <h2 class="extra-general-container-title" id="hostname">Loading...</h2>
+    <p>
+        Status: <span id="heartbeat-status">Loading...</span>
+    </p>
+    <p>
+        IP Address: <span id="ip-address">Loading...</span>
+    </p>
+    <p>
+        CPU Core: <span id="cpu-core">Loading...</span>
+    </p>
+    <p>
+        Memory Usage: <span id="memory-usage">Loading...</span>
+    </p>
 </div>
 {% endblock %}

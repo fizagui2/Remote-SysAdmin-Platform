@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Computer(models.Model):
     """One row per machine running the Windows agent, keyed on hostname.
 
