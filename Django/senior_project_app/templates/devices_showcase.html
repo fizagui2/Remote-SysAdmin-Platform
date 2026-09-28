@@ -1,5 +1,10 @@
 {% extends 'base_dshb.html' %}
+{% load static %}
+{% block extra_js %} <script src="{% static 'js/load_devices.js' %}" defer></script> {% endblock %}
+
 
 {% block content %}
+<h1>Devices connected</h1>
+<div id="computers-container"></div>
 
 {% endblock %}
