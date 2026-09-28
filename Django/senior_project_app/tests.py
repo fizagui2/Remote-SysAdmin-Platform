@@ -1,10 +1,12 @@
 import json
 from datetime import timedelta
+from unittest import mock
 
+from django.db.models.query import QuerySet
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Computer
+from .models import Command, Computer
  
 class AgentEndpointTests(TestCase):
     """
@@ -240,6 +242,40 @@ class MultipleComputerTests(TestCase):
 
         status_data = self.client.get("/api/agent/status/").json()
         self.assertEqual(status_data["hostname"], "NEWER-PC")
+
+
+class CommandQueueTests(TestCase):
+    """The agent polls /api/agent/commands/ and must receive every queued command once."""
+
+    def setUp(self):
+        self.computer = Computer.objects.create(hostname="PC-A")
+
+    def test_poll_returns_pending_commands_and_marks_them_sent(self):
+        command = Command.objects.create(computer=self.computer, command="terminate_process", pid=4242)
+
+        first = self.client.get("/api/agent/commands/?hostname=PC-A").json()
+        second = self.client.get("/api/agent/commands/?hostname=PC-A").json()
+
+        self.assertEqual([c["CommandId"] for c in first], [command.id])
+        self.assertEqual(second, [])
+        command.refresh_from_db()
+        self.assertEqual(command.status, "sent")
+
+    def test_command_queued_during_poll_stays_pending(self):
+        Command.objects.create(computer=self.computer, command="terminate_process", pid=1)
+        real_update = QuerySet.update
+
+        def queue_then_update(queryset, **kwargs):
+            # A dashboard click lands after the agent's poll read the pending
+            # commands but before the poll marked them sent.
+            Command.objects.create(computer=self.computer, command="terminate_process", pid=2)
+            return real_update(queryset, **kwargs)
+
+        with mock.patch.object(QuerySet, "update", queue_then_update):
+            delivered = self.client.get("/api/agent/commands/?hostname=PC-A").json()
+
+        self.assertEqual([c["Pid"] for c in delivered], [1])
+        self.assertEqual(Command.objects.get(pid=2).status, "pending")
 
 
 class PageViewSmokeTests(TestCase):
