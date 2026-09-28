@@ -14,6 +14,7 @@ urlpatterns = [
     path('device-ind/', views.individual_device, name="individual_device"),
     path('', views.home, name="home"),
     path('api/agent/status/', views.agent_status, name="agent_status"),
+    path('api/agent/computers/', views.agent_computers, name="agent_computers"),
     path('api/agent/report/', views.agent_report, name="agent_report"),
 
 #///////////////////Franks Testing URL's////////////////////////////////////
