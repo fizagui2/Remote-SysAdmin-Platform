@@ -29,7 +29,7 @@ fetch("/api/agent/computers/")
             <p>Cores: ${report.CpuCores}</p>
             <p>RAM: ${report.TotalRamGb}</p>
             <p>LAST SEEN: ${computer.last_seen}</p>
-            <button class="view-computer">View Computer</button>
+            <button class="general-button btn rounded-pill px-3">View Computer</button>
         `;
         computersContainer.appendChild(card);
     });

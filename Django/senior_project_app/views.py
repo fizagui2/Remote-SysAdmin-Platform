@@ -12,8 +12,10 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
+# Models & Forms
 from .models import Computer, Command
-
+from django.shortcuts import render, redirect
+from .forms import RegisterForm
 
 def _save_snapshot(data, field):
     """Store data as the latest `field` payload for the machine that sent it.
@@ -42,7 +44,14 @@ def login(request):
     return render(request, 'login.html', {})
 
 def register(request):
-    return render(request, 'register.html', {})
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {"form":form})
 
 def plans_view(request):
     return render(request, 'plans.html', {})
