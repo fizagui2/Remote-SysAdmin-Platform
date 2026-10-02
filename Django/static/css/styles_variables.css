@@ -1,6 +1,8 @@
 :root{
     --base-color: #ffffff;
     --base-variant: #e8e9ed;
+    --white-col: #ffffff;
+    --black-col: #000000;
     --text-color: #1f2231;
     --secondary-text:#5f6270;
     --primary-color:#290049d0;

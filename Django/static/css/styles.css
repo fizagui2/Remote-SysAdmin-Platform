@@ -3,6 +3,8 @@
 .darkmode{
     --base-color: #120227;
     --base-variant: #060226;
+    --white-col: #ffffff;
+    --black-col: #000000;
     --text-color:#ffffff;
     --secondary-text:#c5c5c5;
     --primary-color:#a2ab1c;
@@ -92,101 +94,6 @@
     color: var(--login-cont-text);
 }
 
-/* >>> REGISTER */
-.register-container{
-    background: var(--login-cont-background);
-    margin: 40px auto;
-    padding: 35px;
-    width: min(500px, 90%);
-    box-sizing: border-box;
-    border-radius: 30px;
-    box-shadow: var(--login-cont-glow);
-}
-.register-header{
-    color: var(--base-color);
-    text-align: center;
-    margin-bottom: 25px;
-}
-.register-subtitle{
-    color: var(--login-cont-text);
-    text-align: center;
-    margin-bottom: 25px;
-}
-.register-field{
-    margin-bottom: 20px;
-}
-.register-field label{
-    display: block;
-    margin-bottom: 7px;
-    color: var(--login-cont-text);
-    font-weight: bold;
-}
-.register-field input{
-    width: 100%;
-    padding: 10px 14px;
-    box-sizing: border-box;
-    border: 2px solid var(--secondary-buttons-border);
-    border-radius: 10px;
-    background-color: var(--base-color);
-    color: var(--text-color);
-    outline: none;
-    transition:
-        border-color 0.25s ease;
-        box-shadow: 0.25s ease;
-}
-.register-field input:focus{
-    border-color: var(--buttons-border);
-    box-shadow: 
-        0 0 10px var(--buttons-border),
-        0 0 20px var(--accent-color);
-    outline: none;
-}
-.register-now{
-    display: flex;
-    gap: 15px;
-}
-.register-row .register-field{
-    flex: 1;
-}
-
-.register-error{
-    margin-top: 6px;
-    color: #b00020;
-    font-size: 0.85rem;
-}
-.register-error ul{
-    margin: 5px 0 0;
-    padding-left: 20px;
-}
-
-.register-button-container{
-    text-align: center;
-    margin-top: 25px;
-}
-.register-login-link{
-    margin-top: 18px;
-    color: var(--login-cont-text);
-}
-.register-login-link a{
-    color: var(--accent-color);
-    font-weight: bold;
-    text-decoration: none;
-}
-.register-login-link a:hover{
-    color: var(--accent-color);
-    text-decoration: underline;
-}
-
-/*FOR SMALLER SCREENS*/
-@media (max-width: 600px){
-    .register-row{
-        flex-direction: column;
-        gap: 0;
-    }
-}
-
-
-
 .footer-styles{
     color:var(--footer-text) !important;
 }
@@ -196,47 +103,6 @@
     color:var(--title);
 }
 
-/*DEVICES CONTAINER*/
-.devices-container{
-    background: var(--comp-gradient);
-    width: 350px;
-    margin: 50px auto;
-    padding: 30px;
-    min-height: 320px;
-    box-sizing: border-box;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color:var(--container-text);
-}
-
-.devices-container:hover{
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 
-        0 15px 30px rgba(0, 0, 0, 0.3),
-        0 0 25px var(--accent-color);
-}
-
-.general-container-title{
-    color:var(--container-title);
-}
-
-.extra-general-container-title{
-    color:var(--extra-subtitle-var1);
-}
-
-.general-content-block{
-    background: var(--comp-gradient);
-    width: 200px;
-    margin: 50px auto;
-    padding: 30px;
-    min-height: 200px;
-    box-sizing: border-box;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color:var(--container-text);
-}
 /*//////////////////*/
 
 /* IMAGE CLASSES CONFIGURATIONS */
@@ -246,13 +112,22 @@
     margin: 10px auto;
     padding: 10px;
 }
-
-.image-small-container{
+.image-small{
     width: 120px;
     min-height: 120px;
 }
 
-.image-icon-container{
+/* 
+.image-medium{
+}
+.image-large{
+}
+
+.image-huge{
+} 
+*/
+
+.image-icon{
     width: 12px;
     min-height: 12px;
 }
@@ -265,4 +140,12 @@
 
 .text-block{
     padding: 10px;
+}
+
+/*FOR SMALLER SCREENS*/
+@media (max-width: 600px){
+    .register-row{
+        flex-direction: column;
+        gap: 0;
+    }
 }

@@ -15,6 +15,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('api/agent/status/', views.agent_status, name="agent_status"),
     path('api/agent/computers/', views.agent_computers, name="agent_computers"),
+    # need to check with Franks to see API
     path('api/agent/report/', views.agent_report, name="agent_report"),
 
 # ///////////////////Franks Testing URL's////////////////////////////////////

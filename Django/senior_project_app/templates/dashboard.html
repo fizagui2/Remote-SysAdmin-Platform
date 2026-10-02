@@ -1,16 +1,20 @@
 {% extends 'base_dshb.html' %}
+{% load static %}
 {% block extra_js %} <script src="{% static 'js/load_devices.js' %}" defer></script> {% endblock %}
-
 {% block title %}Dashboard{% endblock %}
+
 {% block content %} 
-
-
 <h1>Devices connected</h1>
-<div id="computers-container"></div>
+<div id="computers-container" class="devices-block">
+</div>
 
+
+<!--Digamos que esto functiona para el status-->
 <!--DEVICE CARD-->
+<hr>
 <h1>Device Status</h1>
 <div class="devices-container">
+    
     <h2 class="extra-general-container-title">Device #</h2>
     <div class="status-card">
         <h3 class="general-container-title">Report</h3>
@@ -31,38 +35,5 @@
         <h3 class="general-container-title">Processes</h3>
         <p id="processes-status">Loading...</p>
     </div>
-</div>
-
-<h2>Device Details (Test)</h2>
-<!-- devices-card (class for other container) -->
-<div class="devices-container">
-    <h2 class="extra-general-container-title" id="hostname">Loading...</h2>
-    <p>
-        Status: <span id="heartbeat-status">Loading...</span>
-    </p>
-    <p>
-        IP Address: <span id="ip-address">Loading...</span>
-    </p>
-    <p>
-        MAC Address: <span id="mac-address">Loading...</span>
-    </p>
-    <p>
-        RAM: <span id="total-ram">Loading...</span>
-    </p>
-    <p>
-        Logged In User: <span id="logged-in-user">Loading...</span>
-    </p>
-    <p>
-        Network Adapter: <span id="network-adapter">Loading...</span>
-    </p>
-    <p>
-        CPU Core: <span id="cpu-core">Loading...</span>
-    </p>
-    <p>
-        CPU Model: <span id="cpu-model">Loading...</span>
-    </p>
-    <p>
-        Memory Usage: <span id="memory-usage">Loading...</span>
-    </p>
 </div>
 {% endblock %}

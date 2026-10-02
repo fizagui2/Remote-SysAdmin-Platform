@@ -1,8 +1,4 @@
-// skipping for now
-// devices.forEach(device => {
-    
-// });
-
+/* DEVICES CALL ROLL FUNCTION*/
 fetch("/api/agent/computers/")
 .then(response => response.json())
 .then(data => {
@@ -21,15 +17,24 @@ fetch("/api/agent/computers/")
 
         card.classList.add("general-container");
         card.innerHTML = `
-            <h3>${computer.hostname}</h3>
-            <p> Online</p>
-            <p>IP: ${report.IpAddress}</p>
-            <p>${report.WindowsVersion}</p>
-            <p>CPU: ${report.CpuModel}</p>
-            <p>Cores: ${report.CpuCores}</p>
-            <p>RAM: ${report.TotalRamGb}</p>
-            <p>LAST SEEN: ${computer.last_seen}</p>
-            <button class="general-button btn rounded-pill px-3">View Computer</button>
+            <div class="device-info">
+                <h3>${computer.hostname}</h3>
+                <p> Online</p>
+                <p><strong>IP:</strong> ${report.IpAddress}</p>
+                <p><strong>OS:</strong>  ${report.WindowsVersion}</p>
+                <p><strong>CPU:</strong> ${report.CpuModel}</p>
+                <p><strong>Cores:</strong> ${report.CpuCores}</p>
+                <p><strong>RAM:</strong> ${report.TotalRamGb}</p>
+                <p><strong>LAST SEEN:</strong> ${computer.last_seen}</p>
+            </div>
+            
+            <div class="device-picture">
+                <div class="img-small"><img src="/images/computer_image.png" alt="device-picture"></div>
+            </div>
+
+            <div class="see-device-button">
+                <button class="general-button btn rounded-pill px-3">View Computer</button>
+            </div>
         `;
         computersContainer.appendChild(card);
     });

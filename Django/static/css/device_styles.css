@@ -1,0 +1,123 @@
+@import 'styles_variables.css';
+
+/* >>> DEVICES CONTAINER */
+.devices-container{
+    background: var(--comp-gradient);
+    width: 350px;
+    margin: 50px auto;
+    padding: 30px;
+    min-height: 320px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color:var(--container-text);
+}
+.devices-container:hover{
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        0 0 25px var(--accent-color);
+}
+.general-container-title{
+    color:var(--container-title);
+}
+.extra-general-container-title{
+    color:var(--extra-subtitle-var1);
+}
+.general-content-block{
+    background: var(--comp-gradient);
+    width: 200px;
+    margin: 50px auto;
+    padding: 30px;
+    min-height: 200px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color:var(--container-text);
+}
+
+/* >>> DEVICES CARDS CONTAINER */
+.devices-block{
+    width: 90%;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+.device-card{
+    background: var(--comp-gradient);
+    min-height: 430px;
+    padding: 25px;
+    box-sizing: border-box;
+    border-radius: 18px;
+    color: var(--container-text);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(135, 205, 255, 0.15);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+.device-card:hover{
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--accent-color);
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.35),
+        0 0 25px var(--accent-color);
+}
+/* //// PICTURE DEVICE //// */
+.device-picture{
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(135, 205, 255, 0.2);
+    box-shadow: 0 0 15px rgba(77, 154, 255, 0.2);
+}
+.device-picture img{
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+/* //////// */
+.device-card h3{
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--container-title);
+    font-size: 1.3rem;
+    word-break: break-word;
+}
+.device-info{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.device-info p{
+    margin: 0;
+    padding: 7px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.9rem;
+}
+.device-info strong{
+    color: var(--extra-subtitle-var1);
+}
+
+/* .device-description-container{
+    width: 300px;
+    min-height: 400px;
+    margin: 20px auto;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px var(--comp-gradient);
+} */
