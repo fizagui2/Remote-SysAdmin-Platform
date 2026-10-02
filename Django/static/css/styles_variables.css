@@ -9,11 +9,14 @@
     --accent-color:#0071ff;
     --buttons-color:#9debff;
     --buttons-text: #ffffff;
+    --buttons-secondary-color: #00193b;
+    --buttons-text-secondary-color: #0d0028d0;
     --buttons-border:#16b6f6;
     --buttons-border-variant1: #d1c0fe;
     --button-glow:0 0 15px rgba(106, 255, 208, 0.4); 
     --secondary-button-text: #18022e;
     --secondary-buttons-border:#04012e;
+    --secondary-buttons-hover:#ffffff;
     --navbar-options:#010020;
     --title:#021e38;
     --subtitle: #26517a;

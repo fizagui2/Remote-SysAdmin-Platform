@@ -64,8 +64,9 @@ def about_us(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
-def device_roll_call(request):
-    return render(request, 'devices_showcase.html', {})
+def device_details(request, hostname):
+    computer = get_object_or_404(Computer, hostname=hostname)
+    return render(request, 'devices_details.html', {"computer":computer})
 
 def device_results(request):
     return render(request, 'device_results.html', {})

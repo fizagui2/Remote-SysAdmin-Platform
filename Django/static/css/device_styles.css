@@ -113,11 +113,63 @@
     color: var(--extra-subtitle-var1);
 }
 
-/* .device-description-container{
-    width: 300px;
-    min-height: 400px;
-    margin: 20px auto;
-    padding: 10px;
-    box-sizing: border-box;
-    box-shadow: 0 5px 15px var(--comp-gradient);
-} */
+/* TO SHOW ONLINE/OFFLINE DEVICE */
+.device-status{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.status{
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+.status::before{
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.status-online{
+    color: #70ff9b;
+    background: rgba(50, 205, 100, 0.12);
+}
+.status-online::before{
+    background: #70ff9b;
+    box-shadow: 0 0 8px #70ff9b;
+}
+.status-offline{
+    color: #ff7777;
+    background: rgba(255, 70, 70, 0.12);
+}
+.status-offline::before{
+    background-color: #ff7777;
+    box-shadow: 0 0 8px #ff7777;
+}
+/* VIEW DEVICE BUTTON */
+.see-device-button{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.see-device-button .general-button{
+    min-width: 150px;
+}
+
+@media (max-width: 600px){
+    .device-block{
+        width: 95%;
+        padding: 10px;
+        grid-template-columns: 1fr;
+    }
+    .device-card{
+        min-height: auto;
+    }
+    .device-info p{
+        font-size: 0.85rem;
+    }
+}

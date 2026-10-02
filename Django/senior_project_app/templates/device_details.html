@@ -2,6 +2,8 @@
 {% load static %}
 {% block extra_js %} <script src="{% static 'js/load_devices.js' %}" defer></script> {% endblock %}
 
+{% block title %} {{ computer.hostname }} - Details {% endblock %}
+
 
 {% block content %}
 <!-- <h1>Devices connected</h1>

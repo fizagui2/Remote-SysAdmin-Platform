@@ -11,11 +11,14 @@
     --accent-color:#4d9aff;
     --buttons-color: #090124;
     --buttons-text: #ffffff;
+    --buttons-secondary-color: #a5e8ffe3;
+    --buttons-text-secondary-color: #91fff2d0;
     --buttons-border: #00aaff;
-    --buttons-border-variant1: #662effdc;
+    --buttons-border-variant1: #027cffdc;
     --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
     --secondary-button-text: #1b0123;
     --secondary-buttons-border:#5650fe;
+    --secondary-buttons-hover:#ffffff;
     --title:#80bbff;
     --subtitle: #99b8d4;
     --extra-subtitle:#5eb1ff;

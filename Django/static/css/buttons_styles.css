@@ -20,3 +20,21 @@
     border-width: 3px;
     border-color: var(--secondary-buttons-border);
 }
+
+.container-buttons-main{
+    color: var(--buttons-color);
+    background-color: var(--buttons-secondary-color);
+    border-width: 3px;
+    border-color: var(--buttons-border);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
+}
+.container-buttons-main:hover{
+    color:var(--base-color);
+    border-color: var(--buttons-border-variant1);
+    background-color: var(--buttons-secondary-color);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 
+        0 0 25px var(--hover-color-darkmode-button),
+        0 0 25px var(--accent-color);
+}
