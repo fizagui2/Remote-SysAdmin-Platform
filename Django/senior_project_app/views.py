@@ -181,7 +181,7 @@ def agent_services(request):
 @csrf_exempt
 def agent_commands(request):
     hostname = request.GET.get("hostname")
-    pending = Command.objects.filter(computer__hostname=hostname, status="pending")
+    pending = list(Command.objects.filter(computer__hostname=hostname, status="pending"))
 
     result = [
         {
@@ -193,7 +193,8 @@ def agent_commands(request):
         }
         for c in pending
     ]
-    pending.update(status="sent")
+    ids = [c.id for c in pending]
+    Command.objects.filter(id__in=ids).update(status="sent")
     return JsonResponse(result, safe=False)
 
 @csrf_exempt
