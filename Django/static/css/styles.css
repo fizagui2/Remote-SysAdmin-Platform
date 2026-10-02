@@ -35,6 +35,7 @@
     --login-cont-glow: 0 5px 15px rgba(76, 177, 255, 0.774);
     --login-cont-text: #1d2180;
     --footer-text:#7070da;
+    --profile-shadow: rgb(168, 255, 246);
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
 
@@ -79,6 +80,19 @@
 }
 
 /* //////////////// CLASSES ////////////////*/
+/* >>> Separators (FOR ABOUT US PAGE) */
+.vertical-separator{
+    border-left: 2px solid;
+    height: 172px;
+    
+    display: inline-block;
+    margin: auto 30px;
+
+    background: linear-gradient(90deg, transparent, var(--accent-color), var(--hover-color), var(--accent-color), transparent);
+    box-shadow: 0 0 10px var(--accent-color);
+    border-radius: 50%;
+}
+
 /* >>> LOGIN */
 .login-container{
     background: var(--login-cont-background);
@@ -102,38 +116,13 @@
 }
 
 .title{
+    text-align: center;
     font-weight: bold;
     color:var(--title);
+    display: flex;
 }
 
 /*//////////////////*/
-
-/* IMAGE CLASSES CONFIGURATIONS */
-.image-container{
-    width:150px;
-    min-height: 150px;
-    margin: 10px auto;
-    padding: 10px;
-}
-.image-small{
-    width: 120px;
-    min-height: 120px;
-}
-
-/* 
-.image-medium{
-}
-.image-large{
-}
-
-.image-huge{
-} 
-*/
-
-.image-icon{
-    width: 12px;
-    min-height: 12px;
-}
 
 .dashboard-layout{
     display: flex;

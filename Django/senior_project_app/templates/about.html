@@ -1,24 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'css/aboutus_styles.css'%}"> {% endblock %}
+
 {% block title %} About us {% endblock %}
 
 {% block content %}
 
-<h1>WebHost Incorporation</h1>
+<h1 class="title">WebHost Incorporation</h1>
 <div class="general-content-block">
     <h2>Our goals</h2>
-    <div class="image-container">
-    </div>
     <div class="text-block">
-        We are a company focused on the proper management and monitor devices connected to a same network for all business, mainly software business.
-        <hr>
-        <h3>Our mission</h3>
-        To provide the best system to manage and control devices in a corporative network for better supervision, 
+        <p>We are a company focused on the proper management and monitor devices connected to a same network for all business, mainly software business.</p>
+    </div>
+    <hr>
+    <div class="text-block">
+        <h2>Our mission</h2>
+        <p>To provide the best system to manage and control devices in a corporative network for better supervision, </p>
     </div>
 </div>
 
 <img src="{% static 'images/RSA-logo.png' %}" alt="WebHost Logo">
-<h2>Creators</h2>
-
-
+<hr>
+<div class="creators-section">
+    <h2>Creators</h2>
+    <div class="creator-container">
+        <h3>Omar Villalobos</h3>
+        <div class="profile-container">
+            <img src="{% static 'images/oumar-vis_profile.png' %}" alt="Omar Vi's profile">
+        </div>
+    </div>
+    <div class="vertical-separator"></div>
+    <div class="creator-container">
+        <h3>Francisco Izaguirre</h3>
+        <div class="profile-container">
+            <img src="{% static 'images/frank_profile.png' %}" alt="Omar Vi's profile">
+        </div>
+    </div>
+    <div class="creator-container">
+        <h3>Luis Chaves</h3>
+        <div class="profile-container">
+            <img src="{% static 'images/luis_profile.png' %}" alt="Omar Vi's profile">
+        </div>
+    </div>
+    
+</div>
 {% endblock %}

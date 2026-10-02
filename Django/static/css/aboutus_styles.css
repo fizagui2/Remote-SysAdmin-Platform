@@ -1,0 +1,23 @@
+@import 'styles_variables.css';
+
+.about-us-block{
+    width: 90%;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.about-us-section{
+        background: var(--comp-gradient);
+    min-height: 430px;
+    padding: 25px;
+    box-sizing: border-box;
+    border-radius: 18px;
+    color: var(--container-text);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(135, 205, 255, 0.15);
+}
