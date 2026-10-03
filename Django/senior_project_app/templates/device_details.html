@@ -6,11 +6,37 @@
 
 
 {% block content %}
+
+<div class="performance-grid">
+    <div class="performance-card">
+        <h3>CPU Usage</h3>
+        <div class="performance-circle">
+            <span id="cpu-usage"></span>
+        </div>
+        <p>Processor</p>
+    </div>
+    <div class="performance-card">
+        <h3>Memory Usage</h3>
+        <div class="performance-circle">
+            <span id="memory-usage"></span>
+        </div>
+        <p>RAM</p>
+    </div>
+
+    <div class="performance-card">
+        <h3>Disk Usage</h3>
+        <div class="performance-circle">
+            <span id="memory-usage"></span>
+        </div>
+        <p>Storage</p>
+    </div>
+</div>
+
 <!-- <h1>Devices connected</h1>
 <div id="computers-container"></div> -->
 
-<h2>Device Details (Test)</h2>
 <!-- devices-card (class for other container) -->
+<!-- <h2>Device Details (Test)</h2>
 <div class="devices-container">
     <h2 class="extra-general-container-title" id="hostname">Loading...</h2>
     <p>
@@ -40,6 +66,5 @@
     <p>
         Memory Usage: <span id="memory-usage">Loading...</span>
     </p>
-</div>
-
+</div> -->
 {% endblock %}
