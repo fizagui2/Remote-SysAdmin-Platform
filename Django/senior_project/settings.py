@@ -144,6 +144,22 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Authentication
+# https://docs.djangoproject.com/en/6.1/topics/auth/default/
+
+# URL names, not paths, so they follow urls.py if the paths change.
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'home'
+
+# Accounts made on the register page use their email address as the username,
+# so usernames are matched without regard to case. This replaces Django's
+# default ModelBackend; it inherits everything else from it.
+AUTHENTICATION_BACKENDS = [
+    'senior_project_app.backends.CaseInsensitiveUsernameBackend',
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
