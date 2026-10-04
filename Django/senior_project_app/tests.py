@@ -358,3 +358,86 @@ class LoginTests(TestCase):
         self.assertNotContains(self.client.get("/"), 'action="/logout/"')
         self.client.force_login(self.user)
         self.assertContains(self.client.get("/"), 'action="/logout/"')
+
+
+class RegisterTests(TestCase):
+    """Anyone can create an account; the email address becomes the username."""
+
+    def register(self, **overrides):
+        data = {
+            "full_name": "Ana Lopez",
+            "email": "ana@example.com",
+            "password": "correct-horse-42",
+            "terms": "on",
+            **overrides,
+        }
+        return self.client.post("/register/", data)
+
+    def test_register_page_shows_the_form(self):
+        # The form once sat outside {% block content %}, which Django drops,
+        # so the page rendered without it.
+        response = self.client.get("/register/")
+        self.assertContains(response, 'id="signupForm"')
+        self.assertContains(response, 'name="email"')
+
+    def test_register_creates_account_and_logs_in(self):
+        response = self.register()
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+        user = get_user_model().objects.get()
+        self.assertEqual(user.username, "ana@example.com")
+        self.assertEqual(user.email, "ana@example.com")
+        self.assertEqual((user.first_name, user.last_name), ("Ana", "Lopez"))
+        self.assertTrue(user.check_password("correct-horse-42"))
+        self.assertEqual(self.client.session.get("_auth_user_id"), str(user.pk))
+
+    def test_new_account_can_log_in_again(self):
+        self.register()
+        self.client.post("/logout/")
+        response = self.client.post("/login/", {"username": "ana@example.com", "password": "correct-horse-42"})
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+    def test_email_is_stored_lowercase(self):
+        self.register(email="Ana@Example.COM")
+        self.assertEqual(get_user_model().objects.get().username, "ana@example.com")
+
+    def test_full_name_splits_at_first_space(self):
+        self.register(full_name="Ana Maria Lopez")
+        user = get_user_model().objects.get()
+        self.assertEqual((user.first_name, user.last_name), ("Ana", "Maria Lopez"))
+
+    def test_duplicate_email_is_rejected_regardless_of_case(self):
+        self.register()
+        self.client.post("/logout/")
+        response = self.register(email="ANA@example.com")
+        self.assertContains(response, "An account with this email already exists.")
+        self.assertEqual(get_user_model().objects.count(), 1)
+
+    def test_weak_password_is_rejected(self):
+        response = self.register(password="12345678")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "is-invalid")
+        self.assertFalse(get_user_model().objects.exists())
+
+    def test_password_resembling_the_email_is_rejected(self):
+        response = self.register(email="analopez@example.com", password="analopez1")
+        self.assertContains(response, "too similar")
+        self.assertFalse(get_user_model().objects.exists())
+
+    def test_terms_must_be_accepted(self):
+        data = {"full_name": "Ana Lopez", "email": "ana@example.com", "password": "correct-horse-42"}
+        response = self.client.post("/register/", data)
+        self.assertContains(response, "You must agree to the terms")
+        self.assertFalse(get_user_model().objects.exists())
+
+    def test_password_is_not_echoed_back_after_an_error(self):
+        response = self.register(email="not-an-email", password="secret-value-77")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "secret-value-77")
+        self.assertContains(response, 'value="Ana Lopez"')
+
+    def test_logged_in_user_skips_register_page(self):
+        user = get_user_model().objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+        self.client.force_login(user)
+        response = self.client.get("/register/")
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)

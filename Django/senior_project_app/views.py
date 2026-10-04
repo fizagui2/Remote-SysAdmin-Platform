@@ -12,7 +12,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
 
 
@@ -52,7 +52,16 @@ class SiteLoginView(LoginView):
         return response
 
 def register(request):
-    return render(request, 'register.html', {})
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    form = RegisterForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        if user is not None:
+            auth_login(request, user)
+            return redirect('dashboard')
+    return render(request, 'register.html', {'form': form})
 
 def plans_view(request):
     return render(request, 'plans.html', {})
