@@ -12,6 +12,8 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
+from .decorators import login_required_json
+from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
 
 
@@ -38,11 +40,29 @@ def _section(computer, field):
 def home(request):
     return render(request, 'home.html', {})
 
-def login(request):
-    return render(request, 'login.html', {})
+class SiteLoginView(LoginView):
+    template_name = 'login.html'
+    authentication_form = LoginForm
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if not form.cleaned_data.get('remember'):
+            # Without "Remember me", the session ends when the browser closes.
+            self.request.session.set_expiry(0)
+        return response
 
 def register(request):
-    return render(request, 'register.html', {})
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    form = RegisterForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        if user is not None:
+            auth_login(request, user)
+            return redirect('dashboard')
+    return render(request, 'register.html', {'form': form})
 
 def plans_view(request):
     return render(request, 'plans.html', {})
@@ -51,20 +71,24 @@ def about_us(request):
     return render(request, 'about.html', {})
 
 # ==================== DASHBOARD SHIT ====================
-# @login_required
+@login_required
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+@login_required
 def device_roll_call(request):
     return render(request, 'devices_showcase.html', {})
 
+@login_required
 def device_results(request):
     return render(request, 'device_results.html', {})
 
+@login_required
 def individual_device(request):
     return render(request, '', {})
 # =========================================================
 
+@login_required_json
 def agent_status(request):
     hostname = request.GET.get("hostname")
     if hostname:
@@ -85,6 +109,7 @@ def agent_status(request):
         "services": _section(computer, "latest_services"),
     })
 
+@login_required_json
 def agent_computers(request):
     computers = Computer.objects.order_by("hostname").only("hostname", "last_seen", "latest_report")
     return JsonResponse({
