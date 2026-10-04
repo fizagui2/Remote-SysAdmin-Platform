@@ -9,36 +9,50 @@
 {% block content %}
 <div class="container-sm text-center login-container">
     <h1 class="login-header">Sign in</h1>
-    <div class="row mb-4" data-mdb-input-initialized="true">
-        <label class="form-label col login-text" for="typeEmailX-2"><b>Email</b></label>
-        <input type="email" id="typeEmailX-2" class="form-control form-control-lg col-6">
-    </div>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
 
-    <div class="form-outline mb-4 row" data-mdb-input-initialized="true">
-        <label class="form-label col login-text" for="typePasswordX-2"><b>Password</b></label>
-        <input type="password" id="passwordField" class="form-control form-control-lg col-6">
-        <div class="form-notch">
-            <div class="form-notch-leading" style="width: 9px;"></div>
-            <div class="form-notch-middle" style="width: 64px;"></div>
-            <div class="form-notch-trailing"></div>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
         </div>
-    </div>
-    <!-- Remember password -->
-    <div class="form-check d-flex justify-content-start mb-4">
-        <input class="form-check-input" type="checkbox" id="rememberPassword">
-        <label class="form-check-label" for="rememberPassword"> Remember password </label>
-    </div>
+        {% endif %}
 
-    <!-- Show password -->
-    <div class="form-check d-flex justify-content-start mb-4">
-        <input class="form-check-input" type="checkbox" id="toggleButton">
-        <label class="form-check-label" for="toggleButton">Show password</label>
-    </div>
-    
-    <!-- Login Buttons -->
-    <div>
-        <button class="btn secondary-button rounded-pill px-3" type="submit">Login</button>
-        <button class="btn secondary-button rounded-pill px-3" type="submit"><i class="fab fa-google me-2"></i>Sign in with google</button>
-    </div>
+        <div class="row mb-4" data-mdb-input-initialized="true">
+            <label class="form-label col login-text" for="typeEmailX-2"><b>Email</b></label>
+            {# type="text" rather than "email" so superusers with a plain username can still sign in here. #}
+            <input type="text" inputmode="email" name="username" id="typeEmailX-2" value="{{ form.username.value|default_if_none:'' }}" autocomplete="username" autocapitalize="none" required class="form-control form-control-lg col-6">
+        </div>
+
+        <div class="form-outline mb-4 row" data-mdb-input-initialized="true">
+            <label class="form-label col login-text" for="passwordField"><b>Password</b></label>
+            <input type="password" name="password" id="passwordField" autocomplete="current-password" required class="form-control form-control-lg col-6">
+            <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px;"></div>
+                <div class="form-notch-middle" style="width: 64px;"></div>
+                <div class="form-notch-trailing"></div>
+            </div>
+        </div>
+        <!-- Remember me: unchecked means the session ends when the browser closes -->
+        <div class="form-check d-flex justify-content-start mb-4">
+            <input class="form-check-input" type="checkbox" name="remember" id="rememberPassword">
+            <label class="form-check-label" for="rememberPassword"> Remember me </label>
+        </div>
+
+        <!-- Show password -->
+        <div class="form-check d-flex justify-content-start mb-4">
+            <input class="form-check-input" type="checkbox" id="toggleButton">
+            <label class="form-check-label" for="toggleButton">Show password</label>
+        </div>
+
+        <!-- Login Buttons -->
+        <div>
+            <button class="btn secondary-button rounded-pill px-3" type="submit">Login</button>
+            {# Not wired up yet. type="button" keeps it from submitting the login form. #}
+            <button class="btn secondary-button rounded-pill px-3" type="button"><i class="fab fa-google me-2"></i>Sign in with google</button>
+        </div>
+    </form>
+    <p class="mt-4">Don't have an account? <a href="{% url 'register' %}">Create one</a></p>
 </div>
 {% endblock %}

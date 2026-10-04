@@ -12,6 +12,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
+from .forms import LoginForm
 from .models import Computer, Command
 
 
@@ -38,8 +39,17 @@ def _section(computer, field):
 def home(request):
     return render(request, 'home.html', {})
 
-def login(request):
-    return render(request, 'login.html', {})
+class SiteLoginView(LoginView):
+    template_name = 'login.html'
+    authentication_form = LoginForm
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if not form.cleaned_data.get('remember'):
+            # Without "Remember me", the session ends when the browser closes.
+            self.request.session.set_expiry(0)
+        return response
 
 def register(request):
     return render(request, 'register.html', {})

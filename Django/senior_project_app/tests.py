@@ -1,6 +1,7 @@
 import json
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
@@ -262,3 +263,98 @@ class PageViewSmokeTests(TestCase):
  
     def test_devices_page_loads(self):
         self.assertEqual(self.client.get("/devices/").status_code, 200)
+
+
+class LoginTests(TestCase):
+    """The login page signs people in by email, and logout signs them out."""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="ana@example.com", email="ana@example.com", password="correct-horse-42",
+        )
+
+    def log_in(self, username="ana@example.com", password="correct-horse-42", **extra):
+        return self.client.post("/login/", {"username": username, "password": password, **extra})
+
+    def assertLoggedIn(self):
+        self.assertEqual(self.client.session.get("_auth_user_id"), str(self.user.pk))
+
+    def assertLoggedOut(self):
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_login_page_has_a_submittable_form(self):
+        response = self.client.get("/login/")
+        self.assertContains(response, 'method="post"')
+        self.assertContains(response, 'name="username"')
+        self.assertContains(response, 'name="password"')
+        self.assertContains(response, "csrfmiddlewaretoken")
+
+    def test_correct_login_goes_to_dashboard(self):
+        response = self.log_in()
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+        self.assertLoggedIn()
+
+    def test_email_is_matched_without_regard_to_case(self):
+        self.log_in(username="Ana@Example.COM")
+        self.assertLoggedIn()
+
+    def test_plain_username_still_works(self):
+        # Superusers made with createsuperuser often have a plain username.
+        get_user_model().objects.create_superuser("luis", "luis@example.com", "admin-pass-99")
+        response = self.log_in(username="luis", password="admin-pass-99")
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+    def test_wrong_password_stays_on_page_with_error(self):
+        response = self.log_in(password="wrong-password")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Incorrect email or password.")
+        self.assertLoggedOut()
+
+    def test_unknown_email_is_rejected(self):
+        response = self.log_in(username="nobody@example.com")
+        self.assertContains(response, "Incorrect email or password.")
+        self.assertLoggedOut()
+
+    def test_inactive_account_cannot_log_in(self):
+        self.user.is_active = False
+        self.user.save()
+        self.log_in()
+        self.assertLoggedOut()
+
+    def test_login_returns_to_next_page(self):
+        response = self.log_in(next="/devices/")
+        self.assertRedirects(response, "/devices/", fetch_redirect_response=False)
+
+    def test_login_ignores_offsite_next(self):
+        response = self.log_in(next="https://evil.example.com/")
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+    def test_without_remember_me_session_ends_with_browser(self):
+        self.log_in()
+        self.assertTrue(self.client.session.get_expire_at_browser_close())
+
+    def test_remember_me_keeps_session_after_browser_closes(self):
+        self.log_in(remember="on")
+        self.assertFalse(self.client.session.get_expire_at_browser_close())
+
+    def test_logged_in_user_skips_login_page(self):
+        self.client.force_login(self.user)
+        response = self.client.get("/login/")
+        self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+    def test_logout_signs_out_and_goes_home(self):
+        self.client.force_login(self.user)
+        response = self.client.post("/logout/")
+        self.assertRedirects(response, "/", fetch_redirect_response=False)
+        self.assertLoggedOut()
+
+    def test_logout_rejects_get(self):
+        # A GET logout could be triggered by any link or <img> on another site.
+        self.client.force_login(self.user)
+        self.assertEqual(self.client.get("/logout/").status_code, 405)
+        self.assertLoggedIn()
+
+    def test_navbar_shows_logout_when_logged_in(self):
+        self.assertNotContains(self.client.get("/"), 'action="/logout/"')
+        self.client.force_login(self.user)
+        self.assertContains(self.client.get("/"), 'action="/logout/"')
