@@ -75,14 +75,20 @@
             <hr>
             <div class="dropdown"> 
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> 
-                    <strong class="sidebar-text">Profile</strong> 
+                    <strong class="sidebar-text">{{ user.get_full_name|default:user.username }}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                     <li><a class="dropdown-item" href="#">New project...</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li>
+                        {# Logout has to be a POST since Django 5.0, so it's a form, not a link. #}
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item">Sign out</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </aside>
