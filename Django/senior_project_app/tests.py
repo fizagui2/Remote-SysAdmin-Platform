@@ -6,8 +6,24 @@ from django.test import TestCase
 from django.utils import timezone
 
 from .models import Computer
- 
-class AgentEndpointTests(TestCase):
+
+
+class LoggedInClientMixin:
+    """Logs the test client in, since the dashboard's status endpoints require it.
+
+    The agent endpoints themselves don't check the session, so the agent POSTs
+    in these tests behave the same as they would from the real agent.
+    """
+
+    def setUp(self):
+        super().setUp()
+        user = get_user_model().objects.create_user(
+            username="tester@example.com", email="tester@example.com", password="test-pass-123",
+        )
+        self.client.force_login(user)
+
+
+class AgentEndpointTests(LoggedInClientMixin, TestCase):
     """
     Example requests against the Windows Agent ingestion endpoints
     (senior_project_app.views.agent_report / agent_heartbeat /
@@ -179,7 +195,7 @@ class AgentEndpointTests(TestCase):
         self.assertContains(response, "TEST-PC-01")
  
  
-class MultipleComputerTests(TestCase):
+class MultipleComputerTests(LoggedInClientMixin, TestCase):
     """
     Several agents reporting at once must each keep their own data.
 
@@ -258,11 +274,47 @@ class PageViewSmokeTests(TestCase):
     def test_about_page_loads(self):
         self.assertEqual(self.client.get("/aboutus/").status_code, 200)
  
+    def test_register_page_loads(self):
+        self.assertEqual(self.client.get("/register/").status_code, 200)
+
     def test_dashboard_page_loads(self):
+        self.client.force_login(get_user_model().objects.create_user("u@example.com", "u@example.com", "pw-12345!"))
         self.assertEqual(self.client.get("/dashboard/").status_code, 200)
- 
+
     def test_devices_page_loads(self):
+        self.client.force_login(get_user_model().objects.create_user("u@example.com", "u@example.com", "pw-12345!"))
         self.assertEqual(self.client.get("/devices/").status_code, 200)
+
+
+class LoginRequiredTests(TestCase):
+    """Dashboard pages and the API behind them need a login; the agent does not."""
+
+    PROTECTED_PAGES = ("/dashboard/", "/devices/", "/connected-devices/", "/device-ind/")
+
+    def test_protected_pages_send_visitors_to_login(self):
+        for url in self.PROTECTED_PAGES:
+            response = self.client.get(url)
+            self.assertRedirects(
+                response, f"/login/?next={url}", fetch_redirect_response=False, msg_prefix=url,
+            )
+
+    def test_dashboard_api_answers_401_json_when_logged_out(self):
+        for url in ("/api/agent/status/", "/api/agent/computers/"):
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 401, msg=url)
+            self.assertEqual(response.json(), {"error": "Login required"})
+
+    def test_logged_out_visitor_cannot_read_machine_data(self):
+        Computer.objects.create(hostname="LAB-PC-01", latest_report={"Hostname": "LAB-PC-01"})
+        self.assertNotContains(self.client.get("/api/agent/computers/"), "LAB-PC-01", status_code=401)
+
+    def test_agent_can_still_post_without_logging_in(self):
+        # The agent has no session. Requiring a login here would cut every
+        # machine off until agent tokens exist.
+        for url in ("/api/agent/report/", "/api/agent/heartbeat/", "/api/agent/performance/"):
+            response = self.client.post(url, data=json.dumps({"Hostname": "LAB-PC-01"}), content_type="application/json")
+            self.assertEqual(response.status_code, 200, msg=url)
+        self.assertTrue(Computer.objects.filter(hostname="LAB-PC-01").exists())
 
 
 class LoginTests(TestCase):

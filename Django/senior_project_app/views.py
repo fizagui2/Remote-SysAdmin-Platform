@@ -12,6 +12,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
+from .decorators import login_required_json
 from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
 
@@ -70,20 +71,24 @@ def about_us(request):
     return render(request, 'about.html', {})
 
 # ==================== DASHBOARD SHIT ====================
-# @login_required
+@login_required
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+@login_required
 def device_roll_call(request):
     return render(request, 'devices_showcase.html', {})
 
+@login_required
 def device_results(request):
     return render(request, 'device_results.html', {})
 
+@login_required
 def individual_device(request):
     return render(request, '', {})
 # =========================================================
 
+@login_required_json
 def agent_status(request):
     hostname = request.GET.get("hostname")
     if hostname:
@@ -104,6 +109,7 @@ def agent_status(request):
         "services": _section(computer, "latest_services"),
     })
 
+@login_required_json
 def agent_computers(request):
     computers = Computer.objects.order_by("hostname").only("hostname", "last_seen", "latest_report")
     return JsonResponse({
