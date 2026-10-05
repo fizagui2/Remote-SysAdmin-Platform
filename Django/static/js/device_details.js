@@ -100,7 +100,7 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
             `;
             processTable.appendChild(row);
         });
-
+        
         // SERVICES
         const serviceTable = document.getElementById("services-table-body");
         serviceTable.innerHTML = "";

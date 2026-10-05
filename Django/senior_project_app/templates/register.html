@@ -2,79 +2,6 @@
 {% load static %}
 {% block extra_js %} <script src="{% static 'js/show_hide_password.js' %}" defer></script> {% endblock %}
 {% block title %} Register {% endblock %}
-<<<<<<< HEAD
-
-
-{% block content %}
-<div class="register-container">
-    <h1 class="register-header">Create An Account</h1>
-    <p class="register-subtitle">Create your WebHost account</p>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="register-field">
-            <label for="{{ form.username.id_for_label }}">Username</label>
-            {{ form.username }}
-            {% if form.username.errors %} 
-                <div class="register-error">{{ form.username.errors }}</div>
-            {% endif %}
-        </div>
-        
-        <div class="register-now">
-            <div class="register-field">
-                <label for="{{ form.first_name.id_for_label }}">First name</label>
-                {{ form.first_name }}
-                {% if form.first_name.errors %} 
-                    <div class="register-error"> {{ form.first_name.errors }} </div>
-                {% endif %}
-            </div>
-
-            <div class="register-field">
-                <label for="{{ form.last_name.id_for_label }}">Last name</label>
-                {{ form.last_name }}
-                {% if form.last_name.errors %}
-                    <div class="register-error"> {{form.last_name.errors }} </div> 
-                {% endif %}
-            </div>
-        </div>
-        
-        <div class="register-field">
-            <label for="{{ form.email.id_for_label }}">Email</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="register-error">{{ form.email.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="register-field">
-            <label for="{{ form.password1.id_for_label }}">Password</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div class="register-error">{{ form.password1.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="register-field">
-            <label for="{{ form.password2.id_for_label }}">Confirm password</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div class="register-error">
-                    {{ form.password2.errors }}
-                </div>
-            {% endif %}
-        </div>
-
-        {% if form.non_field_errors %}
-            <div class="register-error">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
-
-        <div class="register-button-container">
-            <button class="btn general-button rounded-pill px-3" type="submit">Sign Up :O</button>
-            <p class="register-login-link">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
-        </div>
-    </form>
-=======
 <!--
 
     >> (possible entries):
@@ -202,6 +129,5 @@
             </div>
         </div>
     </div>
->>>>>>> main
 </div>
 {% endblock %}
