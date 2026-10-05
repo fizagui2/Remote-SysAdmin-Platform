@@ -3,62 +3,159 @@
 
 {% block extra_js %} 
 <script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
-<script src="{% static 'js/device_report.js' %}" defer></script>
+<script src="{% static 'js/device_details.js' %}" defer></script>
 {% endblock %}
 
-{% block extra_css %} <link rel="stylesheet" href="{% static 'css/device_details_syles.css'%}"> {% endblock %}
+{% block extra_css %} 
+<link rel="stylesheet" href="{% static 'css/device_details_syles.css'%}">
+<link rel="stylesheet" href="{% static 'css/table_syles.css'%}">
+{% endblock %}
 
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
 {% block content %}
-<h2 class="extra-general-container-title" id="hostname">💻 Loading... 💻</h2>
+<h2 class="extra-general-container-title" id="hostname"></h2>
+<!-- >> REPORT -->
 <hr>
-<div class="info-card">
-    <span>IP Address</span>
-    <strong id="computer-id">Loading...</strong>
+<h3>Latest report</h3>
+<div class="report-grid">
+    <div class="info-card">
+        <span>Network Adapter:</span>
+        <strong id="net-adapter">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>IP Address:</span>
+        <strong id="ip-address">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>MAC Address:</span>
+        <strong id="mac-address">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Windows version:</span>
+        <strong id="win-version">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>CPU Cores:</span>
+        <strong id="cpu-cores">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>CPU:</span>
+        <strong id="cpu-model">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>RAM:</span>
+        <strong id="total-ram">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Uptime hours:</span>
+        <strong id="uptime-hours">Loading...</strong>
+    </div>
+
+    <div class="info-card">
+        <span>Drives:</span>
+        <strong id="drives">Loading...</strong>
+    </div>
+</div>
+
+<!-- >> HEARTBEAT -->
+<hr>
+<h3> Latest Heartbeat</h3>
+<div class="heartbeat-grid">
+    <div class="info-card">
+        <span>Timestamp:</span>
+        <strong id="heartbeat-timestamp">Loading...</strong>
+    </div>
+</div>
+
+<!-- >> PERFORMANCE -->
+<hr>
+<h3>Performance</h3>
+
+<!-- >> PROCESSES -->
+<hr>
+<h3> Latest Processes</h3>
+<div class="table-container">
+    <table class="webhost-table">
+        <!-- columns -->
+        <thread>
+            <tr>
+                <!-- <th>Computer</th> -->
+                <th>Process ID</th>
+                <th>Name</th>
+                <th>Memory (MB)</th>
+                <!-- <th>Time Stamp</th> (should be a 'total' column) -->
+            </tr>
+        </thread>
+        <!-- rows -->
+        <tbody id="processes-table-body">
+        </tbody>
+    </table>
+    <div></div>
 </div>
 
 
+<!-- >> SERVICES -->
+<hr>
+<h3>Latests Services</h3>
+<div class="table-container">
+    <table class="webhost-table">
+        <!-- columns -->
+        <thread>
+            <tr>
+                <th>Computer Name</th>
+                <th>Status</th>
+                <th>Display Name</th>
+                <th>Time Stamp</th>
+                <th></th>
+            </tr>
+        </thread>
+        <!-- rows -->
+        <tbody>
+            <tr>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <div></div>
+</div>
 
-
-
-<div class="performance-grid">
-    <div class="performance-card">
+<!-- <div class="performance-grid"> -->
+    <!-- <div class="performance-card">
         <h3>CPU Usage</h3>
         <div class="performance-circle">
             <span id="cpu-usage"></span>
         </div>
         <p>Processor</p>
-    </div>
-    <div class="performance-card">
+    </div> -->
+    <!-- <div class="performance-card">
         <h3>Memory Usage</h3>
         <div class="performance-circle">
             <span id="memory-usage"></span>
         </div>
         <p>RAM</p>
-    </div>
-
-    <div class="performance-card">
+    </div> -->
+    <!-- <div class="performance-card">
         <h3>Disk Usage</h3>
         <div class="performance-circle">
-            <span id="memory-usage"></span>
+            <span id="disk-usage"></span>
         </div>
         <p>Storage</p>
     </div>
-</div>
+</div> -->
+
+
 
 <!-- <h1>Devices connected</h1>
 <div id="computers-container"></div> -->
 
 <!-- devices-card (class for other container) -->
-<h2>Device Report</h2>
+<!-- <h2>Device Report</h2>
 <div class="devices-container">
     <p>
         Status: <span id="heartbeat-status">Loading...</span>
     </p>
-    <p>
-        IP Address: <span id="ip-address">Loading...</span>
-    </p>
+    
     <p>
         MAC Address: <span id="mac-address">Loading...</span>
     </p>
@@ -80,5 +177,5 @@
     <p>
         Memory Usage: <span id="memory-usage">Loading...</span>
     </p>
-</div>
+</div> -->
 {% endblock %}

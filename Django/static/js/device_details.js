@@ -15,7 +15,7 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
         const processes = data.processes.data?.Processes || [];
         const services = data.services.data?.Services || [];
 
-        //console tests
+        //console tests FOR JSONS AND DATA 
         console.log("Computer data:", data);
         console.log("Hostname:", data.hostname);
         console.log("Report:", data.report);
@@ -24,11 +24,26 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
         console.log("Processes:", data.processes);
         console.log("Services:", data.services);
         
-        // showing data in html element basis on their id's
-        document.getElementById("computer-id").textContent = report.IpAddress;
+        // >> DEVICE INFORMATION (showing data in html element basis on their id's)
+        // REPORT (completed)
+        document.getElementById("hostname").textContent = `💻 ${data.hostname} 💻`;
+        document.getElementById("net-adapter").textContent = report.NetworkAdapter ?? "N/A";
+        document.getElementById("ip-address").textContent = report.IpAddress ?? "N/A";
+        document.getElementById("mac-address").textContent = report.MacAddress ?? "N/A";
+        document.getElementById("win-version").textContent = report.WindowsVersion ?? "N/A";
+        document.getElementById("cpu-cores").textContent = report.CpuCores ?? "N/A";
+        document.getElementById("cpu-model").textContent = report.CpuModel ?? "N/A";
+        document.getElementById("total-ram").textContent = report.TotalRamGb ? `${report.TotalRamGb} GB` : "N/A";
+        document.getElementById("uptime-hours").textContent = report.UptimeHours ?? "N/A";
+        document.getElementById("logged-in-user").textContent = report.LoggedInUser ?? "Undentified user";
+        // need to show in bar table or circle table
+        document.getElementById("drives").textContent = report.Drives ?? "N/A";
+        // PERFORMANCE
         document.getElementById("cpu-usage").textContent = `${cpuUsage}%`;
         document.getElementById("memory-usage").textContent = `${memoryUsage}%`;
+        document.getElementById("disk-usage").textContent = `${diskUsage}%`;
         
+        // PROCESSES
         const processTable = document.getElementById("processes-table-body");
         processTable.innerHTML = "";
         processes.forEach(process => {
@@ -41,6 +56,7 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
             processTable.appendChild(row);
         });
 
+        // SERVICES
         const serviceTable = document.getElementById("services-table-body");
         serviceTable.innerHTML = "";
         services.forEach(service => {

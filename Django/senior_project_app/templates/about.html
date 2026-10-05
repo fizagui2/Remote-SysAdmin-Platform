@@ -6,43 +6,63 @@
 {% block title %} About us {% endblock %}
 
 {% block content %}
+<div class="about-us-wrapper">
+    <header class="about-header">
+        <h1 class="title">WebHost Incorporation</h1>
+        <p class="subtitle">Empowering network visibility and device control for modern enterprises.</p>
+        <img src="{% static 'images/RSA-logo.png' %}" alt="WebHost Logo">
+    </header>
+    <hr>
+    <div class="about-main-grid">
+        <section class="general-content-block goal-block">
+            <h2>Our goals</h2>
+            <div class="text-block">
+                <p>We are a company focused on the proper management and monitoring of devices connected to the same network for all businesses, specializing primarily in the software sector.</p>
+                <ul class="extra-info-list">
+                    <li>Real-time telemetry and diagnostics</li>
+                    <li>Secure cross-platform endpoint synchronization</li>
+                    <li>Scalable architecture for growing enterprise environments</li>
+                </ul>
+            </div> 
+        </section>
 
-<h1 class="title">WebHost Incorporation</h1>
-<div class="general-content-block">
-    <h2>Our goals</h2>
-    <div class="text-block">
-        <p>We are a company focused on the proper management and monitor devices connected to a same network for all business, mainly software business.</p>
+        <aside class="sidebar-mission-block">
+            <h2>Our Mission</h2>
+            <div class="text-block">
+                <p>To provide the best system to manage and control devices in a corporate network for better supervision, operational uptime, and strict cybersecurity compliance.</p>
+                <h4>Why Choose WebHost?</h4>
+                <p>Built by engineers, for engineers. We bridge the gap between complex network protocols and intuitive user dashboards.</p>
+            </div>
+        </aside>
     </div>
     <hr>
-    <div class="text-block">
-        <h2>Our mission</h2>
-        <p>To provide the best system to manage and control devices in a corporative network for better supervision, </p>
-    </div>
-</div>
-
-<img src="{% static 'images/RSA-logo.png' %}" alt="WebHost Logo">
-<hr>
-<div class="creators-section">
-    <h2>Creators</h2>
-    <div class="creator-container">
-        <h3>Omar Villalobos</h3>
-        <div class="profile-container">
-            <img src="{% static 'images/oumar-vis_profile.png' %}" alt="Omar Vi's profile">
+    <section class="creators-section">
+        <h2>Meet The Creators</h2>
+        <div class="cretors-grid">
+            <div class="creator-container">
+                <div class="profile-container">
+                    <img src="{% static 'images/oumar-vis_profile.png' %}" alt="Omar Vi's profile">
+                </div>
+                <h3>Omar Villalobos</h3>
+                <span class="creator-role">Lead Full-Stack Architech</span>
+            </div>
+            <hr>
+            <div class="creator-container">
+                <div class="profile-container">
+                    <img src="{% static 'images/frank_profile.png' %}" alt="Omar Vi's profile">
+                </div>
+                <h3>Francisco Izaguirre</h3>
+                <span class="creator-role">Network Security Specialist</span>
+            </div>
+            <hr>
+            <div class="creator-container">
+                <div class="profile-container">
+                    <img src="{% static 'images/luis_profile.png' %}" alt="Omar Vi's profile">
+                </div>
+                <h3>Luis Chaves</h3>
+                <span class="creator-role">Systems & DevOps Engineer</span>
+            </div>
         </div>
-    </div>
-    <div class="vertical-separator"></div>
-    <div class="creator-container">
-        <h3>Francisco Izaguirre</h3>
-        <div class="profile-container">
-            <img src="{% static 'images/frank_profile.png' %}" alt="Omar Vi's profile">
-        </div>
-    </div>
-    <div class="creator-container">
-        <h3>Luis Chaves</h3>
-        <div class="profile-container">
-            <img src="{% static 'images/luis_profile.png' %}" alt="Omar Vi's profile">
-        </div>
-    </div>
-    
+    </section>
 </div>
 {% endblock %}
