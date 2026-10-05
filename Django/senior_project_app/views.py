@@ -36,6 +36,16 @@ def _section(computer, field):
     value = getattr(computer, field) if computer else None
     return {"has_data": bool(value), "data": value or {}}
 
+def _visible_computers(user):
+    """The machines a logged-in user may see: their own, or all of them for a superuser.
+
+    Every dashboard read should start from this rather than Computer.objects,
+    so a hostname in the URL can never reach another account's machine.
+    """
+    if user.is_superuser:
+        return Computer.objects.all()
+    return Computer.objects.filter(owner=user)
+
 # ==================== MAIN/HOME STUFF ====================
 def home(request):
     return render(request, 'home.html', {})
@@ -90,15 +100,18 @@ def individual_device(request):
 
 @login_required_json
 def agent_status(request):
+    computers = _visible_computers(request.user)
     hostname = request.GET.get("hostname")
     if hostname:
-        computer = Computer.objects.filter(hostname=hostname).first()
+        computer = computers.filter(hostname=hostname).first()
         if computer is None:
+            # Same answer for "no such machine" and "not your machine", so the
+            # response doesn't reveal which hostnames other accounts own.
             return JsonResponse({"error": "Unknown hostname"}, status=404)
     else:
         # No hostname: fall back to the machine that checked in most recently,
         # so callers written before per-machine storage keep working.
-        computer = Computer.objects.order_by(F("last_seen").desc(nulls_last=True)).first()
+        computer = computers.order_by(F("last_seen").desc(nulls_last=True)).first()
 
     return JsonResponse({
         "hostname": computer.hostname if computer else None,
@@ -111,7 +124,7 @@ def agent_status(request):
 
 @login_required_json
 def agent_computers(request):
-    computers = Computer.objects.order_by("hostname").only("hostname", "last_seen", "latest_report")
+    computers = _visible_computers(request.user).order_by("hostname").only("hostname", "last_seen", "latest_report")
     return JsonResponse({
         "computers": [
             {

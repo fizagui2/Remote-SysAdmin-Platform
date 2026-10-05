@@ -11,13 +11,17 @@ from .models import Computer
 class LoggedInClientMixin:
     """Logs the test client in, since the dashboard's status endpoints require it.
 
+    The user is a superuser because these tests are about the agent pipeline,
+    not visibility: machines the agent creates have no owner, and only
+    superusers see unowned machines. OwnershipTests covers regular accounts.
+
     The agent endpoints themselves don't check the session, so the agent POSTs
     in these tests behave the same as they would from the real agent.
     """
 
     def setUp(self):
         super().setUp()
-        user = get_user_model().objects.create_user(
+        user = get_user_model().objects.create_superuser(
             username="tester@example.com", email="tester@example.com", password="test-pass-123",
         )
         self.client.force_login(user)
@@ -493,3 +497,90 @@ class RegisterTests(TestCase):
         self.client.force_login(user)
         response = self.client.get("/register/")
         self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+
+class OwnershipTests(TestCase):
+    """Each account sees only its own machines; superusers see every machine."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.ana = User.objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.bo = User.objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+        now = timezone.now()
+        Computer.objects.create(
+            hostname="ANA-PC", owner=self.ana, last_seen=now - timedelta(minutes=5),
+            latest_report={"Hostname": "ANA-PC"},
+        )
+        # Bo's machine reported more recently than Ana's.
+        Computer.objects.create(
+            hostname="BO-PC", owner=self.bo, last_seen=now,
+            latest_report={"Hostname": "BO-PC"},
+        )
+        # An agent that has reported but hasn't been given an owner yet.
+        Computer.objects.create(hostname="UNOWNED-PC", last_seen=now, latest_report={"Hostname": "UNOWNED-PC"})
+
+    def listed_hostnames(self):
+        return [c["hostname"] for c in self.client.get("/api/agent/computers/").json()["computers"]]
+
+    def test_user_lists_only_their_own_machines(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.listed_hostnames(), ["ANA-PC"])
+
+    def test_user_cannot_read_another_accounts_machine(self):
+        self.client.force_login(self.ana)
+        response = self.client.get("/api/agent/status/?hostname=BO-PC")
+        self.assertEqual(response.status_code, 404)
+        self.assertNotContains(response, "BO-PC", status_code=404)
+
+    def test_other_accounts_machine_looks_the_same_as_a_missing_one(self):
+        self.client.force_login(self.ana)
+        not_yours = self.client.get("/api/agent/status/?hostname=BO-PC")
+        missing = self.client.get("/api/agent/status/?hostname=NO-SUCH-PC")
+        self.assertEqual(not_yours.json(), missing.json())
+
+    def test_user_can_read_their_own_machine(self):
+        self.client.force_login(self.ana)
+        data = self.client.get("/api/agent/status/?hostname=ANA-PC").json()
+        self.assertEqual(data["hostname"], "ANA-PC")
+        self.assertTrue(data["report"]["has_data"])
+
+    def test_status_fallback_picks_users_own_most_recent_machine(self):
+        # BO-PC and UNOWNED-PC checked in more recently, but Ana can't see them.
+        self.client.force_login(self.ana)
+        self.assertEqual(self.client.get("/api/agent/status/").json()["hostname"], "ANA-PC")
+
+    def test_unowned_machines_are_hidden_from_regular_users(self):
+        self.client.force_login(self.bo)
+        self.assertNotIn("UNOWNED-PC", self.listed_hostnames())
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=UNOWNED-PC").status_code, 404)
+
+    def test_new_account_sees_no_machines(self):
+        newcomer = get_user_model().objects.create_user("cy@example.com", "cy@example.com", "correct-horse-42")
+        self.client.force_login(newcomer)
+        self.assertEqual(self.listed_hostnames(), [])
+        data = self.client.get("/api/agent/status/").json()
+        self.assertIsNone(data["hostname"])
+        self.assertFalse(data["report"]["has_data"])
+
+    def test_superuser_sees_every_machine(self):
+        admin = get_user_model().objects.create_superuser("root", "root@example.com", "admin-pass-99")
+        self.client.force_login(admin)
+        self.assertEqual(self.listed_hostnames(), ["ANA-PC", "BO-PC", "UNOWNED-PC"])
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=BO-PC").status_code, 200)
+
+    def test_agent_report_keeps_the_machines_owner(self):
+        # The agent doesn't know about accounts, so its posts must never
+        # change or clear who a machine belongs to.
+        self.client.post(
+            "/api/agent/heartbeat/",
+            data=json.dumps({"Hostname": "ANA-PC", "status": "online"}),
+            content_type="application/json",
+        )
+        computer = Computer.objects.get(hostname="ANA-PC")
+        self.assertEqual(computer.owner, self.ana)
+        self.assertEqual(computer.latest_heartbeat["status"], "online")
+
+    def test_deleting_an_account_deletes_its_machines(self):
+        self.ana.delete()
+        self.assertFalse(Computer.objects.filter(hostname="ANA-PC").exists())
+        self.assertTrue(Computer.objects.filter(hostname="BO-PC").exists())
