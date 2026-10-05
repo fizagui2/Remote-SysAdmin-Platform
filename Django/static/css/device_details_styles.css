@@ -1,5 +1,9 @@
 @import 'styles_variables.css';
 
+.device-title{
+    text-shadow: var(--text-shadow1);
+}
+
 .performance-grid{
     display: grid;
     grid-template-columns: repeat(3, 1fr);

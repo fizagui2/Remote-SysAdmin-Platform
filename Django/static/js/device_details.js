@@ -9,12 +9,16 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
     .then(data => {
         // variables
         const report = data.report.data;
+        const heartbeat = data.heartbeat.data;
         const performance = data.performance.data;
-        const cpuUsage = performance.CpuUsagePercent;
-        const memoryUsage = performance.MemoryUsagePercent;
+        
+        const cpUsage = performance.CpuUsagePercent;
+        const memoryUsed = performance.MemoryUsedGb;
+        const memoryAvailable = performance.MemoryAvailableGb;
+        const memoryUsagePercentage = performance.MemoryUsagePercent;
+        
         const processes = data.processes.data?.Processes || [];
         const services = data.services.data?.Services || [];
-
         //console tests FOR JSONS AND DATA 
         console.log("Computer data:", data);
         console.log("Hostname:", data.hostname);
@@ -38,9 +42,15 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
         document.getElementById("logged-in-user").textContent = report.LoggedInUser ?? "Undentified user";
         // need to show in bar table or circle table
         document.getElementById("drives").textContent = report.Drives ?? "N/A";
+        
+        // HEARTBEAT
+        document.getElementById("heartbeat-timestamp").textContent = heartbeat.Timestamp;
+        
         // PERFORMANCE
-        document.getElementById("cpu-usage").textContent = `${cpuUsage}%`;
-        document.getElementById("memory-usage").textContent = `${memoryUsage}%`;
+        document.getElementById("cpu-usage").textContent = `${cpUsage}%`;
+        document.getElementById("memory-usage").textContent = `${memoryUsed}%`;
+        document.getElementById("memory-available").textContent = `${memoryAvailable}%`;
+        document.getElementById("memory-percent").textContent = `${memoryUsagePercentage}%`;
         document.getElementById("disk-usage").textContent = `${diskUsage}%`;
         
         // PROCESSES

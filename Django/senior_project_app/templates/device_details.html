@@ -14,11 +14,15 @@
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
 {% block content %}
-<h2 class="extra-general-container-title" id="hostname"></h2>
+<h2 class="extra-general-container-title device-title" id="hostname"></h2>
 <!-- >> REPORT -->
 <hr>
 <h3>Latest report</h3>
 <div class="report-grid">
+    <div class="info-card">
+        <span>Logged-in User:</span>
+        <strong id="logged-in-user">Loading...</strong>
+    </div>
     <div class="info-card">
         <span>Network Adapter:</span>
         <strong id="net-adapter">Loading...</strong>
@@ -71,6 +75,38 @@
 <!-- >> PERFORMANCE -->
 <hr>
 <h3>Performance</h3>
+<div class="performance-grid">
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>CPU Usage:</h3>
+            <span id="cpu-usage">Loading...</span>
+            <!-- <strong ></strong> -->
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="cpu-progress"></div>
+        </div>
+    </div>
+    <div class="info-card">
+        <span>Drives:</span>
+        <strong id="drives">Loading...</strong>
+    </div>
+    <div class="info-card">
+        
+        
+    </div>
+    <div class="info-card">
+        <span>Memory Used:</span>
+        <strong id="memory-usage">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Memory Available:</span>
+        <strong id="memory-available">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Memory Usage:</span>
+        <strong id="memory-percent">Loading...</strong>
+    </div>
+</div>
 
 <!-- >> PROCESSES -->
 <hr>
@@ -78,7 +114,7 @@
 <div class="table-container">
     <table class="webhost-table">
         <!-- columns -->
-        <thread>
+        <thead>
             <tr>
                 <!-- <th>Computer</th> -->
                 <th>Process ID</th>
@@ -86,7 +122,7 @@
                 <th>Memory (MB)</th>
                 <!-- <th>Time Stamp</th> (should be a 'total' column) -->
             </tr>
-        </thread>
+        </thead>
         <!-- rows -->
         <tbody id="processes-table-body">
         </tbody>
@@ -101,7 +137,7 @@
 <div class="table-container">
     <table class="webhost-table">
         <!-- columns -->
-        <thread>
+        <thead>
             <tr>
                 <th>Computer Name</th>
                 <th>Status</th>
@@ -109,7 +145,7 @@
                 <th>Time Stamp</th>
                 <th></th>
             </tr>
-        </thread>
+        </thead>
         <!-- rows -->
         <tbody>
             <tr>
@@ -120,62 +156,4 @@
     <div></div>
 </div>
 
-<!-- <div class="performance-grid"> -->
-    <!-- <div class="performance-card">
-        <h3>CPU Usage</h3>
-        <div class="performance-circle">
-            <span id="cpu-usage"></span>
-        </div>
-        <p>Processor</p>
-    </div> -->
-    <!-- <div class="performance-card">
-        <h3>Memory Usage</h3>
-        <div class="performance-circle">
-            <span id="memory-usage"></span>
-        </div>
-        <p>RAM</p>
-    </div> -->
-    <!-- <div class="performance-card">
-        <h3>Disk Usage</h3>
-        <div class="performance-circle">
-            <span id="disk-usage"></span>
-        </div>
-        <p>Storage</p>
-    </div>
-</div> -->
-
-
-
-<!-- <h1>Devices connected</h1>
-<div id="computers-container"></div> -->
-
-<!-- devices-card (class for other container) -->
-<!-- <h2>Device Report</h2>
-<div class="devices-container">
-    <p>
-        Status: <span id="heartbeat-status">Loading...</span>
-    </p>
-    
-    <p>
-        MAC Address: <span id="mac-address">Loading...</span>
-    </p>
-    <p>
-        RAM: <span id="total-ram">Loading...</span>
-    </p>
-    <p>
-        Logged In User: <span id="logged-in-user">Loading...</span>
-    </p>
-    <p>
-        Network Adapter: <span id="network-adapter">Loading...</span>
-    </p>
-    <p>
-        CPU Core: <span id="cpu-core">Loading...</span>
-    </p>
-    <p>
-        CPU Model: <span id="cpu-model">Loading...</span>
-    </p>
-    <p>
-        Memory Usage: <span id="memory-usage">Loading...</span>
-    </p>
-</div> -->
 {% endblock %}
