@@ -3,6 +3,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.middleware.csrf import get_token
 
 # FOR APIs
 import json
@@ -229,23 +230,27 @@ def agent_command_result(request):
     print("Received command result:", data)
     return JsonResponse({"status": "received"})
 
+@login_required
 def debug_queue_command(request):
-    hostname = request.GET.get("hostname")
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    hostname = request.POST.get("hostname")
     computer, _ = Computer.objects.get_or_create(hostname=hostname)
 
-    pid = request.GET.get("pid")
+    pid = request.POST.get("pid")
     command = Command.objects.create(
         computer=computer,
-        command=request.GET.get("command"),
+        command=request.POST.get("command"),
         pid=int(pid) if pid else None,
-        service_name=request.GET.get("service_name") or None,
+        service_name=request.POST.get("service_name") or None,
     )
-    if request.GET.get("redirect"):
+    if request.POST.get("redirect"):
         return redirect("view_report")
     return JsonResponse({"queued_id": command.id})
 
-def _queue_form(hostname, command, label, *, pid=None, service_name=None):
-    #a small get method form that queues a command and comes back to this page
+def _queue_form(request, hostname, command, label, *, pid=None, service_name=None):
+    # a small POST method, CSRF protected form that queues a command and comes back to this page
     hidden = [
         ("hostname", hostname),
         ("command", command),
@@ -258,11 +263,13 @@ def _queue_form(hostname, command, label, *, pid=None, service_name=None):
         for name, value in hidden
         if value is not None
     )
+    csrf_input = f"<input type='hidden' name='csrfmiddlewaretoken' value='{get_token(request)}'>"
     return (
-        "<form method='get' action='/debug/queue-command/' style='display:inline'>"
-        f"{inputs}<button type='submit'>{label}</button></form>"
+        "<form method='post' action='/debug/queue-command/' style='display:inline'>"
+        f"{csrf_input}{inputs}<button type='submit'>{label}</button></form>"
     )
 
+@login_required
 def view_report(request):
     # Agent payloads are untrusted input, so everything is escaped before it
     # goes into the page.
@@ -286,7 +293,7 @@ def view_report(request):
                 parts.append(
                     f"<tr><td>{escape(str(p.get('Name')))}</td><td>{escape(str(pid))}</td>"
                     f"<td>{escape(str(p.get('MemoryMb')))}</td>"
-                    f"<td>{_queue_form(hostname, 'terminate_process', 'Terminate', pid=pid)}</td></tr>"
+                    f"<td>{_queue_form(request, hostname, 'terminate_process', 'Terminate', pid=pid)}</td></tr>"
                 )
             parts.append("</table>")
         else:
@@ -299,7 +306,7 @@ def view_report(request):
             for s in services:
                 name = s.get("Name")
                 buttons = "".join(
-                    _queue_form(hostname, cmd, label, service_name=name)
+                    _queue_form(request, hostname, cmd, label, service_name=name)
                     for cmd, label in (
                         ("start_service", "Start"),
                         ("stop_service", "Stop"),
