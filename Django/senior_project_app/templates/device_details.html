@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block extra_css %} 
-<link rel="stylesheet" href="{% static 'css/device_details_syles.css'%}">
-<link rel="stylesheet" href="{% static 'css/table_syles.css'%}">
+<link rel="stylesheet" href="{% static 'css/device_details_styles.css'%}">
+<link rel="stylesheet" href="{% static 'css/table_styles.css'%}">
 {% endblock %}
 
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
@@ -75,6 +75,7 @@
 <!-- >> PERFORMANCE -->
 <hr>
 <h3>Performance</h3>
+<!-- >>> CPU -->
 <div class="performance-grid">
     <div class="performance-card">
         <div class="performance-card-header">
@@ -85,15 +86,48 @@
         <div class="progress-bar">
             <div class="progress-fill" id="cpu-progress"></div>
         </div>
+        <p class="performance-description">Processor utilization</p>
     </div>
+    <!-- >>> MEMORY -->
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>Memory Usage</h3>
+            <span id="memory-percent">Loading...</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="memory-progress"></div>
+        </div>
+        <p class="performance-description">
+            <span id="memory-used">Loading...</span>
+            <span id="memory-available">Loading...</span>
+        </p>
+    </div>
+    
+    <!-- >>> DISK -->   
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>Disk Usage</h3>
+            <span id="disk-usage">Loading...</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="disk-progress"></div>
+        </div>
+        <p class="performance-description">Storage utilization</p>
+    </div>
+
+    <!-- <div class="performance-card">
+        <div class="performance-card-header">
+            <h3></h3>
+            <span></span>
+        </div>
+    </div> -->
+
+
     <div class="info-card">
         <span>Drives:</span>
         <strong id="drives">Loading...</strong>
     </div>
-    <div class="info-card">
-        
-        
-    </div>
+    
     <div class="info-card">
         <span>Memory Used:</span>
         <strong id="memory-usage">Loading...</strong>
@@ -125,6 +159,9 @@
         </thead>
         <!-- rows -->
         <tbody id="processes-table-body">
+            <!-- <tr>
+                <td></td>
+            </tr> -->
         </tbody>
     </table>
     <div></div>
@@ -147,10 +184,10 @@
             </tr>
         </thead>
         <!-- rows -->
-        <tbody>
-            <tr>
+        <tbody id="services-table-body">
+            <!-- <tr>
                 <td></td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
     <div></div>

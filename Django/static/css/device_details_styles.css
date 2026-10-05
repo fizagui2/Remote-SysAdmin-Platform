@@ -4,6 +4,7 @@
     text-shadow: var(--text-shadow1);
 }
 
+/* >>> PERFORMANCE CARDS */
 .performance-grid{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -14,7 +15,6 @@
     background: var(--comp-gradient);
     padding: 25px;
     border-radius: 18px;
-    text-align: center;
     color: var(--container-text);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(135, 205, 255, 0.15);
@@ -25,13 +25,60 @@
 .performance-card:hover{
     transform: translateY(-7px);
     box-shadow: 
-        0 12px 225px rgba(0, 0, 0, 0.3),
+        0 12px 25px rgba(0, 0, 0, 0.3),
         0 0 20px var(--accent-color);
 }
-.performance-card h3{
-    color: var(--container-title);
+/* > PERFORMANCE HEADER */
+.performance-card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
+.performance-card-header h3{
+    color: var(--container-title);
+    margin: 0;
+}
+.performance-card-header span{
+    color: var(--extra-subtitle-var1);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* >>> PROGRESS BAR */
+.progress-bar{
+    width: 100%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(135, 205, 255, 0.12);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+.progress-fill{
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    background: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+    transition:
+        width 0.8s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* >>> PERFORMANCE DESCRIPTION */
+.performance-description{
+    margin-top: 15px;
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    text-align: center;
+}
+/* .performance-card h3{
+    color: var(--container-title);
+    margin-bottom: 20px;
+} */
 .performance-circle{
     width: 130px;
     height: 130px;
