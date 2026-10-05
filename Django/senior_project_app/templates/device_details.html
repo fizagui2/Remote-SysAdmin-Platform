@@ -1,11 +1,26 @@
 {% extends 'base_dshb.html' %}
 {% load static %}
-{% block extra_js %} <script src="{% static 'js/load_devices.js' %}" defer></script> {% endblock %}
+
+{% block extra_js %} 
+<script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
+<script src="{% static 'js/device_report.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %} <link rel="stylesheet" href="{% static 'css/device_details_syles.css'%}"> {% endblock %}
 
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
-
 {% block content %}
+<h2 class="extra-general-container-title" id="hostname">💻 Loading... 💻</h2>
+<hr>
+<div class="info-card">
+    <span>IP Address</span>
+    <strong id="computer-id">Loading...</strong>
+</div>
+
+
+
+
 
 <div class="performance-grid">
     <div class="performance-card">
@@ -36,9 +51,8 @@
 <div id="computers-container"></div> -->
 
 <!-- devices-card (class for other container) -->
-<!-- <h2>Device Details (Test)</h2>
+<h2>Device Report</h2>
 <div class="devices-container">
-    <h2 class="extra-general-container-title" id="hostname">Loading...</h2>
     <p>
         Status: <span id="heartbeat-status">Loading...</span>
     </p>
@@ -66,5 +80,5 @@
     <p>
         Memory Usage: <span id="memory-usage">Loading...</span>
     </p>
-</div> -->
+</div>
 {% endblock %}
