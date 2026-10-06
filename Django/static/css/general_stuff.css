@@ -38,3 +38,8 @@ hr{
     box-shadow: 0 0 10px var(--accent-color);
     border-radius: 50%;
 }
+
+mark{
+    background-color: var(--highlight-text-color1);
+    color: var(--base-variant);
+}

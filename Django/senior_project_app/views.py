@@ -71,6 +71,12 @@ def plans_view(request):
 def about_us(request):
     return render(request, 'about.html', {})
 
+def contacts(request):
+    return render(request, 'contacts.html', {})
+
+def location(request):
+    return render(request, 'location.html', {})
+
 # ==================== DASHBOARD :V ====================
 @login_required
 def dashboard(request):

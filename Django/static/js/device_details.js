@@ -32,15 +32,16 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
         const report = data.report.data;
         const heartbeat = data.heartbeat.data;
         const performance = data.performance.data;
-        
+
         const cpUsage = performance.CpuUsagePercent;
         const memoryUsed = performance.MemoryUsedGb;
         const memoryAvailable = performance.MemoryAvailableGb;
         const memoryUsagePercentage = performance.MemoryUsagePercent;
-        // const diskUsage = performance
+        const diskUsage = performance.Drives?.[0]?.UsagePercent;
 
         const processes = data.processes.data?.Processes || [];
         const services = data.services.data?.Services || [];
+        
         //console tests FOR JSONS AND DATA 
         console.log("Computer data:", data);
         console.log("Hostname:", data.hostname);
@@ -59,34 +60,32 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
         document.getElementById("win-version").textContent = report.WindowsVersion ?? "N/A";
         document.getElementById("cpu-cores").textContent = report.CpuCores ?? "N/A";
         document.getElementById("cpu-model").textContent = report.CpuModel ?? "N/A";
-        document.getElementById("total-ram").textContent = report.TotalRamGb ? `${report.TotalRamGb} GB` : "N/A";
+        document.getElementById("total-ram").textContent = report.TotalRamGb != null ? `${report.TotalRamGb} GB` : "N/A";
         document.getElementById("uptime-hours").textContent = report.UptimeHours ?? "N/A";
         document.getElementById("logged-in-user").textContent = report.LoggedInUser ?? "Undentified user";
         // need to show in bar table or circle table
-        document.getElementById("drives").textContent = report.Drives ?? "N/A";
+        document.getElementById("drives").textContent = report.Drives?.length ? report.Drives.map(drive => `${drive.DriveLetter} - ${drive.FreeGb} GB free / ${drive.TotalGb} GB`).join(", ") : "N/A"; // ?? "N/A";
         
         // HEARTBEAT
         document.getElementById("heartbeat-timestamp").textContent = heartbeat.Timestamp;
         
         // PERFORMANCE
+        // from 'drives'
         document.getElementById("cpu-usage").textContent = `${cpUsage ?? 0}%`;
+        // for the progress bar (do not delete)
         document.getElementById("cpu-progress").style.width = `${cpUsage ?? 0}%`;
 
-        document.getElementById("memory-usage").textContent = memoryAvailable != null ? `${memoryUsed} GB` : "N/A";
-        document.getElementById("memory-available").textContent = `${memoryAvailable}%`;
+        document.getElementById("memory-used").textContent = memoryUsed != null ? `${memoryUsed} GB (used)` : "N/A";
+        // for the progress bar (do not delete)
+        document.getElementById("memory-available").textContent = `| ${memoryAvailable}% (available)`;
         
         document.getElementById("memory-percent").textContent = `${memoryUsagePercentage ?? 0}%`;
         document.getElementById("memory-progress").style.width = `${memoryUsagePercentage ?? 0}%`;
-        document.getElementById("disk-usage").textContent = `${diskUsage}%`;
-        
+        document.getElementById("disk-usage").textContent = `${diskUsage ?? 0}%`;
+        document.getElementById("disk-progress").style.width = `${diskUsage ?? 0}%`
         updateProgressBar("cpu-progress", cpuUsage);
-
         updateProgressBar("memory-progress", memoryUsagePercentage);
-
-        // updateProgressBar(
-        //     "disk-progress",
-        //     diskUsage
-        // );
+        updateProgressBar("disk-progress", diskUsage);
 
         // PROCESSES
         const processTable = document.getElementById("processes-table-body");
@@ -117,3 +116,5 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
     .catch(error => {
         console.error("Could not retrieve computer information: ", error);
     });
+
+// document.getElementById("memory-used").textContent = memoryAvailable != null ? `${memoryUsed} GB` : "N/A";

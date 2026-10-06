@@ -2,8 +2,8 @@
 
 .darkmode{
     --base-color: #120227;
-    --base-variant: #060226;
-    --base-variant1: #010225ad;
+    --base-variant: #0d0837;
+    --base-variant1: #050741ad;
     --white-col: #ffffff;
     --black-col: #000000;
     --text-color:#ffffff;
@@ -21,7 +21,10 @@
     --secondary-buttons-border:#5650fe;
     --secondary-buttons-hover:#ffffff;
     --text-shadow1:#4762ffc4;
+    --highlight-text-color1: #8eff47db;
+    --highlight-text-color2: #477bffdb;
     --title:#80bbff;
+    --extra-title:#563de7c9;
     --subtitle: #99b8d4;
     --extra-subtitle:#5eb1ff;
     --extra-subtitle-var1:#a3f7ff;
@@ -29,7 +32,7 @@
     --container-text: #e1ebfd;
     --hover-color: #87cdff;
     --hover-color-darkmode-button:#0f0070ca;
-    --navbar-options: #ffffff;
+    --navbar-options: #c8ddfd;
     --background: linear-gradient(180deg, #0e121d, #000000);
     --darkmode-button-background: #4603d5b6;
     --comp-gradient: radial-gradient(circle at 25% 70%, #164e63 0%, #172554 40%, #11143d 75%, #060817 100%);
@@ -124,6 +127,11 @@
     display: flex;
 }
 
+.extra-title{
+    color: var(--extra-title);
+    text-shadow: var(--text-shadow1);
+}
+
 /*//////////////////*/
 
 .dashboard-layout{
@@ -135,6 +143,11 @@
 .text-block{
     padding: 10px;
 }
+
+/* .text-highlight{
+    
+} */
+
 
 /*FOR SMALLER SCREENS*/
 @media (max-width: 600px){

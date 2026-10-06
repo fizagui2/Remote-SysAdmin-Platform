@@ -1,6 +1,6 @@
 :root{
     --base-color: #ffffff;
-    --base-variant: #e8e9ed;
+    --base-variant: #080e2c;
     --base-variant1: #0b012af2;
     --white-col: #ffffff;
     --black-col: #000000;
@@ -20,10 +20,13 @@
     --secondary-buttons-hover:#ffffff;
     --navbar-options:#010020;
     --text-shadow1:#0b0037d8;
+    --highlight-text-color1: #8eff47db;
+    --highlight-text-color2: #2f4b91db;
     --title:#021e38;
+    --extra-title:#34277dc9;
     --subtitle: #26517a;
     --extra-subtitle:#226eb5;
-    --extra-subtitle-var1:#5dfdb2;
+    --extra-subtitle-var1:rgb(49, 220, 140);
     --container-title: #99c7ff;
     --container-text: #ffffff;
     --hover-color: #012544;
@@ -36,4 +39,5 @@
     --login-cont-text: #622a8a;
     --footer-text:#1d1d39;
     --profile-shadow: rgb(21, 31, 31);
+
 }
