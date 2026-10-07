@@ -1,21 +1,39 @@
 /* ///////////// NAVBAR (FROM BASE.HTML) ///////////// */
 .navbar_options{
+    width: 100%;
+    padding: 20px 10px;
     background-color: var(--navbar-options) !important;
     color: var(--base-color);
 }
-.navbar_options .navbar-brand,
-.navbar_options .nav-link, 
-.navbar_options .navbar-toggler {
+
+.navbar_options .navbar-brand {
     background-color: var(--background) !important;
     color: var(--base-color) !important;
+    white-space: nowrap;
 }
 
+/* NAVIGATION*/
+.navbar_options .navbar-nav{
+    gap: 6px;
+}
+
+.navbar_options .nav-link{
+    background: transparent !important;
+    color: var(--base-color) !important;
+    padding: 9px 14px !important;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+} 
 
 .navbar_options .nav-link:hover,
-.navbar_options .nav-link:active {
+.navbar_options .nav-link:active,
+.navbar_options .nav-link.active {
     background-color: var(--hover-color) !important;
     color:var(--base-variant) !important;
-    border-radius: 4px;
+    
 }
 
 /* >>> DASHBOARD */
