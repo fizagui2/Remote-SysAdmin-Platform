@@ -152,6 +152,12 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
+# Agents identify themselves with a device token from /api/agent/enroll/.
+# While this is off, agents that predate enrollment can still report by
+# hostname, but only into machines that haven't enrolled. Turn it on once
+# every agent sends a token; then requests without one get a 401.
+AGENT_TOKEN_REQUIRED = _env_flag('AGENT_TOKEN_REQUIRED', 'False')
+
 # Accounts made on the register page use their email address as the username,
 # so usernames are matched without regard to case. This replaces Django's
 # default ModelBackend; it inherits everything else from it.
