@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Computer
+from .models import Command, Computer
 
 
 class LoggedInClientMixin:
@@ -204,7 +204,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             data=json.dumps(sample_report),
             content_type="application/json",
         )
- 
+        self.claim_machines()
+
         response = self.client.get("/agent/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "TEST-PC-01")
@@ -600,6 +601,36 @@ class OwnershipTests(TestCase):
         computer = Computer.objects.get(hostname="ANA-PC")
         self.assertEqual(computer.owner, self.ana)
         self.assertEqual(computer.latest_heartbeat["status"], "online")
+
+    def test_report_page_lists_only_your_machines(self):
+        self.client.force_login(self.ana)
+        page = self.client.get("/agent/")
+        self.assertContains(page, "ANA-PC")
+        self.assertNotContains(page, "BO-PC")
+        self.assertNotContains(page, "UNOWNED-PC")
+
+    def queue(self, **fields):
+        data = {"command": "terminate_process", "pid": "4242", **fields}
+        return self.client.post("/debug/queue-command/", data)
+
+    def test_can_queue_a_command_on_your_own_machine(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="ANA-PC").status_code, 200)
+        command = Command.objects.get()
+        self.assertEqual((command.computer.hostname, command.pid), ("ANA-PC", 4242))
+
+    def test_cannot_queue_a_command_on_another_accounts_machine(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="BO-PC").status_code, 404)
+        self.assertEqual(self.queue(hostname="UNOWNED-PC").status_code, 404)
+        self.assertFalse(Command.objects.exists())
+
+    def test_queueing_for_an_unknown_or_missing_hostname_creates_nothing(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="NOT-A-REAL-PC").status_code, 404)
+        self.assertEqual(self.queue().status_code, 404)
+        self.assertEqual(Computer.objects.count(), 3)
+        self.assertFalse(Command.objects.exists())
 
     def test_deleting_an_account_deletes_its_machines(self):
         self.ana.delete()

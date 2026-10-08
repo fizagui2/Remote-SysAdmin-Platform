@@ -250,7 +250,9 @@ def debug_queue_command(request):
         return HttpResponse(status=405)
 
     hostname = request.POST.get("hostname")
-    computer, _ = Computer.objects.get_or_create(hostname=hostname)
+    # Only the user's own machines. A hostname that's missing, unknown, or
+    # someone else's gets the same 404, and nothing is created.
+    computer = get_object_or_404(_visible_computers(request.user), hostname=hostname)
 
     pid = request.POST.get("pid")
     command = Command.objects.create(
@@ -288,7 +290,7 @@ def view_report(request):
     # Agent payloads are untrusted input, so everything is escaped before it
     # goes into the page.
     parts = ["<h1>Latest Agent Reports</h1>"]
-    for computer in Computer.objects.order_by("hostname"):
+    for computer in _visible_computers(request.user).order_by("hostname"):
         hostname = computer.hostname
         parts.append(f"<h2>{escape(hostname)}</h2><p>Last seen: {computer.last_seen}</p>")
         for label, field in (
