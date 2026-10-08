@@ -11,20 +11,22 @@ from .models import Computer
 class LoggedInClientMixin:
     """Logs the test client in, since the dashboard's status endpoints require it.
 
-    The user is a superuser because these tests are about the agent pipeline,
-    not visibility: machines the agent creates have no owner, and only
-    superusers see unowned machines. OwnershipTests covers regular accounts.
-
     The agent endpoints themselves don't check the session, so the agent POSTs
-    in these tests behave the same as they would from the real agent.
+    in these tests behave the same as they would from the real agent. Machines
+    the agent creates have no owner, so a test calls claim_machines() before
+    reading them back; OwnershipTests covers who can see what.
     """
 
     def setUp(self):
         super().setUp()
-        user = get_user_model().objects.create_superuser(
+        self.user = get_user_model().objects.create_user(
             username="tester@example.com", email="tester@example.com", password="test-pass-123",
         )
-        self.client.force_login(user)
+        self.client.force_login(self.user)
+
+    def claim_machines(self):
+        """Give the test user every unowned machine, as enrolling them would."""
+        Computer.objects.filter(owner__isnull=True).update(owner=self.user)
 
 
 class AgentEndpointTests(LoggedInClientMixin, TestCase):
@@ -56,6 +58,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"status": "received"})
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["report"]["has_data"])
@@ -91,6 +95,7 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         self.assertEqual(response.json(), {"status": "received"})
  
         # /api/agent/status/ should hand this back exactly as posted.
+        self.claim_machines()
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["report"]["has_data"])
         self.assertEqual(status_data["report"]["data"], system_info_payload)
@@ -116,6 +121,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
  
+        self.claim_machines()
+ 
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["heartbeat"]["has_data"])
         self.assertEqual(status_data["heartbeat"]["data"], sample_heartbeat)
@@ -134,6 +141,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["performance"]["has_data"])
@@ -154,6 +163,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["processes"]["has_data"])
@@ -214,6 +225,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 12.5})
         self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
 
+        self.claim_machines()
+
         pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
         pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
         self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 12.5)
@@ -224,6 +237,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
         self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 55.0})
 
+        self.claim_machines()
+
         pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
         pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
         self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 55.0)
@@ -233,6 +248,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
     def test_computers_endpoint_lists_every_machine(self):
         self.post_json("/api/agent/report/", {"Hostname": "PC-B", "WindowsVersion": "Windows 11 Pro"})
         self.post_json("/api/agent/report/", {"Hostname": "PC-A", "WindowsVersion": "Windows 10 Home"})
+
+        self.claim_machines()
 
         computers = self.client.get("/api/agent/computers/").json()["computers"]
         self.assertEqual([c["hostname"] for c in computers], ["PC-A", "PC-B"])
@@ -252,9 +269,10 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         # last_seen is set directly rather than relying on two requests
         # landing at measurably different times.
         now = timezone.now()
-        Computer.objects.create(hostname="NEWER-PC", last_seen=now, latest_heartbeat={"Hostname": "NEWER-PC"})
+        Computer.objects.create(hostname="NEWER-PC", owner=self.user, last_seen=now, latest_heartbeat={"Hostname": "NEWER-PC"})
         Computer.objects.create(
             hostname="OLDER-PC",
+            owner=self.user,
             last_seen=now - timedelta(minutes=5),
             latest_heartbeat={"Hostname": "OLDER-PC"},
         )
@@ -500,7 +518,7 @@ class RegisterTests(TestCase):
 
 
 class OwnershipTests(TestCase):
-    """Each account sees only its own machines; superusers see every machine."""
+    """Each account sees only its own machines, superusers included."""
 
     def setUp(self):
         User = get_user_model()
@@ -562,11 +580,14 @@ class OwnershipTests(TestCase):
         self.assertIsNone(data["hostname"])
         self.assertFalse(data["report"]["has_data"])
 
-    def test_superuser_sees_every_machine(self):
+    def test_superuser_sees_only_their_own_machines(self):
+        # Admins look at other accounts' machines in /admin/, not the dashboard.
         admin = get_user_model().objects.create_superuser("root", "root@example.com", "admin-pass-99")
+        Computer.objects.create(hostname="ADMIN-PC", owner=admin)
         self.client.force_login(admin)
-        self.assertEqual(self.listed_hostnames(), ["ANA-PC", "BO-PC", "UNOWNED-PC"])
-        self.assertEqual(self.client.get("/api/agent/status/?hostname=BO-PC").status_code, 200)
+        self.assertEqual(self.listed_hostnames(), ["ADMIN-PC"])
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=BO-PC").status_code, 404)
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=UNOWNED-PC").status_code, 404)
 
     def test_agent_report_keeps_the_machines_owner(self):
         # The agent doesn't know about accounts, so its posts must never

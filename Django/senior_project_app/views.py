@@ -38,13 +38,14 @@ def _section(computer, field):
     return {"has_data": bool(value), "data": value or {}}
 
 def _visible_computers(user):
-    """The machines a logged-in user may see: their own, or all of them for a superuser.
+    """The machines a logged-in user may see: the ones their account owns.
+
+    This holds for superusers too. The dashboard is the product, and admins
+    see other accounts' machines only through /admin/, not in normal use.
 
     Every dashboard read should start from this rather than Computer.objects,
     so a hostname in the URL can never reach another account's machine.
     """
-    if user.is_superuser:
-        return Computer.objects.all()
     return Computer.objects.filter(owner=user)
 
 # ==================== MAIN/HOME STUFF ====================

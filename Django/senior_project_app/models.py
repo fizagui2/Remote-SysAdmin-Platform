@@ -10,8 +10,9 @@ class Computer(models.Model):
     machine's previous one; no history is kept.
 
     owner is the account the machine belongs to. Only that account sees it on
-    the dashboard. Machines that reported before they had an owner have none,
-    and only superusers see those until one is assigned in the admin.
+    the dashboard, superusers included. Machines that reported before they had
+    an owner have none, and show up on nobody's dashboard until one is assigned
+    in the admin.
     """
 
     owner = models.ForeignKey(
