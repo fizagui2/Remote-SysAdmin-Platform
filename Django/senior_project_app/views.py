@@ -14,7 +14,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
-from .decorators import login_required_json
+from .decorators import agent_token, login_required_json
 from .enrollment import active_code_for, create_enrollment_code, format_code, redeem_enrollment_code
 from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
@@ -214,6 +214,7 @@ def agent_enroll(request):
 
 # //////////////////////// Franks Testing Code ///////////////////////////////////////////////////
 @csrf_exempt
+@agent_token
 def agent_report(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -223,13 +224,14 @@ def agent_report(request):
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    if not _save_snapshot(data, "latest_report"):
+    if not _save_snapshot(data, "latest_report", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
     print("Received agent report:", data)
 
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
+@agent_token
 def agent_heartbeat(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -237,12 +239,13 @@ def agent_heartbeat(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
-    if not _save_snapshot(data, "latest_heartbeat"):
+    if not _save_snapshot(data, "latest_heartbeat", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
     print("Received heartbeat:", data)
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
+@agent_token
 def agent_performance(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -250,12 +253,13 @@ def agent_performance(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
-    if not _save_snapshot(data, "latest_performance"):
+    if not _save_snapshot(data, "latest_performance", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
     print("Received performance:", data)
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
+@agent_token
 def agent_processes(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -263,12 +267,13 @@ def agent_processes(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
-    if not _save_snapshot(data, "latest_processes"):
+    if not _save_snapshot(data, "latest_processes", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
     print("Received process report:", data)
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
+@agent_token
 def agent_services(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -276,15 +281,24 @@ def agent_services(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
-    if not _save_snapshot(data, "latest_services"):
+    if not _save_snapshot(data, "latest_services", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
     print("Received service report:", data)
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
+@agent_token
 def agent_commands(request):
-    hostname = request.GET.get("hostname")
-    pending = list(Command.objects.filter(computer__hostname=hostname, status="pending"))
+    if request.agent_computer is not None:
+        hostname = request.agent_computer.hostname
+        pending = list(Command.objects.filter(computer=request.agent_computer, status="pending"))
+    else:
+        # No token: only commands for machines that haven't enrolled, so a
+        # request naming an enrolled machine's hostname can't take its commands.
+        hostname = request.GET.get("hostname")
+        pending = list(Command.objects.filter(
+            computer__hostname=hostname, computer__token_hash__isnull=True, status="pending",
+        ))
 
     result = [
         {
@@ -301,6 +315,7 @@ def agent_commands(request):
     return JsonResponse(result, safe=False)
 
 @csrf_exempt
+@agent_token
 def agent_command_result(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
@@ -309,7 +324,12 @@ def agent_command_result(request):
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    Command.objects.filter(id=data["CommandId"]).update(
+    commands = Command.objects.filter(id=data["CommandId"])
+    if request.agent_computer is not None:
+        commands = commands.filter(computer=request.agent_computer)
+    else:
+        commands = commands.filter(computer__token_hash__isnull=True)
+    commands.update(
         status=data["Status"],
         message=data["Message"],
         completed_at=timezone.now(),
