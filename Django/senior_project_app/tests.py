@@ -2,6 +2,7 @@ import json
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils import timezone
 
@@ -636,3 +637,52 @@ class OwnershipTests(TestCase):
         self.ana.delete()
         self.assertFalse(Computer.objects.filter(hostname="ANA-PC").exists())
         self.assertTrue(Computer.objects.filter(hostname="BO-PC").exists())
+
+
+class MachineIdentityTests(TestCase):
+    """Hostnames are unique per account, and a post without a token can't touch an enrolled machine."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.ana = User.objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.bo = User.objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+
+    def post_without_token(self, payload):
+        return self.client.post("/api/agent/heartbeat/", data=json.dumps(payload), content_type="application/json")
+
+    def test_two_accounts_can_each_have_the_same_hostname(self):
+        Computer.objects.create(hostname="DESKTOP-1", owner=self.ana, token_hash="a" * 64)
+        Computer.objects.create(hostname="DESKTOP-1", owner=self.bo, token_hash="b" * 64)
+        self.assertEqual(Computer.objects.filter(hostname="DESKTOP-1").count(), 2)
+
+    def test_one_account_cannot_have_the_same_hostname_twice(self):
+        Computer.objects.create(hostname="DESKTOP-1", owner=self.ana, token_hash="a" * 64)
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            Computer.objects.create(hostname="DESKTOP-1", owner=self.ana, token_hash="b" * 64)
+
+    def test_only_one_unenrolled_machine_per_hostname(self):
+        # Unenrolled machines are found by hostname, so two would be ambiguous.
+        Computer.objects.create(hostname="LAB-PC-01")
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            Computer.objects.create(hostname="LAB-PC-01", owner=self.ana)
+
+    def test_post_without_token_never_changes_an_enrolled_machine(self):
+        enrolled = Computer.objects.create(
+            hostname="LAB-PC-01", owner=self.ana, token_hash="a" * 64, latest_heartbeat={"status": "real"},
+        )
+        response = self.post_without_token({"Hostname": "LAB-PC-01", "status": "spoofed"})
+        self.assertEqual(response.status_code, 200)
+
+        enrolled.refresh_from_db()
+        self.assertEqual(enrolled.latest_heartbeat, {"status": "real"})
+        # The post went to a separate, unowned machine that nobody's dashboard shows.
+        stray = Computer.objects.get(hostname="LAB-PC-01", token_hash=None)
+        self.assertIsNone(stray.owner)
+
+    def test_post_without_token_still_updates_an_unenrolled_machine(self):
+        # How an owner assigned in /admin/ keeps getting data until the agent enrolls.
+        machine = Computer.objects.create(hostname="LAB-PC-01", owner=self.ana)
+        self.post_without_token({"Hostname": "LAB-PC-01", "status": "online"})
+        machine.refresh_from_db()
+        self.assertEqual(machine.latest_heartbeat["status"], "online")
+        self.assertEqual(Computer.objects.count(), 1)

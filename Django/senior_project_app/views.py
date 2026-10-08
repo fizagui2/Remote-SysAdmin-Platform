@@ -21,6 +21,11 @@ from .models import Computer, Command
 def _save_snapshot(data, field):
     """Store data as the latest `field` payload for the machine that sent it.
 
+    The payload's Hostname picks the machine. Only machines that haven't
+    enrolled can be written this way, so a request without a device token can
+    never change an enrolled machine; it creates or updates a separate,
+    unenrolled machine with that hostname instead.
+
     Returns False when the payload has no Hostname, since there is no machine
     to store it under.
     """
@@ -29,6 +34,7 @@ def _save_snapshot(data, field):
         return False
     Computer.objects.update_or_create(
         hostname=hostname,
+        token_hash=None,
         defaults={field: data, "last_seen": timezone.now()},
     )
     return True
