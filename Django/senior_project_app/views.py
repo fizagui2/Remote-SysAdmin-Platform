@@ -14,22 +14,35 @@ from django.utils import timezone
 from django.utils.html import escape
 
 from .decorators import login_required_json
+from .enrollment import redeem_enrollment_code
 from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
 
 
-def _save_snapshot(data, field):
+def _save_snapshot(data, field, computer=None):
     """Store data as the latest `field` payload for the machine that sent it.
 
-    The payload's Hostname picks the machine. Only machines that haven't
-    enrolled can be written this way, so a request without a device token can
-    never change an enrolled machine; it creates or updates a separate,
-    unenrolled machine with that hostname instead.
+    computer is the enrolled machine a device token identified (see the
+    agent_token decorator). The payload is stored on it, whatever Hostname the
+    payload claims.
 
-    Returns False when the payload has no Hostname, since there is no machine
-    to store it under.
+    Without one, the payload's Hostname picks the machine. Only machines that
+    haven't enrolled can be written this way, so a request without a device
+    token can never change an enrolled machine; it creates or updates a
+    separate, unenrolled machine with that hostname instead.
+
+    Returns False when the payload isn't a JSON object, or has no Hostname and
+    no token says which machine sent it.
     """
-    hostname = data.get("Hostname") if isinstance(data, dict) else None
+    if not isinstance(data, dict):
+        return False
+    if computer is not None:
+        # update() rather than save(), so two reports landing at once can't
+        # overwrite each other's field with a stale copy.
+        Computer.objects.filter(pk=computer.pk).update(**{field: data, "last_seen": timezone.now()})
+        return True
+
+    hostname = data.get("Hostname")
     if not isinstance(hostname, str) or not hostname:
         return False
     Computer.objects.update_or_create(
@@ -143,6 +156,38 @@ def agent_computers(request):
             for computer in computers
         ]
     })
+
+@csrf_exempt
+def agent_enroll(request):
+    """Trade a one-time enrollment code for a device token.
+
+    Request: {"EnrollmentCode": "K7QF-2M9P", "Hostname": "LAB-PC-01"}
+    Response: {"DeviceToken": "...", "Hostname": "LAB-PC-01"}
+
+    The token is only ever sent here, once. The full contract is in
+    Project-Documents/Agent-Enrollment.md.
+    """
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    code = data.get("EnrollmentCode") if isinstance(data, dict) else None
+    hostname = data.get("Hostname") if isinstance(data, dict) else None
+    if not isinstance(code, str) or not isinstance(hostname, str):
+        return JsonResponse({"error": "EnrollmentCode and Hostname required"}, status=400)
+    hostname = hostname.strip()
+    if not hostname or len(hostname) > 255:
+        return JsonResponse({"error": "EnrollmentCode and Hostname required"}, status=400)
+
+    enrolled = redeem_enrollment_code(code, hostname)
+    if enrolled is None:
+        # Same answer for wrong, expired and already-used codes.
+        return JsonResponse({"error": "Invalid or expired enrollment code"}, status=403)
+    computer, token = enrolled
+    return JsonResponse({"DeviceToken": token, "Hostname": computer.hostname})
 
 
 # //////////////////////// Franks Testing Code ///////////////////////////////////////////////////

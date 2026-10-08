@@ -3,10 +3,21 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
-from django.test import TestCase
+from django.http import JsonResponse
+from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 
-from .models import Command, Computer
+from .decorators import agent_token
+from .enrollment import (
+    CODE_ALPHABET,
+    CODE_LENGTH,
+    create_enrollment_code,
+    format_code,
+    hash_token,
+    normalize_code,
+)
+from .models import Command, Computer, EnrollmentCode
+from .views import _save_snapshot
 
 
 class LoggedInClientMixin:
@@ -686,3 +697,170 @@ class MachineIdentityTests(TestCase):
         machine.refresh_from_db()
         self.assertEqual(machine.latest_heartbeat["status"], "online")
         self.assertEqual(Computer.objects.count(), 1)
+
+
+class EnrollmentTests(TestCase):
+    """An enrollment code from the Add device page buys an agent its device token."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.ana = User.objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.bo = User.objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+
+    def enroll(self, code, hostname="LAB-PC-01"):
+        payload = {"EnrollmentCode": code, "Hostname": hostname}
+        return self.client.post("/api/agent/enroll/", data=json.dumps(payload), content_type="application/json")
+
+    def test_new_code_is_short_readable_and_expires_in_15_minutes(self):
+        enrollment = create_enrollment_code(self.ana)
+        self.assertEqual(len(enrollment.code), CODE_LENGTH)
+        self.assertTrue(set(enrollment.code) <= set(CODE_ALPHABET))
+        lifetime = enrollment.expires_at - timezone.now()
+        self.assertTrue(timedelta(minutes=14) < lifetime <= timedelta(minutes=15))
+
+    def test_codes_can_be_typed_loosely(self):
+        self.assertEqual(normalize_code("k7qf-2m9p"), "K7QF2M9P")
+        self.assertEqual(normalize_code(" K7QF 2M9P "), "K7QF2M9P")
+        self.assertEqual(format_code("K7QF2M9P"), "K7QF-2M9P")
+
+    def test_enrolling_returns_a_token_and_joins_the_codes_account(self):
+        enrollment = create_enrollment_code(self.ana)
+        response = self.enroll(format_code(enrollment.code).lower())
+        self.assertEqual(response.status_code, 200)
+        token = response.json()["DeviceToken"]
+        self.assertEqual(response.json()["Hostname"], "LAB-PC-01")
+
+        computer = Computer.objects.get(hostname="LAB-PC-01")
+        self.assertEqual(computer.owner, self.ana)
+        self.assertTrue(computer.is_enrolled)
+        # Only the hash is kept.
+        self.assertEqual(computer.token_hash, hash_token(token))
+        self.assertNotIn(token, json.dumps(list(Computer.objects.values()), default=str))
+
+        enrollment.refresh_from_db()
+        self.assertIsNotNone(enrollment.used_at)
+        self.assertEqual(enrollment.computer, computer)
+
+    def test_a_code_works_only_once(self):
+        code = create_enrollment_code(self.ana).code
+        self.assertEqual(self.enroll(code).status_code, 200)
+        response = self.enroll(code, hostname="SECOND-PC")
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Computer.objects.filter(hostname="SECOND-PC").exists())
+
+    def test_expired_code_is_rejected(self):
+        enrollment = create_enrollment_code(self.ana)
+        EnrollmentCode.objects.filter(pk=enrollment.pk).update(expires_at=timezone.now() - timedelta(seconds=1))
+        self.assertEqual(self.enroll(enrollment.code).status_code, 403)
+        self.assertFalse(Computer.objects.exists())
+
+    def test_unknown_code_is_rejected_the_same_way(self):
+        response = self.enroll("ZZZZ-ZZZZ")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"error": "Invalid or expired enrollment code"})
+
+    def test_bad_requests(self):
+        self.assertEqual(self.client.get("/api/agent/enroll/").status_code, 405)
+        bad_json = self.client.post("/api/agent/enroll/", data="not json", content_type="application/json")
+        self.assertEqual(bad_json.status_code, 400)
+        code = create_enrollment_code(self.ana).code
+        self.assertEqual(self.enroll(code, hostname="   ").status_code, 400)
+        missing = self.client.post(
+            "/api/agent/enroll/", data=json.dumps({"Hostname": "LAB-PC-01"}), content_type="application/json",
+        )
+        self.assertEqual(missing.status_code, 400)
+        # A rejected request doesn't use the code up.
+        self.assertEqual(self.enroll(code).status_code, 200)
+
+    def test_re_enrolling_keeps_the_machine_and_replaces_its_token(self):
+        first = self.enroll(create_enrollment_code(self.ana).code).json()["DeviceToken"]
+        second = self.enroll(create_enrollment_code(self.ana).code).json()["DeviceToken"]
+        self.assertNotEqual(first, second)
+        self.assertEqual(Computer.objects.filter(hostname="LAB-PC-01").count(), 1)
+        self.assertEqual(Computer.objects.get().token_hash, hash_token(second))
+
+    def test_enrolling_never_takes_over_another_accounts_machine(self):
+        bos = Computer.objects.create(hostname="LAB-PC-01", owner=self.bo, latest_report={"from": "bo"})
+        self.enroll(create_enrollment_code(self.ana).code)
+        bos.refresh_from_db()
+        self.assertEqual((bos.owner, bos.token_hash, bos.latest_report), (self.bo, None, {"from": "bo"}))
+        self.assertTrue(Computer.objects.filter(hostname="LAB-PC-01", owner=self.ana).exists())
+
+    def test_enrolling_never_takes_over_an_unowned_machine(self):
+        stray = Computer.objects.create(hostname="LAB-PC-01", latest_report={"from": "old agent"})
+        self.enroll(create_enrollment_code(self.ana).code)
+        stray.refresh_from_db()
+        self.assertEqual((stray.owner, stray.token_hash), (None, None))
+        self.assertEqual(Computer.objects.filter(hostname="LAB-PC-01").count(), 2)
+
+    def test_enrolling_picks_up_your_own_unenrolled_machine(self):
+        # e.g. one an admin assigned to you before the agent supported enrollment.
+        mine = Computer.objects.create(hostname="LAB-PC-01", owner=self.ana, latest_report={"kept": True})
+        self.enroll(create_enrollment_code(self.ana).code)
+        mine.refresh_from_db()
+        self.assertTrue(mine.is_enrolled)
+        self.assertEqual(mine.latest_report, {"kept": True})
+        self.assertEqual(Computer.objects.count(), 1)
+
+    def test_deleting_an_account_deletes_its_codes(self):
+        create_enrollment_code(self.ana)
+        self.ana.delete()
+        self.assertFalse(EnrollmentCode.objects.exists())
+
+
+class AgentTokenTests(TestCase):
+    """The agent_token decorator works out which enrolled machine is calling."""
+
+    def setUp(self):
+        owner = get_user_model().objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.computer = Computer.objects.create(
+            hostname="LAB-PC-01", owner=owner, token_hash=hash_token("good-token"),
+        )
+        self.view = agent_token(
+            lambda request: JsonResponse({"computer": getattr(request.agent_computer, "pk", None)})
+        )
+        self.factory = RequestFactory()
+
+    def call(self, authorization=None):
+        headers = {"HTTP_AUTHORIZATION": authorization} if authorization is not None else {}
+        return self.view(self.factory.post("/api/agent/heartbeat/", **headers))
+
+    def test_valid_token_identifies_the_machine(self):
+        response = self.call("Token good-token")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {"computer": self.computer.pk})
+
+    def test_unknown_token_is_rejected(self):
+        response = self.call("Token not-a-real-token")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response["WWW-Authenticate"], "Token")
+
+    def test_malformed_header_is_rejected(self):
+        for header in ("Bearer good-token", "Token", "Token   ", "good-token", ""):
+            self.assertEqual(self.call(header).status_code, 401, msg=repr(header))
+
+    def test_no_header_falls_back_while_tokens_are_optional(self):
+        response = self.call()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {"computer": None})
+
+    @override_settings(AGENT_TOKEN_REQUIRED=True)
+    def test_no_header_is_rejected_once_tokens_are_required(self):
+        self.assertEqual(self.call().status_code, 401)
+        self.assertEqual(self.call("Token good-token").status_code, 200)
+
+
+class SnapshotWithTokenTests(TestCase):
+    """A token-identified report goes to that machine, whatever Hostname it claims."""
+
+    def test_report_goes_to_the_tokens_machine(self):
+        owner = get_user_model().objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        computer = Computer.objects.create(hostname="LAB-PC-01", owner=owner, token_hash=hash_token("t"))
+        self.assertTrue(_save_snapshot({"Hostname": "SOMETHING-ELSE", "Cpu": 5}, "latest_performance", computer))
+        computer.refresh_from_db()
+        self.assertEqual(computer.latest_performance, {"Hostname": "SOMETHING-ELSE", "Cpu": 5})
+        self.assertIsNotNone(computer.last_seen)
+        self.assertEqual(Computer.objects.count(), 1)
+
+    def test_payload_must_be_a_json_object(self):
+        self.assertFalse(_save_snapshot(["not", "an", "object"], "latest_report"))
