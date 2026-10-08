@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -7,8 +8,21 @@ class Computer(models.Model):
     Each latest_* column holds the most recent payload the agent sent to the
     matching endpoint, stored exactly as received. A new payload replaces that
     machine's previous one; no history is kept.
+
+    owner is the account the machine belongs to. Only that account sees it on
+    the dashboard, superusers included. Machines that reported before they had
+    an owner have none, and show up on nobody's dashboard until one is assigned
+    in the admin.
     """
 
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        # Deleting an account deletes its machines, and their commands with them.
+        on_delete=models.CASCADE,
+        related_name="computers",
+    )
     hostname = models.CharField(max_length=255, unique=True)
     last_seen = models.DateTimeField(null=True, blank=True)
 

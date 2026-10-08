@@ -37,6 +37,17 @@ def _section(computer, field):
     value = getattr(computer, field) if computer else None
     return {"has_data": bool(value), "data": value or {}}
 
+def _visible_computers(user):
+    """The machines a logged-in user may see: the ones their account owns.
+
+    This holds for superusers too. The dashboard is the product, and admins
+    see other accounts' machines only through /admin/, not in normal use.
+
+    Every dashboard read should start from this rather than Computer.objects,
+    so a hostname in the URL can never reach another account's machine.
+    """
+    return Computer.objects.filter(owner=user)
+
 # ==================== MAIN/HOME STUFF ====================
 def home(request):
     return render(request, 'home.html', {})
@@ -91,15 +102,18 @@ def individual_device(request):
 
 @login_required_json
 def agent_status(request):
+    computers = _visible_computers(request.user)
     hostname = request.GET.get("hostname")
     if hostname:
-        computer = Computer.objects.filter(hostname=hostname).first()
+        computer = computers.filter(hostname=hostname).first()
         if computer is None:
+            # Same answer for "no such machine" and "not your machine", so the
+            # response doesn't reveal which hostnames other accounts own.
             return JsonResponse({"error": "Unknown hostname"}, status=404)
     else:
         # No hostname: fall back to the machine that checked in most recently,
         # so callers written before per-machine storage keep working.
-        computer = Computer.objects.order_by(F("last_seen").desc(nulls_last=True)).first()
+        computer = computers.order_by(F("last_seen").desc(nulls_last=True)).first()
 
     return JsonResponse({
         "hostname": computer.hostname if computer else None,
@@ -112,7 +126,7 @@ def agent_status(request):
 
 @login_required_json
 def agent_computers(request):
-    computers = Computer.objects.order_by("hostname").only("hostname", "last_seen", "latest_report")
+    computers = _visible_computers(request.user).order_by("hostname").only("hostname", "last_seen", "latest_report")
     return JsonResponse({
         "computers": [
             {
@@ -236,7 +250,9 @@ def debug_queue_command(request):
         return HttpResponse(status=405)
 
     hostname = request.POST.get("hostname")
-    computer, _ = Computer.objects.get_or_create(hostname=hostname)
+    # Only the user's own machines. A hostname that's missing, unknown, or
+    # someone else's gets the same 404, and nothing is created.
+    computer = get_object_or_404(_visible_computers(request.user), hostname=hostname)
 
     pid = request.POST.get("pid")
     command = Command.objects.create(
@@ -274,7 +290,7 @@ def view_report(request):
     # Agent payloads are untrusted input, so everything is escaped before it
     # goes into the page.
     parts = ["<h1>Latest Agent Reports</h1>"]
-    for computer in Computer.objects.order_by("hostname"):
+    for computer in _visible_computers(request.user).order_by("hostname"):
         hostname = computer.hostname
         parts.append(f"<h2>{escape(hostname)}</h2><p>Last seen: {computer.last_seen}</p>")
         for label, field in (

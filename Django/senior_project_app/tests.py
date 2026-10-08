@@ -5,22 +5,28 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Computer
+from .models import Command, Computer
 
 
 class LoggedInClientMixin:
     """Logs the test client in, since the dashboard's status endpoints require it.
 
     The agent endpoints themselves don't check the session, so the agent POSTs
-    in these tests behave the same as they would from the real agent.
+    in these tests behave the same as they would from the real agent. Machines
+    the agent creates have no owner, so a test calls claim_machines() before
+    reading them back; OwnershipTests covers who can see what.
     """
 
     def setUp(self):
         super().setUp()
-        user = get_user_model().objects.create_user(
+        self.user = get_user_model().objects.create_user(
             username="tester@example.com", email="tester@example.com", password="test-pass-123",
         )
-        self.client.force_login(user)
+        self.client.force_login(self.user)
+
+    def claim_machines(self):
+        """Give the test user every unowned machine, as enrolling them would."""
+        Computer.objects.filter(owner__isnull=True).update(owner=self.user)
 
 
 class AgentEndpointTests(LoggedInClientMixin, TestCase):
@@ -52,6 +58,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"status": "received"})
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["report"]["has_data"])
@@ -87,6 +95,7 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         self.assertEqual(response.json(), {"status": "received"})
  
         # /api/agent/status/ should hand this back exactly as posted.
+        self.claim_machines()
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["report"]["has_data"])
         self.assertEqual(status_data["report"]["data"], system_info_payload)
@@ -112,6 +121,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
         )
         self.assertEqual(response.status_code, 200)
  
+        self.claim_machines()
+ 
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["heartbeat"]["has_data"])
         self.assertEqual(status_data["heartbeat"]["data"], sample_heartbeat)
@@ -130,6 +141,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["performance"]["has_data"])
@@ -150,6 +163,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
+ 
+        self.claim_machines()
  
         status_data = self.client.get("/api/agent/status/").json()
         self.assertTrue(status_data["processes"]["has_data"])
@@ -189,7 +204,8 @@ class AgentEndpointTests(LoggedInClientMixin, TestCase):
             data=json.dumps(sample_report),
             content_type="application/json",
         )
- 
+        self.claim_machines()
+
         response = self.client.get("/agent/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "TEST-PC-01")
@@ -210,6 +226,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 12.5})
         self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
 
+        self.claim_machines()
+
         pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
         pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
         self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 12.5)
@@ -220,6 +238,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         self.post_json("/api/agent/performance/", {"Hostname": "PC-B", "CpuUsagePercent": 87.0})
         self.post_json("/api/agent/performance/", {"Hostname": "PC-A", "CpuUsagePercent": 55.0})
 
+        self.claim_machines()
+
         pc_a = self.client.get("/api/agent/status/?hostname=PC-A").json()
         pc_b = self.client.get("/api/agent/status/?hostname=PC-B").json()
         self.assertEqual(pc_a["performance"]["data"]["CpuUsagePercent"], 55.0)
@@ -229,6 +249,8 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
     def test_computers_endpoint_lists_every_machine(self):
         self.post_json("/api/agent/report/", {"Hostname": "PC-B", "WindowsVersion": "Windows 11 Pro"})
         self.post_json("/api/agent/report/", {"Hostname": "PC-A", "WindowsVersion": "Windows 10 Home"})
+
+        self.claim_machines()
 
         computers = self.client.get("/api/agent/computers/").json()["computers"]
         self.assertEqual([c["hostname"] for c in computers], ["PC-A", "PC-B"])
@@ -248,9 +270,10 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         # last_seen is set directly rather than relying on two requests
         # landing at measurably different times.
         now = timezone.now()
-        Computer.objects.create(hostname="NEWER-PC", last_seen=now, latest_heartbeat={"Hostname": "NEWER-PC"})
+        Computer.objects.create(hostname="NEWER-PC", owner=self.user, last_seen=now, latest_heartbeat={"Hostname": "NEWER-PC"})
         Computer.objects.create(
             hostname="OLDER-PC",
+            owner=self.user,
             last_seen=now - timedelta(minutes=5),
             latest_heartbeat={"Hostname": "OLDER-PC"},
         )
@@ -493,3 +516,123 @@ class RegisterTests(TestCase):
         self.client.force_login(user)
         response = self.client.get("/register/")
         self.assertRedirects(response, "/dashboard/", fetch_redirect_response=False)
+
+
+class OwnershipTests(TestCase):
+    """Each account sees only its own machines, superusers included."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.ana = User.objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.bo = User.objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+        now = timezone.now()
+        Computer.objects.create(
+            hostname="ANA-PC", owner=self.ana, last_seen=now - timedelta(minutes=5),
+            latest_report={"Hostname": "ANA-PC"},
+        )
+        # Bo's machine reported more recently than Ana's.
+        Computer.objects.create(
+            hostname="BO-PC", owner=self.bo, last_seen=now,
+            latest_report={"Hostname": "BO-PC"},
+        )
+        # An agent that has reported but hasn't been given an owner yet.
+        Computer.objects.create(hostname="UNOWNED-PC", last_seen=now, latest_report={"Hostname": "UNOWNED-PC"})
+
+    def listed_hostnames(self):
+        return [c["hostname"] for c in self.client.get("/api/agent/computers/").json()["computers"]]
+
+    def test_user_lists_only_their_own_machines(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.listed_hostnames(), ["ANA-PC"])
+
+    def test_user_cannot_read_another_accounts_machine(self):
+        self.client.force_login(self.ana)
+        response = self.client.get("/api/agent/status/?hostname=BO-PC")
+        self.assertEqual(response.status_code, 404)
+        self.assertNotContains(response, "BO-PC", status_code=404)
+
+    def test_other_accounts_machine_looks_the_same_as_a_missing_one(self):
+        self.client.force_login(self.ana)
+        not_yours = self.client.get("/api/agent/status/?hostname=BO-PC")
+        missing = self.client.get("/api/agent/status/?hostname=NO-SUCH-PC")
+        self.assertEqual(not_yours.json(), missing.json())
+
+    def test_user_can_read_their_own_machine(self):
+        self.client.force_login(self.ana)
+        data = self.client.get("/api/agent/status/?hostname=ANA-PC").json()
+        self.assertEqual(data["hostname"], "ANA-PC")
+        self.assertTrue(data["report"]["has_data"])
+
+    def test_status_fallback_picks_users_own_most_recent_machine(self):
+        # BO-PC and UNOWNED-PC checked in more recently, but Ana can't see them.
+        self.client.force_login(self.ana)
+        self.assertEqual(self.client.get("/api/agent/status/").json()["hostname"], "ANA-PC")
+
+    def test_unowned_machines_are_hidden_from_regular_users(self):
+        self.client.force_login(self.bo)
+        self.assertNotIn("UNOWNED-PC", self.listed_hostnames())
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=UNOWNED-PC").status_code, 404)
+
+    def test_new_account_sees_no_machines(self):
+        newcomer = get_user_model().objects.create_user("cy@example.com", "cy@example.com", "correct-horse-42")
+        self.client.force_login(newcomer)
+        self.assertEqual(self.listed_hostnames(), [])
+        data = self.client.get("/api/agent/status/").json()
+        self.assertIsNone(data["hostname"])
+        self.assertFalse(data["report"]["has_data"])
+
+    def test_superuser_sees_only_their_own_machines(self):
+        # Admins look at other accounts' machines in /admin/, not the dashboard.
+        admin = get_user_model().objects.create_superuser("root", "root@example.com", "admin-pass-99")
+        Computer.objects.create(hostname="ADMIN-PC", owner=admin)
+        self.client.force_login(admin)
+        self.assertEqual(self.listed_hostnames(), ["ADMIN-PC"])
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=BO-PC").status_code, 404)
+        self.assertEqual(self.client.get("/api/agent/status/?hostname=UNOWNED-PC").status_code, 404)
+
+    def test_agent_report_keeps_the_machines_owner(self):
+        # The agent doesn't know about accounts, so its posts must never
+        # change or clear who a machine belongs to.
+        self.client.post(
+            "/api/agent/heartbeat/",
+            data=json.dumps({"Hostname": "ANA-PC", "status": "online"}),
+            content_type="application/json",
+        )
+        computer = Computer.objects.get(hostname="ANA-PC")
+        self.assertEqual(computer.owner, self.ana)
+        self.assertEqual(computer.latest_heartbeat["status"], "online")
+
+    def test_report_page_lists_only_your_machines(self):
+        self.client.force_login(self.ana)
+        page = self.client.get("/agent/")
+        self.assertContains(page, "ANA-PC")
+        self.assertNotContains(page, "BO-PC")
+        self.assertNotContains(page, "UNOWNED-PC")
+
+    def queue(self, **fields):
+        data = {"command": "terminate_process", "pid": "4242", **fields}
+        return self.client.post("/debug/queue-command/", data)
+
+    def test_can_queue_a_command_on_your_own_machine(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="ANA-PC").status_code, 200)
+        command = Command.objects.get()
+        self.assertEqual((command.computer.hostname, command.pid), ("ANA-PC", 4242))
+
+    def test_cannot_queue_a_command_on_another_accounts_machine(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="BO-PC").status_code, 404)
+        self.assertEqual(self.queue(hostname="UNOWNED-PC").status_code, 404)
+        self.assertFalse(Command.objects.exists())
+
+    def test_queueing_for_an_unknown_or_missing_hostname_creates_nothing(self):
+        self.client.force_login(self.ana)
+        self.assertEqual(self.queue(hostname="NOT-A-REAL-PC").status_code, 404)
+        self.assertEqual(self.queue().status_code, 404)
+        self.assertEqual(Computer.objects.count(), 3)
+        self.assertFalse(Command.objects.exists())
+
+    def test_deleting_an_account_deletes_its_machines(self):
+        self.ana.delete()
+        self.assertFalse(Computer.objects.filter(hostname="ANA-PC").exists())
+        self.assertTrue(Computer.objects.filter(hostname="BO-PC").exists())
