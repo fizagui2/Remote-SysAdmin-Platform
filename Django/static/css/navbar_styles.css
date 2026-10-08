@@ -32,9 +32,31 @@
 .navbar_options .nav-link:active,
 .navbar_options .nav-link.active {
     background-color: var(--hover-color) !important;
-    color:var(--base-variant) !important;
+    /* color:var(--base-variant) !important; */
     
 }
+
+.navbar-actions{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.navbar-actions{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.navbar_options .navbar-toggler{
+    background-color: transparent !important;
+    border: 1px solid var(--base-color);
+    padding: 6px 9px;
+}
+.navbar_options .navbar-toggler-icon{
+    filter: invert(1);
+}
+
 
 /* >>> DASHBOARD */
 /* ///////////// NAVBAR (FROM BASE_DSHB.HTML) ///////////// */
