@@ -324,7 +324,7 @@ class PageViewSmokeTests(TestCase):
 class LoginRequiredTests(TestCase):
     """Dashboard pages and the API behind them need a login; the agent does not."""
 
-    PROTECTED_PAGES = ("/dashboard/", "/devices/", "/connected-devices/", "/device-ind/")
+    PROTECTED_PAGES = ("/dashboard/", "/devices/", "/connected-devices/", "/device-ind/", "/add-device/")
 
     def test_protected_pages_send_visitors_to_login(self):
         for url in self.PROTECTED_PAGES:
@@ -864,3 +864,83 @@ class SnapshotWithTokenTests(TestCase):
 
     def test_payload_must_be_a_json_object(self):
         self.assertFalse(_save_snapshot(["not", "an", "object"], "latest_report"))
+
+
+class AddDevicePageTests(TestCase):
+    """Users get enrollment codes and remove their machines on /add-device/."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.ana = User.objects.create_user("ana@example.com", "ana@example.com", "correct-horse-42")
+        self.bo = User.objects.create_user("bo@example.com", "bo@example.com", "correct-horse-42")
+        self.client.force_login(self.ana)
+
+    def test_no_code_until_one_is_generated(self):
+        page = self.client.get("/add-device/")
+        self.assertEqual(page.status_code, 200)
+        self.assertNotContains(page, 'id="enrollmentCode"')
+        self.assertContains(page, "Generate a code")
+
+    def test_generating_shows_the_code(self):
+        response = self.client.post("/add-device/")
+        self.assertRedirects(response, "/add-device/")
+        code = EnrollmentCode.objects.get(owner=self.ana)
+        page = self.client.get("/add-device/")
+        self.assertContains(page, format_code(code.code))
+        self.assertContains(page, "Works once.")
+
+    def test_another_accounts_code_is_never_shown(self):
+        bos = create_enrollment_code(self.bo)
+        self.assertNotContains(self.client.get("/add-device/"), format_code(bos.code))
+
+    def test_used_or_expired_codes_are_not_shown(self):
+        used = create_enrollment_code(self.ana)
+        used.used_at = timezone.now()
+        used.save()
+        expired = create_enrollment_code(self.ana)
+        expired.expires_at = timezone.now() - timedelta(seconds=1)
+        expired.save()
+        page = self.client.get("/add-device/")
+        self.assertNotContains(page, 'id="enrollmentCode"')
+
+    def test_lists_only_your_devices(self):
+        Computer.objects.create(hostname="ANA-PC", owner=self.ana, token_hash=hash_token("a"))
+        Computer.objects.create(hostname="BO-PC", owner=self.bo, token_hash=hash_token("b"))
+        page = self.client.get("/add-device/")
+        self.assertContains(page, "ANA-PC")
+        self.assertContains(page, "Enrolled")
+        self.assertNotContains(page, "BO-PC")
+
+    def test_remove_deletes_your_device(self):
+        mine = Computer.objects.create(hostname="ANA-PC", owner=self.ana, token_hash=hash_token("a"))
+        response = self.client.post(f"/devices/{mine.pk}/remove/")
+        self.assertRedirects(response, "/add-device/")
+        self.assertFalse(Computer.objects.filter(pk=mine.pk).exists())
+
+    def test_cannot_remove_another_accounts_device(self):
+        bos = Computer.objects.create(hostname="BO-PC", owner=self.bo, token_hash=hash_token("b"))
+        self.assertEqual(self.client.post(f"/devices/{bos.pk}/remove/").status_code, 404)
+        self.assertTrue(Computer.objects.filter(pk=bos.pk).exists())
+
+    def test_remove_needs_a_post_and_a_login(self):
+        mine = Computer.objects.create(hostname="ANA-PC", owner=self.ana)
+        self.assertEqual(self.client.get(f"/devices/{mine.pk}/remove/").status_code, 405)
+        self.client.logout()
+        response = self.client.post(f"/devices/{mine.pk}/remove/")
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/login/", response["Location"])
+        self.assertTrue(Computer.objects.filter(pk=mine.pk).exists())
+
+    def test_full_flow_code_from_page_enrolls_agent(self):
+        self.client.post("/add-device/")
+        code = EnrollmentCode.objects.get(owner=self.ana).code
+        response = self.client.post(
+            "/api/agent/enroll/",
+            data=json.dumps({"EnrollmentCode": format_code(code), "Hostname": "NEW-PC"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        page = self.client.get("/add-device/")
+        self.assertContains(page, "NEW-PC")
+        # The used code is no longer offered.
+        self.assertNotContains(page, 'id="enrollmentCode"')

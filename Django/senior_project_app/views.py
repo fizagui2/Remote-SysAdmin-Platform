@@ -9,12 +9,13 @@ from django.middleware.csrf import get_token
 import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
 
 from .decorators import login_required_json
-from .enrollment import redeem_enrollment_code
+from .enrollment import active_code_for, create_enrollment_code, format_code, redeem_enrollment_code
 from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
 
@@ -117,6 +118,27 @@ def device_results(request):
 @login_required
 def individual_device(request):
     return render(request, '', {})
+
+@login_required
+def add_device(request):
+    """Hands out enrollment codes and lists the user's machines."""
+    if request.method == 'POST':
+        create_enrollment_code(request.user)
+        # Redirect so a page refresh shows the code instead of making another.
+        return redirect('add_device')
+    code = active_code_for(request.user)
+    return render(request, 'add_device.html', {
+        'code': format_code(code.code) if code else None,
+        'expires_at': code.expires_at if code else None,
+        'devices': _visible_computers(request.user).order_by('hostname'),
+    })
+
+@login_required
+@require_POST
+def remove_device(request, pk):
+    """Delete one of the user's machines. Its device token stops working with it."""
+    get_object_or_404(_visible_computers(request.user), pk=pk).delete()
+    return redirect('add_device')
 # =========================================================
 
 @login_required_json
