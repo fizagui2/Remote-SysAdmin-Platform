@@ -84,7 +84,23 @@ async Task<string> EnrollAsync()
     while (true)
     {
         Console.Write("Enrollment code: ");
-        var code = Console.ReadLine() ?? string.Empty;
+        var code = Console.ReadLine();
+
+        //ReadLine returns null specifically when stdin is closed/non-interactive
+        //(EOF), as opposed to "" when someone just hits Enter. Without this check
+        //the loop would spin, posting empty codes to the server as fast as it can.
+        if (code is null)
+        {
+            Console.WriteLine("Enrollment needs an interactive console. Run the agent from a terminal and try again.");
+            Environment.Exit(1);
+            return string.Empty; // unreachable - Environment.Exit ends the process
+        }
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            Console.WriteLine("Please enter a code.");
+            continue;
+        }
 
         EnrollmentOutcome outcome;
         try
@@ -110,26 +126,40 @@ async Task<string> EnrollAsync()
     }
 }
 
-//clears the rejected token and asks for another enrollment
-async Task HandleUnauthorizedAsync(string tokenAtFailureTime)
+//Clears the rejected token and asks for another enrollment. Returns whether this
+//call was the one that actually re-enrolled (false means another loop already
+//handled the same failure first, so there's nothing left to do here).
+async Task<bool> HandleUnauthorizedAsync(string tokenAtFailureTime)
 {
     await reenrollLock.WaitAsync();
     try
     {
         if (currentToken != tokenAtFailureTime)
         {
-            return;
+            return false;
         }
 
         Console.WriteLine("Device token was rejected (401) - clearing it and re-enrolling.");
         tokenStore.Delete();
         currentToken = await EnrollAsync();
         apiClient.SetDeviceToken(currentToken);
+        return true;
     }
     finally
     {
         reenrollLock.Release();
     }
+}
+
+//A fresh enrollment may have landed on a brand new Computer row (or one that
+//never got a system info report), so re-send it once re-enrollment succeeds.
+//Called after HandleUnauthorizedAsync has already released reenrollLock -
+//SemaphoreSlim isn't reentrant, so doing this from inside the lock would
+//deadlock if this send also happened to come back 401.
+async Task ResendSystemInfoAsync()
+{
+    var systemInfo = systemInfoService.Collect();
+    await SendAsync(() => apiClient.SendSystemInfoAsync(systemInfo), "system info (post re-enroll)");
 }
 
 async Task SendAsync(Func<Task<string>> send, string label)
@@ -142,7 +172,10 @@ async Task SendAsync(Func<Task<string>> send, string label)
     catch (UnauthorizedAccessException)
     {
         Console.WriteLine($"[{label}] Rejected: device token no longer valid.");
-        await HandleUnauthorizedAsync(currentToken);
+        if (await HandleUnauthorizedAsync(currentToken))
+        {
+            await ResendSystemInfoAsync();
+        }
     }
     catch (HttpRequestException ex)
     {
@@ -180,7 +213,10 @@ async Task ExecutePendingCommandsAsync()
     catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
     {
         Console.WriteLine("[commands] Rejected: device token no longer valid.");
-        await HandleUnauthorizedAsync(currentToken);
+        if (await HandleUnauthorizedAsync(currentToken))
+        {
+            await ResendSystemInfoAsync();
+        }
     }
     catch (HttpRequestException ex)
     {
