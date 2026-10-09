@@ -15,10 +15,13 @@ urlpatterns = [
     path('offices/', views.location, name="offices"),
     path('device-details-<str:hostname>/', views.device_details, name="device_details"),
     path('device-ind/', views.individual_device, name="individual_device"),
+    path('add-device/', views.add_device, name="add_device"),
+    path('devices/<int:pk>/remove/', views.remove_device, name="remove_device"),
     path('', views.home, name="home"),
     path('api/agent/status/', views.agent_status, name="agent_status"),
     path('api/agent/computers/', views.agent_computers, name="agent_computers"),
     # need to check with Franks to see API
+    path('api/agent/enroll/', views.agent_enroll, name="agent_enroll"),
     path('api/agent/report/', views.agent_report, name="agent_report"),
 
 # ///////////////////Franks Testing URL's////////////////////////////////////
