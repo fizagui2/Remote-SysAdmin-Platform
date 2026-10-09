@@ -35,7 +35,7 @@
                 {# Logout has to be a POST since Django 5.0, so it's a form, not a link. #}
                 <form method="post" action="{% url 'logout' %}" class="d-inline ms-2">
                     {% csrf_token %}
-                    <button type="submit" class="general-button btn rounded-pill px-3">Log out</button>
+                    <button type="submit" class="general-button btn rounded-pill px-3">Logout</button>
                 </form>
             {% else %}
                 <a href="{% url 'login' %}" class="general-button btn rounded-pill px-3">Login</a>

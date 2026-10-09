@@ -5,6 +5,7 @@
     --base-variant: #0d0837;
     --base-variant1: #050741ad;
     --base-variant2: #bdeefcf8;
+    --banner: #f1ff54e0;
     --white-col: #ffffff;
     --black-col: #000000;
     --text-color:#ffffff;
@@ -24,6 +25,7 @@
     --text-shadow1:#4762ffc4;
     --highlight-text-color1: #8eff47db;
     --highlight-text-color2: #477bffdb;
+    --highlight-text-color3: #f1f666db;
     --title:#80bbff;
     --extra-title:#563de7c9;
     --subtitle: #99b8d4;
@@ -145,9 +147,110 @@
     padding: 10px;
 }
 
-/* .text-highlight{
-    
-} */
+.text-highlight{
+    color: var(--highlight-text-color3)   
+}
+
+.banner-styles{
+    color: var(--text-color);
+    background: var(--banner)
+}
+
+
+/* //////////////// */
+/*For Home Page*/
+.home-page{
+    overflow: hidden;
+}
+.home-hero{
+    width: 100%;
+}
+.home-hero .carousel{
+    width: 100%;
+}
+.home-slide{
+    min-height: 560px;
+    position: relative;
+    background: 
+        radial-gradient(circle at 20% 60%, var(--highlight-text-color2), transparent 45%),
+        linear-gradient(135deg, var(--base-variant), var(--base-color));
+}
+.home-slide-one{
+    background: 
+        radial-gradient(circle at 20% 60%, var(--highlight-text-color2), transparent 45%),
+        linear-gradient(135deg, #071633, #172554);
+}
+.home-slide-two{
+    background: 
+        radial-gradient(circle at 75% 35%, var(--extra-subtitle), transparent 40%),
+        linear-gradient(135deg, #08152c, #123c66);
+}
+.home-slider-three{
+    background: 
+        radial-gradient(circle at 80% 65%, var(--accent-color), transparent 40%),
+        linear-gradient(135deg, #0b1025, #172554);
+}
+
+/* HERO TEXT */
+.home-slide .carousel-caption{
+    bottom: 50%;
+    transform: translateY(50%);
+    max-width: 750px;
+}
+.home-slide h1{
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 15px 0 20px;
+}
+.home-slide p{
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.7;
+    max-width: 650px;
+    color: var(--container-text);
+}
+
+.home-evebrow,
+.home-section-label{
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--extra-subtitle-var1);
+}
+
+.home-highlight{
+    color: var(--title);
+}
+
+.home-hero-buttons,
+.home-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+/* INTRODUCTION */
+.home-introduction{
+    padding: 10px 20px 60px;
+}
+.home-section-title{
+    color: var(--title);
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 10px 0 20px;
+}
+.home-section-description{
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--container-text);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* FEATURES */
+
 
 /*FOR SMALLER SCREENS*/
 @media (max-width: 600px){

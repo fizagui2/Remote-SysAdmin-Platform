@@ -2,6 +2,7 @@
     --base-color: #ffffff;
     --base-variant: #080e2c;
     --base-variant1: #0b012af2;
+    --banner: #f1ff54e0;
     --white-col: #ffffff;
     --black-col: #000000;
     --text-color: #1f2231;
@@ -23,6 +24,7 @@
     --text-shadow1:#0b0037d8;
     --highlight-text-color1: #8eff47db;
     --highlight-text-color2: #2f4b91db;
+    --highlight-text-color3: #f1f666db;
     --title:#021e38;
     --extra-title:#34277dc9;
     --subtitle: #26517a;
