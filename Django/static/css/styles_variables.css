@@ -9,17 +9,21 @@
     --secondary-text:#5f6270;
     --primary-color:#290049d0;
     --accent-color:#0071ff;
+    --accent-color2: #9bfff2d6;
+    --accent-color3: #b3fff1;
     --buttons-color:#9debff;
     --buttons-text: #ffffff;
     --buttons-secondary-color: #00193b;
     --buttons-text-secondary-color: #0d0028d0;
     --buttons-border:#16b6f6;
     --buttons-border-variant1: #d1c0fe;
+    --buttons-border-variant2: #190023ed;
     --base-variant2: #bdeefcf8;
     --button-glow:0 0 15px rgba(106, 255, 208, 0.4); 
-    --secondary-button-text: #18022e;
+    --secondary-button-background:#ffffff;
+    --secondary-button-text: #ffd9fe;
     --secondary-buttons-border:#04012e;
-    --secondary-buttons-hover:#ffffff;
+    --secondary-buttons-hover:#fffsfff;
     --navbar-options:#010020;
     --text-shadow1:#0b0037d8;
     --highlight-text-color1: #8eff47db;
@@ -34,6 +38,7 @@
     --container-text: #ffffff;
     --hover-color: #012544;
     --hover-color-darkmode-button:#b2f2fdca;
+    --hover-color-darkmode-button2: #91fdffca;
     --background: linear-gradient(180deg, #ceeff3, #ffffff); 
     --darkmode-button-background: #31ccd7b6;
     --comp-gradient: radial-gradient(circle at 25% 70%, #4789a0 0%, #1b64ad 40%, #172554 75%, #101b45 100%);
@@ -42,5 +47,4 @@
     --login-cont-text: #622a8a;
     --footer-text:#1d1d39;
     --profile-shadow: rgb(21, 31, 31);
-
 }

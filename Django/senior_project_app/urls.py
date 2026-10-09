@@ -13,14 +13,14 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
     path('devices/', views.device_results, name="devices"),
     path('offices/', views.location, name="offices"),
+    path('reviews/', views.reviews, name="reviews"),
     path('device-details-<str:hostname>/', views.device_details, name="device_details"),
     path('device-ind/', views.individual_device, name="individual_device"),
     path('add-device/', views.add_device, name="add_device"),
     path('devices/<int:pk>/remove/', views.remove_device, name="remove_device"),
-    path('', views.home, name="home"),
     path('api/agent/status/', views.agent_status, name="agent_status"),
     path('api/agent/computers/', views.agent_computers, name="agent_computers"),
-    # need to check with Franks to see API
+    # >> New ones
     path('api/agent/enroll/', views.agent_enroll, name="agent_enroll"),
     path('api/agent/report/', views.agent_report, name="agent_report"),
 

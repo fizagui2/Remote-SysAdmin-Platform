@@ -10,17 +10,21 @@
     --black-col: #000000;
     --text-color:#ffffff;
     --secondary-text:#c5c5c5;
-    --primary-color:#a2ab1c;
+    --primary-color:#d3dd4b;
     --accent-color:#4d9aff;
+    --accent-color2: #fa9bffd6;
+    --accent-color3: #561eff;
     --buttons-color: #090124;
     --buttons-text: #ffffff;
     --buttons-secondary-color: #a5e8ffe3;
     --buttons-text-secondary-color: #91fff2d0;
     --buttons-border: #00aaff;
     --buttons-border-variant1: #027cffdc;
+    --buttons-border-variant2: #090036ed;
     --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
+    --secondary-button-background:#ffffff;
     --secondary-button-text: #1b0123;
-    --secondary-buttons-border:#5650fe;
+    --secondary-buttons-border:#2f2c8a;
     --secondary-buttons-hover:#ffffff;
     --text-shadow1:#4762ffc4;
     --highlight-text-color1: #8eff47db;
@@ -35,6 +39,7 @@
     --container-text: #e1ebfd;
     --hover-color: #87cdff;
     --hover-color-darkmode-button:#0f0070ca;
+    --hover-color-darkmode-button2: #dfcaffca;
     --navbar-options: #c8ddfd;
     --background: linear-gradient(180deg, #0e121d, #000000);
     --darkmode-button-background: #4603d5b6;
@@ -47,17 +52,24 @@
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
 
-*{
+/* *{
     margin: 0;
     padding: 0;
+} */
+
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-
-/* *,
-*::before,
-*::after {
-    box-sizing: border-box;
-} */
+.divider-variant1{
+    border: none;
+    height: 2px;
+    margin: 30px auto;
+    width: 85%;
+    background: linear-gradient(90deg, transparent, var(--accent-color), var(--hover-color), var(--accent-color), transparent);
+    box-shadow: 0 0 10px var(--accent-color);
+    border-radius: 50%;
+}
 
 /*DARKMODE STUFF*/
 #theme-switch{
@@ -116,7 +128,7 @@
     width: 400px;
     min-height: 400px;
     box-sizing: border-box;
-    border-radius: 10%;
+    border-radius: 28px;
     box-shadow: var(--login-cont-glow);
 }
 .login-header{
@@ -164,8 +176,7 @@
 }
 
 
-/* //////////////// */
-/*For Home Page*/
+/* /////// HOMEPAGE (HOME.HTML) ///////// */
 .home-page{
     overflow: hidden;
 }
@@ -411,6 +422,8 @@
 .home-cta-buttons{
     justify-content: center;
 }
+
+/* ////////////// END OF HOMEPAGE ////////////// */
 
 /*FOR SMALLER SCREENS*/
 @media (max-width: 600px){

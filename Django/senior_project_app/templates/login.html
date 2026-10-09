@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} 👤Login👤 {% endblock %}
+{% block title %}👤Login{% endblock %}
 
 {% block extra_js %}<script src="{% static 'js/show_hide_password.js' %}" defer></script>{% endblock %}
 
 {% block content %}
 <div class="container-sm text-center login-container">
     <h1 class="login-header">Sign in</h1>
+    <hr>
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
