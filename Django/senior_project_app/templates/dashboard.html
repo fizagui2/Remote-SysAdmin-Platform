@@ -5,6 +5,10 @@
 
 {% block content %} 
 <h1>Devices connected</h1>
+
+<p>You have no devices in the network yet. Please add a device in order to access and manage its features</p>
+<a href="{% url 'add_device' %}" class="general-button btn rounded-pill px-3">Add Device</a>
+
 <div id="computers-container" class="devices-block">
 </div>
 {% endblock %}

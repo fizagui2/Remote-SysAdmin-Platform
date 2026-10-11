@@ -43,6 +43,7 @@
     --navbar-options: #c8ddfd;
     --background: linear-gradient(180deg, #0e121d, #000000);
     --darkmode-button-background: #4603d5b6;
+    --darkmode-button-background2: #150044b6;
     --comp-gradient: radial-gradient(circle at 25% 70%, #164e63 0%, #172554 40%, #11143d 75%, #060817 100%);
     --login-cont-background:#98b9f7;
     --login-cont-glow: 0 5px 15px rgba(76, 177, 255, 0.774);
@@ -71,40 +72,6 @@
     border-radius: 50%;
 }
 
-/*DARKMODE STUFF*/
-#theme-switch{
-    height: 50px;
-    width: 50px;
-    padding: 0;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
-
-#theme-switch:hover{
-    background-color: var(--hover-color-darkmode-button);
-    transform: scale(1.08);
-}
-
-#theme-switch svg{
-    fill: var(--primary-color);
-}
-
-#theme-switch svg:last-child{
-    display: none;
-}
-
-.darkmode #theme-switch svg:first-child{
-    display: none;
-}
-
-.darkmode #theme-switch svg:last-child{
-    display: block;
-}
 
 /* //////////////// CLASSES ////////////////*/
 /* >>> Separators (FOR ABOUT US PAGE) */

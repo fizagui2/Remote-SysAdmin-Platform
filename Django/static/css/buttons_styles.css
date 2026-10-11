@@ -1,4 +1,6 @@
 @import 'styles_variables.css';
+@import 'styles.css';
+/* >> GENERAL BUTTONS */
 .general-button{
     color: var(--buttons-color);
     border-width: 3px;
@@ -15,6 +17,12 @@
         0 0 25px var(--accent-color);
 }
 
+/* NAVBAR BUTTON */
+.navbar-button{
+    color: var(--buttons-color);
+}
+
+/* >> SECONDARY BUTTON */
 .secondary-button{
     font-weight: bold;
     color: var(--secondary-button-text);
@@ -32,13 +40,14 @@
         0 0 25px var(--accent-color);
 }
 
+/* CONTAINER BUTTONS */
 .container-buttons-main{
     color: var(--buttons-color);
     background-color: var(--buttons-secondary-color);
     border-width: 3px;
     border-color: var(--buttons-border);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 0 15px var(--accent-color);
 }
 .container-buttons-main:hover{
     color:var(--base-color);
@@ -48,4 +57,41 @@
     box-shadow: 
         0 0 25px var(--hover-color-darkmode-button),
         0 0 25px var(--accent-color);
+}
+
+/* DARKMODE BUTTON */
+#theme-switch{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--darkmode-button-background);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+#theme-switch:hover{
+    background: var(--darkmode-button-background2);
+    transform: scale(1.08);
+    box-shadow:
+        0 0 25px var(--hover-color-darkmode-button),
+        0 0 25px var(--accent-color);
+}
+
+#theme-switch svg{
+    fill: var(--primary-color);
+}
+
+#theme-switch svg:last-child{
+    display: none;
+}
+.darkmode #theme-switch svg:first-child{
+    display: none;
+}
+.darkmode #theme-switch svg:last-child{
+    display: block;
 }

@@ -40,9 +40,10 @@
     --hover-color-darkmode-button:#b2f2fdca;
     --hover-color-darkmode-button2: #91fdffca;
     --background: linear-gradient(180deg, #ceeff3, #ffffff); 
-    --darkmode-button-background: #31ccd7b6;
+    --darkmode-button-background: #f4fc83;
+    --darkmode-button-background2: #c8f9ff;
     --comp-gradient: radial-gradient(circle at 25% 70%, #4789a0 0%, #1b64ad 40%, #172554 75%, #101b45 100%);
-    --login-cont-background:#00007681;
+    --login-cont-background:#20202081;
     --login-cont-glow: 0 5px 15px rgba(111, 72, 255, 0.774);
     --login-cont-text: #622a8a;
     --footer-text:#1d1d39;
