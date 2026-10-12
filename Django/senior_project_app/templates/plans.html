@@ -1,19 +1,137 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}💲Plans{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/plans_styles.css'%}">
+{% endblock %}
 
 {% block content %}
 <main class="plans-page">
     <section class="plans-header">
         <span class="plans-eyebrow">HOSTWEB INC.</span>
         <h1 class="plans-title">Plans & Pricing</h1>
-        <p class="plans-description">
-            
-        </p>
+        <p class="plans-description">Find the right plan for your organization and manage your network with greater visibility and control.</p>
+    </section>
+
+    <section class="plans-pricing">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-center">
+            <!-- FREE PLAN -->
+            <div class="col">
+                <article class="card plan-card h-100">
+                    <div class="card-body">
+                        <span class="plan-label">STARTER</span>
+                        <h2 class="plan-name">Free</h2>
+                        <p class="plan-description">Get started with the essentials.</p>
+                        <div class="plan-price">$0 <span>/month</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><span class="plan-check">✓</span> 10 users included</li>
+                        <li><span class="plan-check">✓</span> 2 GB of storage</li>
+                        <li><span class="plan-check">✓</span> Email support</li>
+                        <li><span class="plan-check">✓</span> Help center access</li>
+                    </ul>
+
+                    <a href="{% url 'login' %}" class="btn plan-button plan-button-outline">Get Started</a>
+                </article>
+            </div>
+            <!-- PRO PLAN -->
+            <div class="col">
+                <article class="card plan-card plan-card-featured h-100">
+                    <div class="plan-popular">POPULAR</div>
+                    <div class="card-body">
+                        <span class="plan-label">FOR GROWING TEAMS</span>
+                        <h2 class="plan-name">Pro</h2>
+                        <p class="plan-description">More flexibility for your team.</p>
+                        <div class="plan-price">$15 <span>/month</span></div>
+                        <ul class="plan-features">
+                            <li><span class="plan-check">✓</span> 20 users included</li>
+                            <li><span class="plan-check">✓</span> 10 GB of storage</li>
+                            <li><span class="plan-check">✓</span> Priority email support</li>
+                            <li><span class="plan-check">✓</span> Help center access</li>
+                        </ul>
+                        <a href="{% url 'login' %}" class="btn plan-button plan-button-primary">Get Started</a>
+                    </div>
+                </article>
+            </div>
+            <!-- ENTERPRISE PLAN -->
+            <div class="col">
+                <article class="card plan-card h-100">
+                    <div class="card-body">
+                        <span class="plan-label">FOR ORGANIZATIONS</span>
+                        <h2 class="plan-name">Enterprise</h2>
+                        <p class="plan-description">Additional capabilities for larger teams.</p>
+                        <div class="plan-price">$29 <span>/month</span></div>
+                        <ul class="plan-features">
+                            <li><span class="plan-check">✓</span> 30 users included</li>
+                            <li><span class="plan-check">✓</span> 15 GB of storage</li>
+                            <li><span class="plan-check">✓</span> Phone and email support</li>
+                            <li><span class="plan-check">✓</span> Phone and email support</li>
+                        </ul>
+                        <a href="{% url 'contacts' %}" class="btn plan-button plan-button-outline">Contact Us</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="plans-comparison">
+        <h2 class="plans-comparison-title">Compare Plans</h2>
+        <div class="plans-table-wrapper">
+            <table class="table plans-table text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-start">Features</th>
+                        <th scope="col">Free</th>
+                        <th scope="col">Pro</th>
+                        <th scope="col">Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" class="text-start">Public</th>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start">Private</th>
+                        <td><span class="table-unavailable" aria-label="Not included">—</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start">Permissions</th>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start">Sharing</th>
+                        <td><span class="table-unavailable" aria-label="Not included">—</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start">Unlimited members</th>
+                        <td><span class="table-unavailable" aria-label="Not included">—</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start">Extra security</th>
+                        <td><span class="table-unavailable" aria-label="Not included">—</span></td>
+                        <td><span class="table-unavailable" aria-label="Not included">—</span></td>
+                        <td><span class="table-check" aria-label="Included">✓</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 </main>
 
 
-<div class="container py-3">
+<!-- <div class="container py-3">
     <header>
         <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
             <h1 class="title">Pricing</h1>
@@ -222,5 +340,5 @@
             </div>
         </div>
     </footer>
-</div>
+</div> -->
 {% endblock %}
