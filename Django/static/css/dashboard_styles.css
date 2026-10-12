@@ -1,0 +1,31 @@
+@import 'styles_variables.css';
+
+.dashboard-actions{
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0;
+}
+
+.add-device-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    background: var(--comp-gradient);
+    color: var(--container-text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.add-device-button:hover{
+    color: var(--white-col);
+    transform: translateY(-3px);
+    box-shadow: var(--button-glow);
+}
+
+.add-device-button:focus-visible{
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}

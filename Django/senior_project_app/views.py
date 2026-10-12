@@ -121,9 +121,11 @@ def dashboard(request):
 def device_roll_call(request):
     return render(request, 'devices_showcase.html', {})
 
+# >> Changed with Luis Helper function
 @login_required
 def device_details(request, hostname):
-    computer = get_object_or_404(Computer, hostname=hostname)
+    #computer = get_object_or_404(Computer, hostname=hostname)
+    computer = get_object_or_404(_visible_computers(request.user), hostname=hostname)
     return render(request, 'device_details.html', {"computer":computer})
 
 @login_required
