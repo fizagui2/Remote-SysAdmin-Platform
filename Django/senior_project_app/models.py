@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Computer(models.Model):
@@ -54,6 +57,18 @@ class Computer(models.Model):
     @property
     def is_enrolled(self):
         return self.token_hash is not None
+
+    @property
+    def is_online(self):
+        """True if the agent reported within AGENT_OFFLINE_AFTER_SECONDS.
+
+        Worked out from last_seen on every read rather than stored, so a
+        machine goes offline on its own when its agent stops, with no
+        background job to flip a flag.
+        """
+        if self.last_seen is None:
+            return False
+        return timezone.now() - self.last_seen <= timedelta(seconds=settings.AGENT_OFFLINE_AFTER_SECONDS)
 
     def __str__(self):
         return self.hostname

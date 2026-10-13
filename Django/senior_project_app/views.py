@@ -158,6 +158,7 @@ def agent_status(request):
 
     return JsonResponse({
         "hostname": computer.hostname if computer else None,
+        "online": computer.is_online if computer else False,
         "report": _section(computer, "latest_report"),
         "heartbeat": _section(computer, "latest_heartbeat"),
         "performance": _section(computer, "latest_performance"),
@@ -173,6 +174,7 @@ def agent_computers(request):
             {
                 "hostname": computer.hostname,
                 "last_seen": computer.last_seen,
+                "online": computer.is_online,
                 "report": computer.latest_report,
             }
             for computer in computers
