@@ -77,13 +77,13 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
 
         document.getElementById("memory-used").textContent = memoryUsed != null ? `${memoryUsed} GB (used)` : "N/A";
         // for the progress bar (do not delete)
-        document.getElementById("memory-available").textContent = `| ${memoryAvailable}% (available)`;
+        document.getElementById("memory-available").textContent != null ? `| ${memoryAvailable} GB (available)` : "N/A";
         
         document.getElementById("memory-percent").textContent = `${memoryUsagePercentage ?? 0}%`;
         document.getElementById("memory-progress").style.width = `${memoryUsagePercentage ?? 0}%`;
         document.getElementById("disk-usage").textContent = `${diskUsage ?? 0}%`;
         document.getElementById("disk-progress").style.width = `${diskUsage ?? 0}%`
-        updateProgressBar("cpu-progress", cpuUsage);
+        updateProgressBar("cpu-progress", cpUsage);
         updateProgressBar("memory-progress", memoryUsagePercentage);
         updateProgressBar("disk-progress", diskUsage);
 

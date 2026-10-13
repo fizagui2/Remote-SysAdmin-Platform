@@ -1,14 +1,27 @@
 {% extends 'base_dshb.html' %}
 {% load static %}
-{% block extra_js %} <script src="{% static 'js/load_devices.js' %}" defer></script> {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard_styles.css'%}">
+{% endblock %}
+
+{% block extra_js %} 
+<script src="{% static 'js/load_devices.js' %}" defer></script> 
+<script type="module" src="{% static 'js/no_devices_advertisement.js' %}"></script> 
+{% endblock %}
+
 {% block title %}Dashboard{% endblock %}
 
 {% block content %} 
-<h1>Devices connected</h1>
-
-<p>You have no devices in the network yet. Please add a device in order to access and manage its features</p>
-<a href="{% url 'add_device' %}" class="general-button btn rounded-pill px-3">Add Device</a>
-
-<div id="computers-container" class="devices-block">
-</div>
+<section class="dashboard-devices">
+    <div class="dashboard-devices-header">
+        <!-- <h2>My Devices</h2> -->
+        <h1>Devices connected</h1>
+        <a href="{% url 'add_device' %}" class="add-device-button">+ Add Device</a>
+    </div>
+    <div id="computers-container" class="devices-block">
+        <p class="devices-loading">Loading your devices...</p>
+    </div>
+</section>
+<!-- <p id="show-no-devices">You have no devices in the network yet. Please add a device in order to access and manage its features</p> -->
 {% endblock %}
