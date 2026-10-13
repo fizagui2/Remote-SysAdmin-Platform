@@ -43,3 +43,7 @@ mark{
     background-color: var(--highlight-text-color1);
     color: var(--base-variant);
 }
+
+/* li{
+    font-weight: bold;
+} */

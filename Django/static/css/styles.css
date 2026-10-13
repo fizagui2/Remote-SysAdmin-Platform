@@ -9,19 +9,24 @@
     --white-col: #ffffff;
     --black-col: #000000;
     --text-color:#ffffff;
+    --text-color-var1: #a5e1facb;
     --secondary-text:#c5c5c5;
     --primary-color:#d3dd4b;
     --accent-color:#4d9aff;
     --accent-color2: #fa9bffd6;
     --accent-color3: #561eff;
     --buttons-color: #090124;
+    --buttons-color-var1: radial-gradient(circle at 50% 50%, #e88fd8f0 0%, #4a215ccb 50%, #29153b 80%, #15081c 100%);
     --buttons-text: #ffffff;
+    --buttons-text-var1: #f9d5ff;
     --buttons-secondary-color: #a5e8ffe3;
     --buttons-text-secondary-color: #91fff2d0;
     --buttons-border: #00aaff;
     --buttons-border-variant1: #027cffdc;
     --buttons-border-variant2: #090036ed;
+    --buttons-border-variant3: #23004d;
     --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
+    --button-glow-var1:  0 0 15px rgba(125, 116, 246, 0.788);
     --secondary-button-background:#ffffff;
     --secondary-button-text: #1b0123;
     --secondary-buttons-border:#2f2c8a;
@@ -31,10 +36,13 @@
     --highlight-text-color2: #477bffdb;
     --highlight-text-color3: #f1f666db;
     --title:#80bbff;
+    --title-var1: #80f4ffee;
     --extra-title:#563de7c9;
     --subtitle: #99b8d4;
     --extra-subtitle:#5eb1ff;
     --extra-subtitle-var1:#a3f7ff;
+    --container-color: radial-gradient(circle at 25% 70%, #63a5bc 0%, #2b154b 40%, #11143d 75%, #120617 100%);
+    --container-shadow: #e0b4ffec;
     --container-title: #51cfd8;
     --container-text: #e1ebfd;
     --hover-color: #87cdff;
@@ -72,8 +80,10 @@
     border-radius: 50%;
 }
 
-
-/* //////////////// CLASSES ////////////////*/
+.bolded{
+    font-weight: bold;
+}
+/* //////////////// CLASSES //////////////// */
 /* >>> Separators (FOR ABOUT US PAGE) */
 .vertical-separator{
     border-left: 2px solid;
@@ -115,7 +125,12 @@
     color:var(--title);
     display: flex;
 }
-
+.subtitle{
+    padding: 10px auto;
+    color: var(--accent-color2);
+    font-weight: bold;
+    display: flex;
+}
 .extra-title{
     color: var(--extra-title);
     text-shadow: var(--text-shadow1);

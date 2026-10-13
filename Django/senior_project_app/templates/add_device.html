@@ -1,17 +1,23 @@
 {% extends 'base_dshb.html' %}
+{% load static %}
 {% block title %} Add a device {% endblock %}
+
+{% block extra_css %} 
+<link rel="stylesheet" href="{% static 'css/add_device_styles.css'%}">
+{% endblock %}
 
 {# Functional first pass; styling is Omar's call. #}
 {% block content %}
-<div class="container py-4">
-    <h1 class="h3 mb-3">Add a device</h1>
-
-    <ol class="mb-4">
-        <li>Generate a code below.</li>
-        <li>Run the agent on the computer you want to add. When it asks for an enrollment code, type this one in.</li>
-        <li>The computer joins your account and shows up in the list below.</li>
-    </ol>
-
+<div class="container py-4 add-device-container">
+    <h1 class="title add-device-title">Add a device</h1>
+    <div class="add-device-text-container">
+        <ol class="bolded">
+            <li>Generate a code below.</li>
+            <li>Run the agent on the computer you want to add. When it asks for an enrollment code, type this one in.</li>
+            <li>The computer joins your account and shows up in the list below.</li>
+        </ol>
+    </div>
+    
     {% if code %}
     <div class="alert alert-primary" role="status">
         <div class="small text-uppercase fw-semibold">Your enrollment code</div>
@@ -22,10 +28,10 @@
 
     <form method="post" action="{% url 'add_device' %}" class="mb-5">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">{% if code %}Generate a new code{% else %}Generate a code{% endif %}</button>
+        <button type="submit" class="general-button add-device-button">{% if code %}Generate a new code{% else %}Generate a code{% endif %}</button>
     </form>
 
-    <h2 class="h5">Your devices</h2>
+    <h2 class="subtitle">Your devices</h2>
     {% if devices %}
     <table class="table align-middle">
         <thead>
@@ -49,7 +55,7 @@
         </tbody>
     </table>
     {% else %}
-    <p class="text-muted">No devices yet.</p>
+    <p class="text-muted add-devices-extra-text">No devices yet.</p>
     {% endif %}
 </div>
 {% endblock %}
