@@ -18,7 +18,8 @@ from .decorators import agent_token, login_required_json
 from .enrollment import active_code_for, create_enrollment_code, format_code, redeem_enrollment_code
 from .forms import LoginForm, RegisterForm
 from .models import Computer, Command
-
+from django.shortcuts import render, redirect
+from .forms import RegisterForm
 
 def _save_snapshot(data, field, computer=None):
     """Store data as the latest `field` payload for the machine that sent it.
@@ -102,18 +103,34 @@ def plans_view(request):
 def about_us(request):
     return render(request, 'about.html', {})
 
-# ==================== DASHBOARD SHIT ====================
+def reviews(request):
+    return render(request, 'user_reviews.html', {})
+
+def contacts(request):
+    return render(request, 'contacts.html', {})
+
+def location(request):
+    return render(request, 'location.html', {})
+
+# ==================== DASHBOARD :V ====================
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
-@login_required
-def device_roll_call(request):
-    return render(request, 'devices_showcase.html', {})
+# @login_required
+# def device_roll_call(request):
+#     return render(request, 'devices_showcase.html', {})
 
+# >> Changed with Luis Helper function
 @login_required
-def device_results(request):
-    return render(request, 'device_results.html', {})
+def device_details(request, hostname):
+    #computer = get_object_or_404(Computer, hostname=hostname)
+    computer = get_object_or_404(_visible_computers(request.user), hostname=hostname)
+    return render(request, 'device_details.html', {"computer":computer})
+
+# @login_required
+# def device_results(request):
+#     return render(request, 'device_results.html', {})
 
 @login_required
 def individual_device(request):

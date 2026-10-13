@@ -1,0 +1,26 @@
+{% extends 'base_dshb.html' %}
+{% block title %} Processes {% endblock %}
+<!-- >> PROCESSES -->
+{% block content %}
+
+<h1>Device: </h1> <hr>
+<h3> Latest Processes</h3>
+<div class="table-container">
+    <table class="webhost-table">
+        <!-- columns -->
+        <thead>
+            <tr>
+                <th>Process ID</th>
+                <th>Name</th>
+                <th>Memory (MB)</th>
+                <!-- <th>Time Stamp</th> (should be a 'total' column) -->
+            </tr>
+        </thead>
+        <!-- rows -->
+        <tbody id="processes-table-body">
+            
+        </tbody>
+    </table>
+    <div></div>
+</div>
+{% endblock %}

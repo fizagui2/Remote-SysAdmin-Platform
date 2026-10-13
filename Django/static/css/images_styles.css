@@ -1,0 +1,47 @@
+@import 'styles_variables.css';
+
+/* IMAGE CLASSES CONFIGURATIONS */
+.image-container{
+    width:150px;
+    min-height: 150px;
+    margin: 10px auto;
+    padding: 10px;
+}
+.image-small{
+    width: 120px;
+    min-height: 120px;
+}
+
+/* 
+.image-medium{
+}
+.image-large{
+}
+
+.image-huge{
+} 
+*/
+
+.image-icon{
+    width: 12px;
+    min-height: 12px;
+}
+
+/* >> FOR ABOUT US PROFILE SECTION*/
+.profile-container{
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 17px var(--profile-shadow);
+}
+.profile-container img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+    /* object-fit: contain; */
+}

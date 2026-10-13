@@ -1,0 +1,180 @@
+{% extends 'base_dshb.html' %}
+{% load static %}
+
+{% block extra_js %} 
+<script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
+<script src="{% static 'js/device_details.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %} 
+<link rel="stylesheet" href="{% static 'css/device_details_styles.css'%}">
+<link rel="stylesheet" href="{% static 'css/table_styles.css'%}">
+{% endblock %}
+
+{% block title %} {{ computer.hostname }} - Details {% endblock %}
+
+{% block content %}
+<h2 class="extra-title device-title" id="hostname"></h2>
+<!-- >>> REPORT -->
+<hr>
+<h3>Latest report</h3>
+<div class="report-grid">
+    <div class="info-card">
+        <span class="features-highlight">Logged-in User:</span>
+        <strong id="logged-in-user">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Network Adapter:</span>
+        <strong id="net-adapter">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>IP Address:</span>
+        <strong id="ip-address">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>MAC Address:</span>
+        <strong id="mac-address">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Windows version:</span>
+        <strong id="win-version">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>CPU Cores:</span>
+        <strong id="cpu-cores">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>CPU:</span>
+        <strong id="cpu-model">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>RAM:</span>
+        <strong id="total-ram">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Uptime hours:</span>
+        <strong id="uptime-hours">Loading...</strong>
+    </div>
+
+    <div class="info-card">
+        <span>Drives:</span>
+        <strong id="drives">Loading...</strong>
+    </div>
+</div>
+
+<!-- >>> HEARTBEAT -->
+<hr>
+<h3> Latest Heartbeat</h3>
+<div class="heartbeat-grid">
+    <div class="info-card">
+        <span>Timestamp:</span>
+        <strong id="heartbeat-timestamp">Loading...</strong>
+    </div>
+</div>
+
+<!-- >>> PERFORMANCE -->
+<hr>
+<h3>Performance</h3>
+<!-- > CPU -->
+<div class="performance-grid">
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>CPU Usage:</h3>
+            <span id="cpu-usage">Loading...</span>
+        </div>
+        <div class="resource-progress-bar">
+            <div class="resource-progress-fill" id="cpu-progress"></div>
+        </div>
+        <p class="performance-description">Processor utilization</p>
+    </div>
+<!-- > MEMORY -->
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>Memory Usage</h3>
+            <span id="memory-percent">Loading...</span>
+        </div>
+        <div class="resource-progress-bar">
+            <div class="resource-progress-fill" id="memory-progress"></div>
+        </div>
+        <p class="performance-description">
+            <span id="memory-used">Loading.../used</span>
+            <span id="memory-available">Loading.../available</span>
+        </p>
+    </div>
+    
+    <!-- >>> DISK (need to change) -->   
+    <div class="performance-card">
+        <div class="performance-card-header">
+            <h3>Disk Usage</h3>
+            <span id="disk-usage">Loading...</span>
+        </div>
+        <div class="resource-progress-bar">
+            <div class="resource-progress-fill" id="disk-progress"></div>
+        </div>
+        <p class="performance-description">Storage utilization</p>
+    </div>
+    <!-- END OF PERFORMANCE SECTION -->
+    <!-- <div class="info-card">
+        <span>Drives:</span>
+        <strong id="drives">Loading...</strong>
+    </div>
+    
+    <div class="info-card">
+        <span>Memory Used:</span>
+        <strong id="memory-usage">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Memory Available:</span>
+        <strong id="memory-available">Loading...</strong>
+    </div>
+    <div class="info-card">
+        <span>Memory Usage:</span>
+        <strong id="memory-percent">Loading...</strong>
+    </div> -->
+</div>
+
+<!-- >> PROCESSES -->
+<hr>
+<h3> Latest Processes</h3>
+<div class="table-container">
+    <table class="webhost-table">
+        <!-- columns -->
+        <thead>
+            <tr>
+                <!-- <th>Computer</th> -->
+                <th>Process ID</th>
+                <th>Name</th>
+                <th>Memory (MB)</th>
+                <!-- <th>Time Stamp</th> (should be a 'total' column) -->
+            </tr>
+        </thead>
+        <!-- rows -->
+        <tbody id="processes-table-body">
+            
+        </tbody>
+    </table>
+    <div></div>
+</div>
+
+
+<!-- >> SERVICES -->
+<hr>
+<h3>Latests Services</h3>
+<div class="table-container">
+    <table class="webhost-table">
+        <!-- columns -->
+        <thead>
+            <tr>
+                <th>Display Name</th>
+                <th>Status</th>
+                <th>Time Stamp</th>
+            </tr>
+        </thead>
+        <!-- rows -->
+        <tbody id="services-table-body">
+        </tbody>
+    </table>
+    <div></div>
+</div>
+
+{% endblock %}

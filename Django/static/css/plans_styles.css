@@ -1,0 +1,235 @@
+@import 'styles_variables.css';
+@import 'buttons_styles.css';
+
+.plans-page{
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    color: var(--base-color);
+}
+
+/* >> HEADER */
+.plans-header{
+    max-width: 760px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.plans-eyebrow, .plans-label{
+    display: inline-block;
+    color: var(--extra-subtitle);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.plans-title{
+    margin: 14px 0;
+    color: var(--title);
+    font-size: clamp(2.3rem, 5vw, 3.8rem);
+    font-weight: 800;
+}
+
+.plans-description{
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--container-text);
+    font-size: 1.08rem;
+    line-height: 1.8;
+}
+
+/* >> PRICING LAYOUT */
+.plans-pricing{
+    margin-bottom: 90px;
+}
+
+.plan-card{
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--secondary-text);
+    border-radius: 20px;
+    background: var(--base-variant1);
+    color: var(--container-text);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    transition: 
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25 ease;
+}
+.plan-card:hover{
+    transform: translateY(-7px);
+    border-color: var(--accent-color);
+    box-shadow: var(--button-glow);
+}
+
+.plan-card .card-body{
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+}
+
+.plan-name{
+    margin: 12px 0 8px;
+    color: var(--title);
+    font-size: 1.8rem;
+    font-weight: 750;
+}
+
+.plans-description{
+    min-height: 48px;
+    color: var(--container-text);
+    line-height: 1.6;
+}
+
+.plan-price{
+    margin: 18px 0 24px;
+    color: var(--title);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+.plan-price span{
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: normal;
+}
+
+/* >> FEATURE LIST */
+.plan-features{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    flex: 1;
+}
+.plan-features li{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+
+.plan-check{
+    color: var(--highlight-text-color1);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+
+/* FEATURED PLAN */
+.plan-card-featured{
+    border: 2px solid var(--accent-color);
+    box-shadow: var(--button-glow);
+}
+
+.plan-popular{
+    position: absolute;
+    top: 17px;
+    right: -34px;
+    width: 135px;
+    padding: 7px 0;
+    transform: rotate(35deg);
+    background: var(--accent-color);
+    color: white;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+/* COMPARISON TABLE */
+.plans-comparison{
+    margin-top: 70px;
+}
+
+.plans-comparison-title{
+    margin-bottom: 30px;
+    color: var(--title);
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 750;
+}
+
+.plans-table-wrapper{
+    overflow-x: auto;
+    border: 1px solid var(--secondary-text);
+    border-radius: 16px;
+    background: var(--base-variant1);
+}
+
+.plans-table{
+    width: 100%;
+    min-width: 600px;
+    margin: 0;
+    color: var(--container-text);
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+.plans-table th, .plans-table td{
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--secondary-text);
+    background: transparent;
+    color: inherit;
+}
+.plans-table thead th{
+    color: var(--title);
+    font-weight: 750;
+}
+.plans-table tbody th{
+    font-weight: 600;
+}
+
+.plans-table tbody tr:last-child th,
+.plans-table tbody tr:last-child td{
+    border-bottom: 0;
+}
+
+.plans-table tbody tr:hover th,
+.plans-table tbody tr:hover td{
+    background: var(--base-variant2);
+}
+
+.plans-table .table-check{
+    color: var(--highlight-text-color1);
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.plans-table .table-unavailable{
+    color: var(--secondary-text);
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 767px){
+    .plans-page{
+        padding: 30px 16px 55px;
+    }
+    .plans-header{
+        margin-bottom: 35px;
+    }
+    .plans-pricing{
+        margin-bottom: 60px;
+    }
+    .plan-card .card-body{
+        padding: 28px 24px;
+    }
+    .plans-comparison{
+        margin-top: 50px;
+    }
+}
+
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce){
+    .plan-card, .plan-button{
+        transition: none;
+    }
+
+    .plan-card:hover, .plan-button:hover{
+        transform: none;
+    }
+}

@@ -1,4 +1,6 @@
 @import 'styles_variables.css';
+@import 'styles.css';
+/* >> GENERAL BUTTONS */
 .general-button{
     color: var(--buttons-color);
     border-width: 3px;
@@ -10,13 +12,171 @@
 .general-button:hover{
     border-color: var(--buttons-border-variant1);
     transform: translateY(-2px) scale(1.03);
+    box-shadow:
+        0 0 25px var(--hover-color-darkmode-button),
+        0 0 25px var(--accent-color);
+}
+
+/* NAVBAR BUTTON */
+.navbar-button{
+    color: var(--buttons-color);
+}
+
+/* >> SECONDARY BUTTON */
+.secondary-button{
+    font-weight: bold;
+    color: var(--secondary-button-text);
+    border-width: 3px;
+    border-color: var(--secondary-buttons-border);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
+}
+.secondary-button:hover{
+    color: var(--accent-color3);
+    border-color: var(--buttons-border-variant2);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+        0 0 25px var(--hover-color-darkmode-button2),
+        0 0 25px var(--accent-color);
+}
+
+/* >> CONTAINER BUTTONS */
+.container-buttons-main{
+    color: var(--buttons-color);
+    background-color: var(--buttons-secondary-color);
+    border-width: 3px;
+    border-color: var(--buttons-border);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 0 15px var(--accent-color);
+}
+.container-buttons-main:hover{
+    color:var(--base-color);
+    border-color: var(--buttons-border-variant1);
+    background-color: var(--buttons-secondary-color);
+    transform: translateY(-2px) scale(1.03);
     box-shadow: 
         0 0 25px var(--hover-color-darkmode-button),
         0 0 25px var(--accent-color);
 }
 
-.secondary-button{
-    color: var(--secondary-button-text);
-    border-width: 3px;
-    border-color: var(--secondary-buttons-border);
+/* >> DARKMODE BUTTON */
+#theme-switch{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--darkmode-button-background);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
+#theme-switch:hover{
+    background: var(--darkmode-button-background2);
+    transform: scale(1.08);
+    box-shadow:
+        0 0 25px var(--hover-color-darkmode-button),
+        0 0 25px var(--accent-color);
+}
+
+#theme-switch svg{
+    fill: var(--primary-color);
+}
+
+#theme-switch svg:last-child{
+    display: none;
+}
+.darkmode #theme-switch svg:first-child{
+    display: none;
+}
+.darkmode #theme-switch svg:last-child{
+    display: block;
+}
+
+/* >> PLANS BUTTONS */
+.plan-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: auto;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    transition: 
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+.plan-button:hover{
+    transform: translateY(-2px);
+}
+
+.plan-button-outline{
+    border: 1px solid var(--buttons-border);
+    color: var(--buttons-text);
+    background: transparent;
+}
+.plan-button-outline:hover{
+    background: var(--hover-color);
+    color: var(--base-variant);
+}
+
+.plan-button-primary{
+    border: 1px solid var(--buttons-border);
+    background: var(--buttons-color);
+    color: var(--buttons-text);
+}
+.plan-button-primary:hover{
+    background: var(--accent-color);
+    color: white;
+    box-shadow: var(--button-glow);
+}
+
+
+/* ADD DEVICE BUTTON (for dashboard empty state)*/
+.add-device-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 25px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    background: var(--comp-gradient);
+    color: var(--container-text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.add-device-button:hover{
+    color: var(--white-col);
+    transform: translateY(-3px);
+    box-shadow: var(--button-glow);
+}
+
+.add-device-button:focus-visible{
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
+
+/* .add-device-button{
+    background: var(--accent-color3);
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 30px;
+    margin-top: auto;
+    padding: 12px 22px;
+    border-radius: 20px;
+    transition: 
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+    
+} */

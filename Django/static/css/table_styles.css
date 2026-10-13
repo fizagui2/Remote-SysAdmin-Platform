@@ -1,0 +1,68 @@
+@import 'styles_variables.css';
+
+.table-container{
+    width: 90%;
+    margin: 40px auto;
+    overflow-x: auto;
+    background: var(--comp-gradient);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.webhost-table{
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--container-text);
+    font-size: 0.95rem;
+}
+
+/* >> TABLE HEADER */
+.webhost-table thead{
+    background: var(--accent-color);
+    color:white;
+}
+.webhost-table th{
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid var(--hover-color);
+}
+/* >> TABLE CELLS */
+.webhost-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid var(--secondary-text);
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+/* > ROW HOVER */
+.webhost-table tbody tr{
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.webhost-table tbody tr:hover{
+    background-color: rgba(77, 154, 255, 0.15);
+}
+
+/* > STATUS*/
+
+/* FOR SMALL SCREENS */
+@media (max-width: 768px){
+    .table-container{
+        width: 95%;
+    }
+
+    .webhost-table{
+        min-width: 700px;
+    }
+    .webhost-table th,
+    .webhost-table td{
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}

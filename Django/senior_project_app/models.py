@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-
 class Computer(models.Model):
     """One row per machine running the Windows agent.
 

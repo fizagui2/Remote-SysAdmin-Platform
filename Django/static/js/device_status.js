@@ -1,3 +1,4 @@
+// >> GENERAL DEVICE DESCRIPTION
 fetch("/api/agent/status/")
     .then(response => response.json())
     .then(data => {

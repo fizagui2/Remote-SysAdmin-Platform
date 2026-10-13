@@ -1,0 +1,46 @@
+@import 'styles_variables.css';
+
+.add-device-container{
+    background: var(--container-color);
+    border-radius: 20px;
+    padding: 15px 20px;
+    box-shadow: 0 0 15px 5px var(--container-shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.add-device-container:hover{
+    transform: translateY(-3px);
+    box-shadow: var(--container-shadow);
+}
+
+
+.add-device-title{
+    color: var(--title-var1) !important;
+    padding: 10px 15px;
+    align-items: center !important;
+    flex: auto;
+}
+
+.add-device-text-container{
+    padding: 20px;
+    margin: 10px auto;
+    color: var(--white-col);
+}
+
+.add-devices-extra-text{
+    color: var(--text-color-var1) !important;
+}
+
+.add-device-button{
+    background: var(--buttons-color-var1) !important;
+    color: var(--buttons-text-var1) !important;
+    padding: 20px auto;
+    margin: 10px;
+    border-radius: 20px;
+    border-color: var(--buttons-border-variant2);
+    border: solid 2px;
+    box-shadow: var(--button-glow-var1);
+}
+.add-device-button:hover{
+    border-color: var(--buttons-border-variant2);
+    box-shadow: var(--button-glow-var1);
+}
