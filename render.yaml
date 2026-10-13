@@ -1,0 +1,33 @@
+# Render Blueprint: in Render, New -> Blueprint, pick this repo.
+# Render reads this file to create the web service. The database stays on
+# Supabase; Render only runs the Django app.
+services:
+  - type: web
+    name: hostweb
+    runtime: python
+    plan: free
+    # Same region as the Supabase database (us-east-2), since the app opens a
+    # database connection on every request.
+    region: ohio
+    branch: main
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      python Django/manage.py collectstatic --noinput &&
+      python Django/manage.py migrate --noinput
+    startCommand: gunicorn --chdir Django --bind 0.0.0.0:$PORT --workers 2 senior_project.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.14"
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_HTTPS
+        value: "True"
+      - key: AGENT_TOKEN_REQUIRED
+        value: "True"
+      # Render generates a random one; it never needs to be seen or copied.
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      # Supabase session pooler string. Render asks for it when the Blueprint
+      # is created; it is never stored in this repo.
+      - key: DATABASE_URL
+        sync: false

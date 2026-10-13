@@ -42,14 +42,37 @@ if not SECRET_KEY:
     )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_flag('DJANGO_DEBUG', 'True')
+# Off unless .env turns it on, so a deployment that forgets to set it is safe.
+DEBUG = _env_flag('DJANGO_DEBUG', 'False')
 
-# '*' is the development default. Set real hostnames in .env before deploying.
+# Any hostname is fine while debugging locally. A deployment lists its own in
+# DJANGO_ALLOWED_HOSTS; on Render, its address is added automatically below.
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '*' if DEBUG else '').split(',')
     if host.strip()
 ]
+
+# Render sets this to the service's public address, e.g. hostweb.onrender.com.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS = [f'https://{RENDER_EXTERNAL_HOSTNAME}']
+
+# Set DJANGO_HTTPS=True when the site is served over HTTPS, as on Render. It is
+# a separate flag from DEBUG so the test suite and local servers, which run
+# without DEBUG but over plain HTTP, aren't redirected to HTTPS.
+if _env_flag('DJANGO_HTTPS', 'False'):
+    # Render ends HTTPS at its proxy and passes requests on over HTTP; this
+    # header is how Django knows the original request was HTTPS.
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Browsers refuse plain HTTP to this host for an hour after a visit.
+    # Raise it once the deployment has proven stable.
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 
 # Application definition
@@ -66,6 +89,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Serves static files when DEBUG is off, since Django itself won't.
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -194,11 +219,14 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'assets'
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
+STORAGES = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    # Compressed but not hashed. The hashed (manifest) version fails a page
+    # outright when a template references a static file that doesn't exist;
+    # this one just 404s that file, the same as locally.
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
