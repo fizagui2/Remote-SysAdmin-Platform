@@ -135,7 +135,7 @@
     color: white;
 }
 
-/* >>>  SIDEBAR  */
+/* >>> SIDEBAR FROM DASHBOARD*/
 .dashboard-sidebar.dashboard-sidebar.collapsed .sidebar-text{
     display: none;
 }
@@ -153,7 +153,6 @@
     min-height: 400px;
 }
 
-/*SIDEBAR FROM DASHBOARD*/
 .dashboard-sidebar{
     width: 280px;
     min-width: 200px;
@@ -194,6 +193,8 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+/* ////////////////////////////////////// */
 
 /* MEDIUM SCREEN */
 @media (max-width: 1100px){

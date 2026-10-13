@@ -117,9 +117,9 @@ def location(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
-@login_required
-def device_roll_call(request):
-    return render(request, 'devices_showcase.html', {})
+# @login_required
+# def device_roll_call(request):
+#     return render(request, 'devices_showcase.html', {})
 
 # >> Changed with Luis Helper function
 @login_required
@@ -128,9 +128,9 @@ def device_details(request, hostname):
     computer = get_object_or_404(_visible_computers(request.user), hostname=hostname)
     return render(request, 'device_details.html', {"computer":computer})
 
-@login_required
-def device_results(request):
-    return render(request, 'device_results.html', {})
+# @login_required
+# def device_results(request):
+#     return render(request, 'device_results.html', {})
 
 @login_required
 def individual_device(request):
