@@ -158,6 +158,11 @@ LOGOUT_REDIRECT_URL = 'home'
 # every agent sends a token; then requests without one get a 401.
 AGENT_TOKEN_REQUIRED = _env_flag('AGENT_TOKEN_REQUIRED', 'False')
 
+# A machine counts as online if any agent report reached the server this
+# recently. The agent sends a heartbeat every 10 seconds, so 30 is three
+# missed heartbeats in a row.
+AGENT_OFFLINE_AFTER_SECONDS = 30
+
 # Accounts made on the register page use their email address as the username,
 # so usernames are matched without regard to case. This replaces Django's
 # default ModelBackend; it inherits everything else from it.
