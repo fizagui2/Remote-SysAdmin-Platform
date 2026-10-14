@@ -1,5 +1,5 @@
 /* DEVICES CALL ROLL FUNCTION*/
-function LoadAvailableComputers(){
+export function LoadAvailableComputers(){
     fetch("/api/agent/computers/")
     .then(response => response.json())
     .then(data => {
