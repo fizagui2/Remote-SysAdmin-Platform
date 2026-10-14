@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using WindowsAgent.Services;
 
-var baseUrl = Environment.GetEnvironmentVariable("AGENT_API_BASE_URL") ?? "http://localhost:8000/";
+var baseUrl = Environment.GetEnvironmentVariable("AGENT_API_BASE_URL") ?? "https://hostweb-3s86.onrender.com/";
 var intervalSeconds = int.TryParse(Environment.GetEnvironmentVariable("AGENT_REPORT_INTERVAL_SECONDS"), out var seconds)
     ? seconds
     : 10;
