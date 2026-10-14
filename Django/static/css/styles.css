@@ -415,7 +415,7 @@
     }
 }
 
-@media (max-width: 768){
+@media (max-width: 768px){
     .home-slide{
         min-height: 520px;
     }
