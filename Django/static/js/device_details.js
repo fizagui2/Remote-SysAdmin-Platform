@@ -1,4 +1,45 @@
 // RETRIEVEN THE DATA OF THE COMPUTERS FROM THE DATABASE INTO JSON VARIABLE
+// COMMAND BUTTONS (terminate a process / start, stop, restart a service)
+function getCookie(name){
+    const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : null;
+}
+
+function escapeAttr(value){
+    return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+
+function queueCommand(command, extra, buttonEl){
+    const originalText = buttonEl.textContent;
+    buttonEl.disabled = true;
+    buttonEl.textContent = "Queuing...";
+
+    const body = new URLSearchParams({ hostname: COMPUTER_HOSTNAME, command, ...extra });
+
+    fetch("/debug/queue-command/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
+    })
+        .then(response => {
+            if(!response.ok){ throw new Error(`Request failed (${response.status})`); }
+            buttonEl.textContent = "Queued";
+        })
+        .catch(error => {
+            console.error("Could not queue command: ", error);
+            buttonEl.textContent = "Failed";
+        })
+        .finally(() => {
+            setTimeout(() => {
+                buttonEl.disabled = false;
+                buttonEl.textContent = originalText;
+            }, 2000);
+        });
+}
+
 /* FUNCTION TO CHANGE PROGRESS BAR COLOR */
 function updateProgressBar(barId, value){
     const bar = document.getElementById(barId);
@@ -20,7 +61,15 @@ function updateProgressBar(barId, value){
     }
 }
 
-fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
+// Live refresh added, refetches and renders device on an interval so that CPU, memory
+// and the process list update on their own without a manual reload
+let isLoadingDeviceDetails = false;
+
+function loadDeviceDetails(){
+    if(isLoadingDeviceDetails){ return; }
+    isLoadingDeviceDetails = true;
+
+    fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
     .then(response => {
         if(!response.ok){
             throw new Error("Could not retrieve computer data.");
@@ -77,7 +126,7 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
 
         document.getElementById("memory-used").textContent = memoryUsed != null ? `${memoryUsed} GB (used)` : "N/A";
         // for the progress bar (do not delete)
-        document.getElementById("memory-available").textContent != null ? `| ${memoryAvailable} GB (available)` : "N/A";
+        document.getElementById("memory-available").textContent = memoryAvailable != null ? `| ${memoryAvailable} GB (available)` : "N/A";
         
         document.getElementById("memory-percent").textContent = `${memoryUsagePercentage ?? 0}%`;
         document.getElementById("memory-progress").style.width = `${memoryUsagePercentage ?? 0}%`;
@@ -96,10 +145,16 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
                 <td>${process.Pid ?? "N/A"}</td>
                 <td>${process.Name ?? "Unknown"}</td>
                 <td>${process.MemoryMb ?? "N/A"} MB</td>
+                <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
             `;
             processTable.appendChild(row);
         });
-        
+        processTable.onclick = (event) => {
+            const button = event.target.closest("button[data-pid]");
+            if(!button){ return; }
+            queueCommand("terminate_process", { pid: button.dataset.pid }, button);
+        };
+
         // SERVICES
         const serviceTable = document.getElementById("services-table-body");
         serviceTable.innerHTML = "";
@@ -109,12 +164,29 @@ fetch(`/api/agent/status/?hostname=${encodeURIComponent(COMPUTER_HOSTNAME)}`)
                 <td>${service.Name ?? "Unknown"}</td>
                 <td>${service.DisplayName ?? "Unknown"}</td>
                 <td>${service.Status ?? "Unknown"}</td>
+                <td>
+                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="start_service" data-service="${escapeAttr(service.Name)}">Start</button>
+                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="stop_service" data-service="${escapeAttr(service.Name)}">Stop</button>
+                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="restart_service" data-service="${escapeAttr(service.Name)}">Restart</button>
+                </td>
             `
             serviceTable.appendChild(row);
         });
+        serviceTable.onclick = (event) => {
+            const button = event.target.closest("button[data-command]");
+            if(!button){ return; }
+            queueCommand(button.dataset.command, { service_name: button.dataset.service }, button);
+        };
     })
     .catch(error => {
         console.error("Could not retrieve computer information: ", error);
+    })
+    .finally(() => {
+        isLoadingDeviceDetails = false;
     });
+}
+
+loadDeviceDetails();
+setInterval(loadDeviceDetails, 1000);
 
 // document.getElementById("memory-used").textContent = memoryAvailable != null ? `${memoryUsed} GB` : "N/A";
