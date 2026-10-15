@@ -294,6 +294,44 @@ class MultipleComputerTests(LoggedInClientMixin, TestCase):
         self.assertEqual(status_data["hostname"], "NEWER-PC")
 
 
+class OnlineStatusTests(LoggedInClientMixin, TestCase):
+    """A machine is online while its agent keeps reporting, and offline once it stops."""
+
+    def make(self, hostname, seconds_ago):
+        last_seen = None if seconds_ago is None else timezone.now() - timedelta(seconds=seconds_ago)
+        return Computer.objects.create(hostname=hostname, owner=self.user, last_seen=last_seen)
+
+    def test_recent_report_is_online(self):
+        self.assertTrue(self.make("PC-A", 5).is_online)
+
+    @override_settings(AGENT_OFFLINE_AFTER_SECONDS=30)
+    def test_online_up_to_the_threshold_then_offline(self):
+        self.assertTrue(self.make("PC-A", 29).is_online)
+        self.assertFalse(self.make("PC-B", 31).is_online)
+
+    def test_never_reported_is_offline(self):
+        self.assertFalse(self.make("PC-A", None).is_online)
+
+    def test_computers_endpoint_reports_online(self):
+        self.make("PC-A", 5)
+        self.make("PC-B", 600)
+        computers = self.client.get("/api/agent/computers/").json()["computers"]
+        self.assertEqual({c["hostname"]: c["online"] for c in computers}, {"PC-A": True, "PC-B": False})
+
+    def test_status_endpoint_reports_online(self):
+        self.make("PC-A", 600)
+        self.assertFalse(self.client.get("/api/agent/status/?hostname=PC-A").json()["online"])
+
+    def test_status_with_no_machines_reports_offline(self):
+        self.assertFalse(self.client.get("/api/agent/status/").json()["online"])
+
+    def test_agent_report_brings_machine_online(self):
+        self.make("PC-A", 600)
+        self.client.post("/api/agent/heartbeat/", data=json.dumps({"Hostname": "PC-A", "Timestamp": "x"}),
+                         content_type="application/json")
+        self.assertTrue(Computer.objects.get(hostname="PC-A").is_online)
+
+
 class PageViewSmokeTests(TestCase):
     """Basic checks that the main (non-API) pages still render without errors."""
  

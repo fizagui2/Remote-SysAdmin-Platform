@@ -23,3 +23,6 @@ __pycache__/
 Windows-Agent/**/bin/
 Windows-Agent/**/obj/
 Windows-Agent/**/publish/
+
+# A stale committed copy of this shadowed real changes to Django/static/ in production
+Django/assets/
