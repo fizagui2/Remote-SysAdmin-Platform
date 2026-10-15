@@ -117,6 +117,31 @@ def location(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+# >>> DASHBOARD SIDEBAR OPTIONS y asi bro no se
+@login_required
+def device_reports(request):
+    return render(request, 'device_reports.html', {})
+
+@login_required
+def device_heartbeats(request):
+    return render(request, 'device_heartbeats.html', {})
+
+@login_required
+def device_performances(request):
+    return render(request, 'device_performances.html', {})
+
+@login_required
+def device_processes(request):
+    return render(request, 'device_processes.html', {})
+
+@login_required
+def device_services(request):
+    return render(request, 'device_services.html', {})
+# ==================== END OF DASHBOARD ACCTIONS ====================
+@login_required #needed? dont know, but will be there for now :u
+def device_status(request):
+    return render(request, 'device_status.html', {})
+
 # @login_required
 # def device_roll_call(request):
 #     return render(request, 'devices_showcase.html', {})

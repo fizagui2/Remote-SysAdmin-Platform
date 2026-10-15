@@ -21,6 +21,8 @@ async function loadComputers(){
         }
         else{
             // call devices function
+            const loadingDeviceAdvertisement = document.getElementById("load-advertisement");
+            loadingDeviceAdvertisement.style.display = "none";
             load_devices.LoadAvailableComputers();
         }
     } catch (error){

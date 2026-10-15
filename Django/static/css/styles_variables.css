@@ -5,6 +5,8 @@
     --banner: #f1ff54e0;
     --white-col: #ffffff;
     --black-col: #000000;
+    --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
+    --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
     --text-color: #1f2231;
     --text-color-var1: #a5e1facb;
     --secondary-text:#5f6270;
@@ -22,6 +24,10 @@
     --buttons-border-variant1: #d1c0fe;
     --buttons-border-variant2: #190023ed;
     --buttons-border-variant3: #000e4d;
+    --buttons-border-variant4: #0a3000da;
+    --buttons-border-variant5: #a5ff8eda;
+    --buttons-border-variant6: #300000da;
+    --buttons-border-variant7: #ff8e8eda;
     --base-variant2: #bdeefcf8;
     --button-glow: 0 0 15px rgba(106, 255, 208, 0.4);
     --button-glow-var1:  0 0 15px rgba(116, 233, 246, 0.788);

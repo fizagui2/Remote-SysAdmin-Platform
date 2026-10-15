@@ -52,42 +52,49 @@
                         <span class="sidebar-text">All devices</span>
                     </a> 
                 </li>
+                <li> 
+                    <a href="{% url 'reports' %}" class="nav-link text-white"> 
+                        <span class="sidebar-icon">📝</span>
+                        <span class="sidebar-text">Devices Latest Reports</span>
+                    </a> 
+                </li>
+                <li> 
+                    <a href="{% url 'heartbeats' %}" class="nav-link text-white"> 
+                        <span class="sidebar-icon">⚡</span>
+                        <span class="sidebar-text">Devices Heartbeat</span>
+                    </a> 
+                </li>
+                <li> 
+                    <a href="{% url 'performances' %}" class="nav-link text-white"> 
+                        <span class="sidebar-icon">📈</span>
+                        <span class="sidebar-text">Devices Performance</span>
+                    </a> 
+                </li>
+                
+                <li> 
+                    <a href="{% url 'processes' %}" class="nav-link text-white"> 
+                        <span class="sidebar-icon">📊</span>
+                        <span class="sidebar-text">Devices processes</span>
+                    </a> 
+                </li>
+                <li> 
+                    <a href="{% url 'services' %}" class="nav-link text-white"> 
+                        <span class="sidebar-icon">📋</span>
+                        <span class="sidebar-text">Devices services</span>
+                    </a> 
+                </li>
                 <!-- <li> 
                     <a href="#" class="nav-link text-white">
                         <span class="sidebar-icon">▣</span>
                         <span class="sidebar-text">Add device</span>
                     </a> 
                 </li> -->
-                <li> 
-                    <a href="#" class="nav-link text-white"> 
-                        <span class="sidebar-icon">⚡</span>
-                        <span class="sidebar-text">Devices Heartbeat</span>
-                    </a> 
-                </li>
-                <li> 
-                    <a href="#" class="nav-link text-white"> 
-                        <span class="sidebar-icon">📈</span>
-                        <span class="sidebar-text">Devices Performance</span>
-                    </a> 
-                </li>
-                <li> 
+                <!-- <li> 
                     <a href="#" class="nav-link text-white"> 
                         <span class="sidebar-icon">⚙️</span>
-                        <span class="sidebar-text">Devices CPU status</span>
+                        <span class="sidebar-text">Devices Memory/CPU status</span>
                     </a> 
-                </li>
-                <li> 
-                    <a href="#" class="nav-link text-white"> 
-                        <span class="sidebar-icon">📊</span>
-                        <span class="sidebar-text">Devices processes</span>
-                    </a> 
-                </li>
-                <li> 
-                    <a href="#" class="nav-link text-white"> 
-                        <span class="sidebar-icon">📋</span>
-                        <span class="sidebar-text">Devices services</span>
-                    </a> 
-                </li>
+                </li> -->
             </ul>
             <hr>
             <div class="dropdown"> 
@@ -95,7 +102,7 @@
                     <strong class="sidebar-text">{{ user.get_full_name|default:user.username }}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">New Device...</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
