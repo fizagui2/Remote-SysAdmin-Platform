@@ -2,6 +2,7 @@
     --base-color: #ffffff;
     --base-variant: #080e2c;
     --base-variant1: #0b012af2;
+    --base-variant2: #502497f8;
     --banner: #f1ff54e0;
     --white-col: #ffffff;
     --black-col: #000000;
@@ -48,6 +49,7 @@
     --extra-subtitle-var1:rgb(49, 220, 140);
     --container-color: radial-gradient(circle at 25% 70%, #8ebfef 0%, #15214b 40%, #111d3d 75%, #070617 100%);
     --container-shadow: #b4ffffec;
+    --container-shadow-var1: #0a8661;
     --container-title: #99c7ff;
     --container-text: #ffffff;
     --hover-color: #012544;

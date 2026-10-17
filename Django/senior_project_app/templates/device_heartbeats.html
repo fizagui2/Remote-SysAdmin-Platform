@@ -1,8 +1,26 @@
 {% extends 'base_dshb.html' %}
-{% block title %} Heartbeats {% endblock %}
+{% load static %}
+
+{% block extra_js %} 
+<script src="{% static 'js/device_heartbeat.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/device_heartbeats_styles.css'%}">
+{% endblock %}
+
+{% block title %}💓Heartbeats{% endblock %}
+
 
 {% block content %}
-
-<h1>Device: </h1> <hr>
-
+<div class="container-fluid py-4">
+    <h1 class="title">🤍Devices Heartbeats bro🤍</h1><hr>
+    <div id="heartbeats-cards" class="devices-heartbeats">
+        <p class="bolded" id="hide-bro">Loading devices heartbeats...</p>
+    </div>
+</div>
 {% endblock %}
+
+<!-- <div class="heartbeat-card">
+    <p class="bolded" id="hide-bro">Loading devices...</p>
+</div> -->

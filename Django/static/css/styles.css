@@ -49,6 +49,7 @@
     --extra-subtitle-var1:#a3f7ff;
     --container-color: radial-gradient(circle at 25% 70%, #63a5bc 0%, #2b154b 40%, #11143d 75%, #120617 100%);
     --container-shadow: #e0b4ffec;
+    --container-shadow-var1: #e3ffbd;
     --container-title: #51cfd8;
     --container-text: #e1ebfd;
     --hover-color: #87cdff;
@@ -88,6 +89,10 @@
 
 .bolded{
     font-weight: bold;
+}
+
+.hide-bro{
+    display: block;
 }
 /* //////////////// CLASSES //////////////// */
 /* >>> Separators (FOR ABOUT US PAGE) */
