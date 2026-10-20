@@ -1,5 +1,47 @@
 // RETRIEVEN THE DATA OF THE COMPUTERS FROM THE DATABASE INTO JSON VARIABLE
 // COMMAND BUTTONS (terminate a process / start, stop, restart a service)
+let currentProcesses = [];
+let processSortOrder = "memory-desc";
+
+/* >> For sorting processes */
+function renderProcesses(){
+    const processTable = document.getElementById("processes-table-body");
+    if(!processTable){ return; }
+    const sortedProcesses = [...currentProcesses];
+    sortedProcesses.sort((a, b) => {
+        switch(processSortOrder){
+            case "memory-asc":
+                return (Number(a.MemoryMb) || 0) - (Number(b.MemoryMb) || 0);
+            case "memory-desc":
+                return (Number(b.MemoryMb) || 0) - (Number(a.MemoryMb) || 0);
+
+            case "name-asc":
+                return (a.Name ?? "").localeCompare(b.Name ?? "");
+            case "name-desc":
+                return (b.Name ?? "").localeCompare(a.Name ?? "");
+            
+            case "pid-asc":
+                return (Number(a.Pid) || 0) - (Number(b.Pid) || 0);
+            case "pid-desc":
+                return (Number(b.Pid) || 0) - (Number(a.Pid) || 0);
+
+            default:
+                return 0;
+        }
+    });
+    processTable.innerHTML = "";
+    sortedProcesses.forEach(process => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${process.Pid ?? "N/A"}</td>
+            <td>${process.Name ?? "Unknown"}</td>
+            <td>${process.MemoryMb ?? "N/A"} MB</td>
+            <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
+        `;
+        processTable.appendChild(row);
+    });
+}
+
 function getCookie(name){
     const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
     return match ? decodeURIComponent(match[1]) : null;
@@ -64,6 +106,14 @@ function updateProgressBar(barId, value){
 // Live refresh added, refetches and renders device on an interval so that CPU, memory
 // and the process list update on their own without a manual reload
 let isLoadingDeviceDetails = false;
+const processSortDropdown = document.getElementById("process-sort");
+
+if(processSortDropdown){
+    processSortDropdown.addEventListener("change", () => {
+        processSortOrder = processSortDropdown.value;
+        renderProcesses();
+    });
+}
 
 function loadDeviceDetails(){
     if(isLoadingDeviceDetails){ return; }
@@ -137,23 +187,32 @@ function loadDeviceDetails(){
         updateProgressBar("disk-progress", diskUsage);
 
         // PROCESSES
+        currentProcesses = processes;
+        renderProcesses();
         const processTable = document.getElementById("processes-table-body");
-        processTable.innerHTML = "";
-        processes.forEach(process => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${process.Pid ?? "N/A"}</td>
-                <td>${process.Name ?? "Unknown"}</td>
-                <td>${process.MemoryMb ?? "N/A"} MB</td>
-                <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
-            `;
-            processTable.appendChild(row);
-        });
-        processTable.onclick = (event) => {
-            const button = event.target.closest("button[data-pid]");
-            if(!button){ return; }
-            queueCommand("terminate_process", { pid: button.dataset.pid }, button);
-        };
+        // processTable.innerHTML = "";
+        if(processTable){
+            processTable.onclick = (event) => {
+                const button = event.target.closest("button[data-pid]");
+                if(!button){ return; }
+                queueCommand("terminate_process", {pid:button.dataset.pid}, button);
+            };
+        }
+        // processes.forEach(process => {
+        //     const row = document.createElement("tr");
+        //     row.innerHTML = `
+        //         <td>${process.Pid ?? "N/A"}</td>
+        //         <td>${process.Name ?? "Unknown"}</td>
+        //         <td>${process.MemoryMb ?? "N/A"} MB</td>
+        //         <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
+        //     `;
+        //     processTable.appendChild(row);
+        // });
+        // processTable.onclick = (event) => {
+        //     const button = event.target.closest("button[data-pid]");
+        //     if(!button){ return; }
+        //     queueCommand("terminate_process", { pid: button.dataset.pid }, button);
+        // };
 
         // SERVICES
         const serviceTable = document.getElementById("services-table-body");
@@ -161,6 +220,7 @@ function loadDeviceDetails(){
         services.forEach(service => {
             const row = document.createElement("tr");
             row.innerHTML = `
+                
                 <td>${service.Name ?? "Unknown"}</td>
                 <td>${service.DisplayName ?? "Unknown"}</td>
                 <td>${service.Status ?? "Unknown"}</td>

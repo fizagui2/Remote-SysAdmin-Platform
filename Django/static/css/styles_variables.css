@@ -17,6 +17,8 @@
     --accent-color3: #b3fff1;
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
+    --buttons-color-var2: #00300a;
+    --buttons-color-var3: #300000;
     --buttons-text: #ffffff;
     --buttons-text-var1: #bcc3ffed;
     --buttons-secondary-color: #00193b;
@@ -64,4 +66,11 @@
     --login-cont-text: #622a8a;
     --footer-text:#1d1d39;
     --profile-shadow: rgb(21, 31, 31);
+    /* SIDEBAR VARIABLES */
+    --sidebar-expanded-width: 280px;
+    --sidebar-collapsed-width: 80px;
+    --sidebar-background: #171d2b;
+    --sidebar-border: rgba(255, 255, 255, 0.08);
+    --sidebar-hover: rgba(96, 165, 250, 0.13);
+    --sidebar-active: #2563eb;
 }

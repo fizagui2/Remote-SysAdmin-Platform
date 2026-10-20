@@ -137,16 +137,31 @@
     box-shadow: var(--button-glow);
 }
 
+/* >> ADD DEVICES BUTTONS (when getting the code)*/
+.add-device-button{
+    background: var(--buttons-color-var1) !important;
+    color: var(--buttons-text-var1) !important;
+    padding: 18px 25px;
+    margin: 10px;
+    border-radius: 20px;
+    border-color: var(--buttons-border-variant2);
+    border: solid 2px;
+    box-shadow: var(--button-glow-var1);
+}
+.add-device-button:hover{
+    border-color: var(--buttons-border-variant2);
+    box-shadow: var(--button-glow-var1);
+}
 
 /* ADD DEVICE BUTTON (for dashboard empty state)*/
 .add-device-button-var1{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 15px 20px;
-    border: 3px solid var(--buttons-border-variant4);
+    padding: 15px 15px;
+    border: 3px solid var(--buttons-border-variant5);
     border-radius: 12px;
-    background: var(--green-color);
+    background: var(--buttons-color-var2);
     color: var(--container-text);
     font-weight: 600;
     text-decoration: none;
@@ -164,7 +179,8 @@
 }
 
 .remove-device-button-var1{
-    background: var(--red-color);
+    background: var(--buttons-color-var3);
+    border: 3px solid var(--buttons-border-variant7);
 }
 .remove-device-button-var1:hover{
     color: var(--white-col);
@@ -173,23 +189,9 @@
     box-shadow: var(--button-glow);
 }
 .remove-device-button-var1:focus-visible{
-    outline-color: var(accent-color2);
+    outline-color: var(--accent-color2);
 }
-/* >> ADD DEVICES BUTTONS (when getting the code)*/
-.add-device-button{
-    background: var(--buttons-color-var1) !important;
-    color: var(--buttons-text-var1) !important;
-    padding: 18px 25px;
-    margin: 10px;
-    border-radius: 20px;
-    border-color: var(--buttons-border-variant2);
-    border: solid 2px;
-    box-shadow: var(--button-glow-var1);
-}
-.add-device-button:hover{
-    border-color: var(--buttons-border-variant2);
-    box-shadow: var(--button-glow-var1);
-}
+
 
 
 /* .add-device-button{
