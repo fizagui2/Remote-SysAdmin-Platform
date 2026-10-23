@@ -117,6 +117,10 @@ def location(request):
 def dashboard(request):
     return render(request, 'dashboard.html', {})
 
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {})
+
 # >>> DASHBOARD SIDEBAR OPTIONS y asi bro no se
 @login_required
 def device_reports(request):

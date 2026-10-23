@@ -17,17 +17,9 @@ function LimitProcessesRows(table){
             wrapper.style.maxHeight = totalHeight + "px";
         }
     });
-
-    // allRows = table.tBodies[0];
-    // maxRowsToShow = 8;
-    // for(let i = 0; i < allRows.length; i++){
-    //     if(i >= maxRowsToShow){ allRows[i].style.display = 'none'; }
-    // }
-    // const btn = document.getElementById("show-more-btn");
-    // let currentlyShown = maxRowsToShow;
-
 }
 
+// PROBABLY WONT NEED IT :u
 function LimitServicesRows(table){
     maxRowsToShow = 10;
 }

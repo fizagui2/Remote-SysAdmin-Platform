@@ -11,6 +11,7 @@ urlpatterns = [
     path('aboutus/', views.about_us, name="aboutus"),
     path('contacts/', views.contacts, name="contacts"),
     path('dashboard/', views.dashboard, name="dashboard"),
+    path('profile/', views.profile, name="profile"),
     path('devices-reports/', views.device_reports, name="reports"),
     path('devices-heartbeats/', views.device_heartbeats, name="heartbeats"),
     path('devices-performances/', views.device_performances, name="performances"),

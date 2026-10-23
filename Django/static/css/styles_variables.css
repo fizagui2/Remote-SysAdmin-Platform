@@ -70,7 +70,10 @@
     --sidebar-expanded-width: 280px;
     --sidebar-collapsed-width: 80px;
     --sidebar-background: #171d2b;
+    --sidebar-title: #daecfff0;
+    --sidebar-text: #ddddfa;
+    --sidebar-text-hover: #2a0079;
     --sidebar-border: rgba(255, 255, 255, 0.08);
-    --sidebar-hover: rgba(96, 165, 250, 0.13);
+    --sidebar-hover: rgb(141, 190, 251);
     --sidebar-active: #2563eb;
 }

@@ -136,8 +136,6 @@
 }
 
 /* >>> SIDEBAR FROM DASHBOARD*/
-
-
 .dashboard-sidebar.dashboard-sidebar.collapsed .sidebar-icon{
     margin-right: 0;
 }
@@ -160,12 +158,13 @@
 
 
 
-/*DASBOARD SIDEBAR IMPROVEMENTS*/
+/* >>>> DASBOARD SIDEBAR IMPROVEMENTS!! */
 .dashboard-layout{
     display: flex;
     align-items: stretch;
     width: 100%;
     min-width: 0;
+    min-height: 100vh;
 }
 /* SIDEBAR ASU :V */
 .dashboard-sidebar{
@@ -176,19 +175,14 @@
     min-width: 0;
     height: 100vh;
     box-sizing: border-box;
-    padding: 20px 14px;
     display: flex;
     flex-direction: column;
+    padding: 20px 14px;
     background: var(--sidebar-background);
     color: #f8fafc;
-    border-right: 1px solid var(--sidebar-border);
     overflow-x: hidden;
     overflow-y: auto;
-
-    transition:
-        width 0.25s ease,
-        flex-basis 0.25s ease,
-        padding 0.25s ease;
+    transition: width 0.25s ease, flex-basis 0.25s ease;
 }
 
 .sidebar-header{
@@ -203,7 +197,7 @@
     display: flex;
     align-items: center;
     min-width: 0;
-    color: #f8fafc;
+    color: var(--sidebar-title);
     text-decoration: none;
     font-size: 1.05rem;
     font-weight: 700;
@@ -241,7 +235,7 @@
     min-height: 46px;
     padding: 10px 12px;
     border-radius: 10px;
-    color: #cbd5e1;
+    color: var(--sidebar-text);
     text-decoration: none;
     white-space: nowrap;
     transition: 
@@ -251,7 +245,7 @@
 }
 
 .dashboard-sidebar .nav-link:hover{
-    color: #fff;
+    color: var(--sidebar-text-hover);
     background: var(--sidebar-hover);
     transform: translateX(2px);
 }
@@ -347,6 +341,41 @@
         width: min(280px, 85vw);
         flex-basis: auto;
         transform: translateX(-100%);
-        
+        transition: transform 0.25s ease;
+    }
+
+    .dashboard-sidebar.mobile-open{
+        transform: translateX(0);
+    }
+
+    .dashboard-sidebar.dashboard-sidebar.collapsed{
+        width: min(280px, 85vw);
+        flex-basis: auto;
+    }
+    .dashboard-sidebar.dashboard-sidebar.collapsed .sidebar-text{
+        display: inline;
+    }
+
+    .dashboard-sidebar.dashboard-sidebar.collapsed .sidebar-brand{
+        display: flex;
+    }
+
+    .dashboard-sidebar.dashboard-sidebar.collapsed .sidebar-header{
+        justify-content: space-between;
+    }
+
+    .dashboard-sidebar.dashboard-sidebar.collapsed .nav-link{
+        justify-content: flex-start;
+        padding: 10px 12px;
+    }
+
+    .dashboard-main{
+        padding: 20px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .dashboard-sidebar, .dashboard-sidebar *, .dashboard-main{
+        transition: none !important;
     }
 }

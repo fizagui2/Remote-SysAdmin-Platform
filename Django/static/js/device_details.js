@@ -3,7 +3,10 @@
 let currentProcesses = [];
 let processSortOrder = "memory-desc";
 
-/* >> For sorting processes */
+let currentServices = []
+let serviceSortOrder = "name-asc";
+
+/* >> To Sort 'Processes' */
 function renderProcesses(){
     const processTable = document.getElementById("processes-table-body");
     if(!processTable){ return; }
@@ -42,20 +45,40 @@ function renderProcesses(){
     });
 }
 
+// >> To Sort 'Services'
+function renderServices(){
+    const serviceTable = document.getElementById("services-table-body");
+    if(!serviceTable){ return; }
+    const sortedServies = [...currentServices];
+    sortedServies.sort((a, b) => {
+        switch(serviceSortOrder){
+            case "name-asc":
+                
+                return;
+            case "name-desc":
+                return;
+            case "status-asc":
+                return;
+            case "status-desc":
+                return;
+            case "time-run":
+                return;
+            case "time-stop":
+                return;
+        }
+    });
+}
+
 function getCookie(name){
     const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
     return match ? decodeURIComponent(match[1]) : null;
 }
-
-function escapeAttr(value){
-    return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;");
-}
+function escapeAttr(value){ return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;"); }
 
 function queueCommand(command, extra, buttonEl){
     const originalText = buttonEl.textContent;
     buttonEl.disabled = true;
     buttonEl.textContent = "Queuing...";
-
     const body = new URLSearchParams({ hostname: COMPUTER_HOSTNAME, command, ...extra });
 
     fetch("/debug/queue-command/", {

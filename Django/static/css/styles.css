@@ -70,9 +70,12 @@
     /* SIDEBAR VARIABLES */
     --sidebar-expanded-width: 280px;
     --sidebar-collapsed-width: 80px;
-    --sidebar-background: #171d2b;
-    --sidebar-border: rgba(255, 255, 255, 0.08);
-    --sidebar-hover: rgba(96, 165, 250, 0.13);
+    --sidebar-background: #d2e1ff;
+    --sidebar-title: #012e5bf0;
+    --sidebar-text: #00013dbe;
+    --sidebar-text-hover: #ffffff;
+    --sidebar-hover: rgba(97, 107, 255, 0.53);
+    --sidebar-border: rgba(255, 255, 255, 0.08); /* Probably wont use it */
     --sidebar-active: #2563eb;
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
