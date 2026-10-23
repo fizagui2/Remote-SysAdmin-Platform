@@ -53,19 +53,35 @@ function renderServices(){
     sortedServies.sort((a, b) => {
         switch(serviceSortOrder){
             case "name-asc":
-                
-                return;
+                return (a.Name ?? "").localeCompare(b.Name ?? "");
             case "name-desc":
-                return;
-            case "status-asc":
-                return;
-            case "status-desc":
-                return;
-            case "time-run":
-                return;
-            case "time-stop":
-                return;
+                return (b.Name ?? "").localeCompare(a.Name ?? "");
+            case "display-asc":
+                return (a.DisplayName ?? "").localeCompare(b.DisplayName ?? "");
+            case "display-desc":
+                return (b.DisplayName ?? "").localeCompare(a.DisplayName ?? "");
+            case "status-run":
+                return (a.Status.toLowerCase() === "running" ? 0 : 1) - (b.Status.toLowerCase() === "running" ? 0 : 1);
+            case "status-stop":
+                return (a.Status.toLowerCase() === "running" ? 0 : 1) - (b.Status.toLowerCase() === "running" ? 0 : 1);
+            default:
+                return 0;
         }
+    });
+    serviceTable.innerHTML = "";
+    sortedServies.forEach(service => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${service.Name ?? "Unknown"}</td>
+            <td>${service.DisplayName ?? "Unknown"}</td>
+            <td>${service.Status ?? "Unknown"}</td>
+            <td>
+                <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="start_service" data-service="${escapeAttr(service.Name)}">Start</button>
+                <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="stop_service" data-service="${escapeAttr(service.Name)}">Stop</button>
+                <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="restart_service" data-service="${escapeAttr(service.Name)}">Restart</button>
+            </td>
+        `;
+        serviceTable.appendChild(row);
     });
 }
 
@@ -138,6 +154,15 @@ if(processSortDropdown){
     });
 }
 
+const serviceSortDropdown = document.getElementById("services-sort");
+if(serviceSortDropdown){
+    serviceSortDropdown.addEventListener("change", () => {
+        serviceSortOrder = serviceSortDropdown.value;
+        renderServices();
+    });
+}
+
+
 function loadDeviceDetails(){
     if(isLoadingDeviceDetails){ return; }
     isLoadingDeviceDetails = true;
@@ -209,11 +234,10 @@ function loadDeviceDetails(){
         updateProgressBar("memory-progress", memoryUsagePercentage);
         updateProgressBar("disk-progress", diskUsage);
 
-        // PROCESSES
+        // PROCESSES (Updated with Sort)
         currentProcesses = processes;
         renderProcesses();
         const processTable = document.getElementById("processes-table-body");
-        // processTable.innerHTML = "";
         if(processTable){
             processTable.onclick = (event) => {
                 const button = event.target.closest("button[data-pid]");
@@ -221,45 +245,40 @@ function loadDeviceDetails(){
                 queueCommand("terminate_process", {pid:button.dataset.pid}, button);
             };
         }
-        // processes.forEach(process => {
+        
+        // SERVICES (Updated with Sort)
+        currentServices = services;
+        renderServices();
+        const serviceTable = document.getElementById("services-table-body");
+        if (serviceTable){
+            serviceTable.onclick = (event) => {
+                const button = event.target.closest("button[data-command]");
+                if(!button){ return; }
+                queueCommand(button.dataset.command, {service_name: button.dataset.service }, button);
+            };
+        }
+        // SERVICES
+        // const serviceTable = document.getElementById("services-table-body");
+        // serviceTable.innerHTML = "";
+        // services.forEach(service => {
         //     const row = document.createElement("tr");
         //     row.innerHTML = `
-        //         <td>${process.Pid ?? "N/A"}</td>
-        //         <td>${process.Name ?? "Unknown"}</td>
-        //         <td>${process.MemoryMb ?? "N/A"} MB</td>
-        //         <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
-        //     `;
-        //     processTable.appendChild(row);
+        //         <td>${service.Name ?? "Unknown"}</td>
+        //         <td>${service.DisplayName ?? "Unknown"}</td>
+        //         <td>${service.Status ?? "Unknown"}</td>
+        //         <td>
+        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="start_service" data-service="${escapeAttr(service.Name)}">Start</button>
+        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="stop_service" data-service="${escapeAttr(service.Name)}">Stop</button>
+        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="restart_service" data-service="${escapeAttr(service.Name)}">Restart</button>
+        //         </td>
+        //     `
+        //     serviceTable.appendChild(row);
         // });
-        // processTable.onclick = (event) => {
-        //     const button = event.target.closest("button[data-pid]");
+        // serviceTable.onclick = (event) => {
+        //     const button = event.target.closest("button[data-command]");
         //     if(!button){ return; }
-        //     queueCommand("terminate_process", { pid: button.dataset.pid }, button);
+        //     queueCommand(button.dataset.command, { service_name: button.dataset.service }, button);
         // };
-
-        // SERVICES
-        const serviceTable = document.getElementById("services-table-body");
-        serviceTable.innerHTML = "";
-        services.forEach(service => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                
-                <td>${service.Name ?? "Unknown"}</td>
-                <td>${service.DisplayName ?? "Unknown"}</td>
-                <td>${service.Status ?? "Unknown"}</td>
-                <td>
-                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="start_service" data-service="${escapeAttr(service.Name)}">Start</button>
-                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="stop_service" data-service="${escapeAttr(service.Name)}">Stop</button>
-                    <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="restart_service" data-service="${escapeAttr(service.Name)}">Restart</button>
-                </td>
-            `
-            serviceTable.appendChild(row);
-        });
-        serviceTable.onclick = (event) => {
-            const button = event.target.closest("button[data-command]");
-            if(!button){ return; }
-            queueCommand(button.dataset.command, { service_name: button.dataset.service }, button);
-        };
     })
     .catch(error => {
         console.error("Could not retrieve computer information: ", error);
@@ -271,5 +290,3 @@ function loadDeviceDetails(){
 
 loadDeviceDetails();
 setInterval(loadDeviceDetails, 1000);
-
-// document.getElementById("memory-used").textContent = memoryAvailable != null ? `${memoryUsed} GB` : "N/A";

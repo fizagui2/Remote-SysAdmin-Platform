@@ -166,12 +166,17 @@
 <!-- >>>>>>>>>>>>>>>>>> SERVICES >>>>>>>>>>>>>>>>>> -->
 <hr>
 <h3>Latests Services</h3>
+<!-- >> SORT SERVICES -->
 <div class="table-controls">
     <label for="services-sort">Sort services by:</label>
     <select id="services-sort" class="table-sort-dropdown">
-
+        <option value="name-asc">Name: A → Z</option>
+        <option value="name-desc">Name: Z → A</option>
+        <option value="display-asc">Display Name: A → Z</option>
+        <option value="display-desc">Display Name: Z → A</option>
+        <option value="status-run">Status: Running first</option>
+        <option value="status-stop">Status: Stopped first</option>
     </select>
-    <select></select>
 </div>
 <!-- >>  TABLE SERVICES -->
 <div class="table-container scroll-container scroll-container-services">
