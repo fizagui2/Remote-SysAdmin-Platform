@@ -1,0 +1,98 @@
+@import 'styles_variables.css';
+
+/* table{
+
+} */
+
+.devices-heartbeats{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.25rem;
+    padding: 1rem 0;
+}
+
+.heartbeat-card{
+    padding: 1.5rem;
+    border-radius: 16px;
+    background-color: var(--container-color);
+    border: 1px solid var(--buttons-border-variant3);
+    box-shadow: 0 4px 12px var(--container-shadow-var1);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.heartbeat-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px var(--container-shadow-var1);
+}
+
+.heartbeat-card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.heartbeat-hostname{
+    font-size: 1.15rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    margin: 0;
+}
+
+.heartbeat-status{
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.status-online{
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-offline{
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.status-unknown{
+    color: #374151;
+    background: #e5e7eb;
+}
+
+.heartbeat-details{
+    margin-top: 1.25rem;
+}
+
+.heartbeat-date{
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+
+.heartbeat-relative{
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce){
+    .heartbeat-card{
+        transition: none;
+    }
+    .heartbeat-card:hover{
+        transform: none;
+    }
+}
+/* 
+padding: 20px;
+    margin: 10px auto;
+    width: 500px;
+    max-height: 400px;
+    border: 3px solid var(--black-col);
+    border-radius: 18px;
+    background: var(--base-variant2);
+
+*/
+
+/* @media(min){} */

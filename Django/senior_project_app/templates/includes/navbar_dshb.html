@@ -4,11 +4,14 @@
         <!-- <span></span>  -->
         
         <ul class="dashboard-nav">
-            <li><a href="{% url 'home' %}" class="dashboard-nav-link">Homepage</a></li>
-            <li><a href="{% url 'dashboard' %}" class="dashboard-nav-link">Devices</a></li>
-            <li><a href="#" class="dashboard-nav-link">Active Devices</a></li>
-            <li><a href="#" class="dashboard-nav-link">Offline Devices</a></li>
-            <li><a href="#" class="dashboard-nav-link">Search (probably)</a></li>
+            <li><a href="{% url 'dashboard' %}" class="dashboard-nav-link bolded">📱Devices</a></li>
+            <li><a href="#" class="dashboard-nav-link bolded">🟢Active Devices</a></li>
+            <li><a href="#" class="dashboard-nav-link bolded">🔴Offline Devices</a></li>
+            <li><a href="{% url 'home' %}" class="dashboard-nav-link bolded">🏠Homepage</a></li>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">🔍Search</button>
+            </form>
         </ul>
     </div>
 </nav>

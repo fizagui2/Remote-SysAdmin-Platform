@@ -1,4 +1,4 @@
-/* DEVICES CALL ROLL FUNCTION*/
+/* DEVICES CALL ROLL FUNCTION */
 export function LoadAvailableComputers(){
     fetch("/api/agent/computers/")
     .then(response => response.json())

@@ -44,8 +44,7 @@
                 <td>{% if device.is_enrolled %}Enrolled{% else %}Not enrolled{% endif %}</td>
                 <td>{% if device.last_seen %}{{ device.last_seen|timesince }} ago{% else %}Never{% endif %}</td>
                 <td class="text-end">
-                    <form method="post" action="{% url 'remove_device' device.pk %}"
-                          onsubmit="return confirm('Remove {{ device.hostname|escapejs }}? Its agent will stop being able to report until it enrolls again.');">
+                    <form method="post" action="{% url 'remove_device' device.pk %}" onsubmit="return confirm('Remove {{ device.hostname|escapejs }}? Its agent will stop being able to report until it enrolls again.');">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                     </form>

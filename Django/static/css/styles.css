@@ -8,6 +8,8 @@
     --banner: #f1ff54e0;
     --white-col: #ffffff;
     --black-col: #000000;
+    --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
+    --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
     --secondary-text:#c5c5c5;
@@ -17,6 +19,8 @@
     --accent-color3: #561eff;
     --buttons-color: #090124;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #e88fd8f0 0%, #4a215ccb 50%, #29153b 80%, #15081c 100%);
+    --buttons-color-var2: #00300a;
+    --buttons-color-var3: #300000;
     --buttons-text: #ffffff;
     --buttons-text-var1: #f9d5ff;
     --buttons-secondary-color: #a5e8ffe3;
@@ -25,6 +29,10 @@
     --buttons-border-variant1: #027cffdc;
     --buttons-border-variant2: #090036ed;
     --buttons-border-variant3: #23004d;
+    --buttons-border-variant4: #0a3000da;
+    --buttons-border-variant5: #a5ff8eda;
+    --buttons-border-variant6: #300000da;
+    --buttons-border-variant7: #ff8e8eda;
     --button-glow:0 0 15px rgba(47, 179, 255, 0.4); 
     --button-glow-var1:  0 0 15px rgba(125, 116, 246, 0.788);
     --secondary-button-background:#ffffff;
@@ -43,6 +51,7 @@
     --extra-subtitle-var1:#a3f7ff;
     --container-color: radial-gradient(circle at 25% 70%, #63a5bc 0%, #2b154b 40%, #11143d 75%, #120617 100%);
     --container-shadow: #e0b4ffec;
+    --container-shadow-var1: #e3ffbd;
     --container-title: #51cfd8;
     --container-text: #e1ebfd;
     --hover-color: #87cdff;
@@ -58,6 +67,22 @@
     --login-cont-text: #1d2180;
     --footer-text:#7070da;
     --profile-shadow: rgb(168, 255, 246);
+    /* SIDEBAR VARIABLES */
+    --sidebar-expanded-width: 280px;
+    --sidebar-collapsed-width: 80px;
+    --sidebar-background: #d2e1ff;
+    --sidebar-title: #012e5bf0;
+    --sidebar-text: #0a002bfb;
+    --sidebar-text-hover: #ffffff;
+    --sidebar-hover: rgba(97, 107, 255, 0.53);
+    --sidebar-border: rgba(255, 255, 255, 0.08); /* Probably wont use it */
+    --sidebar-active: #2563eb;
+    /* SERVICES TABLE BUTTONS */
+    --button-services-text: #03066fe3;
+    --button-services-background: #73f3fcf2;
+    --button-services-border: #9bffa5df;
+    --button-services-border-var1: #ff9b9bdf;
+    --button-services-border-var2: #c6e0ffdf;
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
 
@@ -82,6 +107,10 @@
 
 .bolded{
     font-weight: bold;
+}
+
+.hide-bro{
+    display: block;
 }
 /* //////////////// CLASSES //////////////// */
 /* >>> Separators (FOR ABOUT US PAGE) */

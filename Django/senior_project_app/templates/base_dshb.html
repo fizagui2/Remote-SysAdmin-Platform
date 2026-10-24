@@ -14,6 +14,8 @@
     <script src="{% static 'js/darkmode.js' %}" defer></script>
     <script src="{% static 'js/device_status.js' %}" defer></script>
     <script src="{% static 'js/image_not_found.js' %}" defer></script>
+    <script src="{% static 'js/sidebar.js' %}" defer></script>
+    <!-- <script src="{% static 'js/.js' %}" defer></script> -->
     {% block extra_js %}{% endblock %}
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -39,8 +41,8 @@
     <div class="dashboard-layout">
         <aside class="dashboard-sidebar" id="dashboardSidebar">
             <div class="sidebar-header">
-                <a href="/" class="sidebar-brand">  
-                    <span class="sidebar-text">Sidebar</span> 
+                <a href="#" class="sidebar-brand">  
+                    <span class="sidebar-text">Devices features</span> 
                 </a>
                 <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle sidebar">☰</button>
             </div>
@@ -52,42 +54,42 @@
                         <span class="sidebar-text">All devices</span>
                     </a> 
                 </li>
-                <!-- <li> 
-                    <a href="#" class="nav-link text-white">
-                        <span class="sidebar-icon">▣</span>
-                        <span class="sidebar-text">Add device</span>
-                    </a> 
-                </li> -->
                 <li> 
-                    <a href="#" class="nav-link text-white"> 
+                    <a href="{% url 'reports' %}" class="nav-link"> 
+                        <span class="sidebar-icon">📝</span>
+                        <span class="sidebar-text">Devices Latest Reports</span>
+                    </a> 
+                </li>
+                <li> 
+                    <a href="{% url 'heartbeats' %}" class="nav-link"> 
                         <span class="sidebar-icon">⚡</span>
                         <span class="sidebar-text">Devices Heartbeat</span>
                     </a> 
                 </li>
                 <li> 
-                    <a href="#" class="nav-link text-white"> 
+                    <a href="{% url 'performances' %}" class="nav-link"> 
                         <span class="sidebar-icon">📈</span>
                         <span class="sidebar-text">Devices Performance</span>
                     </a> 
                 </li>
                 <li> 
-                    <a href="#" class="nav-link text-white"> 
-                        <span class="sidebar-icon">⚙️</span>
-                        <span class="sidebar-text">Devices CPU status</span>
-                    </a> 
-                </li>
-                <li> 
-                    <a href="#" class="nav-link text-white"> 
+                    <a href="{% url 'processes' %}" class="nav-link"> 
                         <span class="sidebar-icon">📊</span>
                         <span class="sidebar-text">Devices processes</span>
                     </a> 
                 </li>
                 <li> 
-                    <a href="#" class="nav-link text-white"> 
+                    <a href="{% url 'services' %}" class="nav-link"> 
                         <span class="sidebar-icon">📋</span>
                         <span class="sidebar-text">Devices services</span>
                     </a> 
                 </li>
+                <!-- <li> 
+                    <a href="#" class="nav-link text-white"> 
+                        <span class="sidebar-icon">⚙️</span>
+                        <span class="sidebar-text">Devices Memory/CPU status</span>
+                    </a> 
+                </li> -->
             </ul>
             <hr>
             <div class="dropdown"> 
@@ -95,9 +97,9 @@
                     <strong class="sidebar-text">{{ user.get_full_name|default:user.username }}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'add_device' %}">➕New Device...</a></li>
+                    <li><a class="dropdown-item" href="#">⚙️Settings</a></li>
+                    <li><a class="dropdown-item" href="{% url 'profile' %}">👤Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         {# Logout has to be a POST since Django 5.0, so it's a form, not a link. #}

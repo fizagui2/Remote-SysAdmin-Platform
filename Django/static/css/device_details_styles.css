@@ -3,6 +3,16 @@
 .device-title{
     text-shadow: var(--text-shadow1);
 }
+
+.info-card-container{
+    min-width: 300px;
+    padding: 10px;
+    margin: 10px auto;
+    align-items: center;
+    border-radius: 16px;
+    border: 3px solid var(--accent-color);
+}
+
 .features-highlight{
     background-color: var(--highlight-text-color2);
     padding: 4px 4px;

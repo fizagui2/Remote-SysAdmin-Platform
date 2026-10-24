@@ -12,7 +12,6 @@
     box-shadow: var(--container-shadow);
 }
 
-
 .add-device-title{
     color: var(--title-var1) !important;
     padding: 10px 15px;
@@ -28,19 +27,4 @@
 
 .add-devices-extra-text{
     color: var(--text-color-var1) !important;
-}
-
-.add-device-button{
-    background: var(--buttons-color-var1) !important;
-    color: var(--buttons-text-var1) !important;
-    padding: 20px auto;
-    margin: 10px;
-    border-radius: 20px;
-    border-color: var(--buttons-border-variant2);
-    border: solid 2px;
-    box-shadow: var(--button-glow-var1);
-}
-.add-device-button:hover{
-    border-color: var(--buttons-border-variant2);
-    box-shadow: var(--button-glow-var1);
 }

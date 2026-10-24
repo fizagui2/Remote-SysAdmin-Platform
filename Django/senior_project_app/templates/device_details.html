@@ -3,6 +3,7 @@
 
 {% block extra_js %} 
 <script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
+<script> const SERVICE_ICONS = {start: "{% static 'images/play.png' %}", stop:"{% static 'images/stop.png' %}", restart:"{% static 'images/restart.png' %}"};</script>
 <script src="{% static 'js/device_details.js' %}" defer></script>
 {% endblock %}
 
@@ -18,47 +19,57 @@
 <!-- >>> REPORT -->
 <hr>
 <h3>Latest report</h3>
-<div class="report-grid">
-    <div class="info-card">
-        <span class="features-highlight">Logged-in User:</span>
-        <strong id="logged-in-user">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>Network Adapter:</span>
-        <strong id="net-adapter">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>IP Address:</span>
-        <strong id="ip-address">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>MAC Address:</span>
-        <strong id="mac-address">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>Windows version:</span>
-        <strong id="win-version">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>CPU Cores:</span>
-        <strong id="cpu-cores">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>CPU:</span>
-        <strong id="cpu-model">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>RAM:</span>
-        <strong id="total-ram">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>Uptime hours:</span>
-        <strong id="uptime-hours">Loading...</strong>
+<div class="report-grid row">
+    <div class="info-card-container col">
+        <h4 class="bolded">User Info</h4>
+        <div class="info-card">
+            <span>Logged-in User:</span>
+            <strong id="logged-in-user">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>Windows version:</span>
+            <strong id="win-version">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>Uptime hours:</span>
+            <strong id="uptime-hours">Loading...</strong>
+        </div>
     </div>
 
-    <div class="info-card">
-        <span>Drives:</span>
-        <strong id="drives">Loading...</strong>
+    <div class="info-card-container col">
+        <h4 class="bolded">Network Info</h4>
+        <div class="info-card">
+            <span>Network Adapter:</span>
+            <strong id="net-adapter">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>IP Address:</span>
+            <strong id="ip-address">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>MAC Address:</span>
+            <strong id="mac-address">Loading...</strong>
+        </div>
+    </div>
+    
+    <div class="info-card-container row">
+        <h4 class="bolded">Memory Info</h4>
+        <div class="info-card">
+            <span>CPU Cores:</span>
+            <strong id="cpu-cores">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>CPU:</span>
+            <strong id="cpu-model">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>RAM:</span>
+            <strong id="total-ram">Loading...</strong>
+        </div>
+        <div class="info-card">
+            <span>Drives:</span>
+            <strong id="drives">Loading...</strong>
+        </div>
     </div>
 </div>
 
@@ -67,7 +78,7 @@
 <h3> Latest Heartbeat</h3>
 <div class="heartbeat-grid">
     <div class="info-card">
-        <span>Timestamp:</span>
+        <span class="features-highlight">Timestamp:</span>
         <strong id="heartbeat-timestamp">Loading...</strong>
     </div>
 </div>
@@ -113,30 +124,26 @@
         </div>
         <p class="performance-description">Storage utilization</p>
     </div>
-    <!-- END OF PERFORMANCE SECTION -->
-    <!-- <div class="info-card">
-        <span>Drives:</span>
-        <strong id="drives">Loading...</strong>
-    </div>
-    
-    <div class="info-card">
-        <span>Memory Used:</span>
-        <strong id="memory-usage">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>Memory Available:</span>
-        <strong id="memory-available">Loading...</strong>
-    </div>
-    <div class="info-card">
-        <span>Memory Usage:</span>
-        <strong id="memory-percent">Loading...</strong>
-    </div> -->
 </div>
 
-<!-- >> PROCESSES -->
+<!-- >>>>>>>>>>>>>>>>>> PROCESSES >>>>>>>>>>>>>>>>>> -->
 <hr>
 <h3> Latest Processes</h3>
-<div class="table-container">
+<!-- >> PROCESSES SORTING -->
+<div class="table-controls">
+    <label for="process-sort" class="label-process-sort bolded">Sort processes by:</label>
+    <select id="process-sort" class="table-sort-dropdown">
+        <option value="memory-asc">Memory: Lowest first</option>
+        <option value="memory-desc">Memory: Highest first</option>
+        <option value="name-asc">Name: A → Z</option>
+        <option value="name-desc">Name: Z → A</option>
+        <option value="pid-asc">PID: Highest First</option>
+        <option value="pid-desc">PID: Lowest First</option>
+        <!-- <option value=""></option> -->
+    </select>
+</div>
+<!-- >> PROCESSES TABLE -->
+<div class="table-container scroll-container">
     <table class="webhost-table">
         <!-- columns -->
         <thead>
@@ -157,18 +164,30 @@
     <div></div>
 </div>
 
-
-<!-- >> SERVICES -->
+<!-- >>>>>>>>>>>>>>>>>> SERVICES >>>>>>>>>>>>>>>>>> -->
 <hr>
 <h3>Latests Services</h3>
-<div class="table-container">
+<!-- >> SORT SERVICES -->
+<div class="table-controls">
+    <label for="services-sort" class="label-process-sort bolded">Sort services by:</label>
+    <select id="services-sort" class="table-sort-dropdown">
+        <option value="name-asc">Name: A → Z</option>
+        <option value="name-desc">Name: Z → A</option>
+        <option value="display-asc">Display Name: A → Z</option>
+        <option value="display-desc">Display Name: Z → A</option>
+        <option value="status-run">Status: Running first</option>
+        <option value="status-stop">Status: Stopped first</option>
+    </select>
+</div>
+<!-- >>  TABLE SERVICES -->
+<div class="table-container scroll-container scroll-container-services">
     <table class="webhost-table">
         <!-- columns -->
         <thead>
             <tr>
+                <th>Name</th>
                 <th>Display Name</th>
                 <th>Status</th>
-                <th>Time Stamp</th>
                 <th></th>
             </tr>
         </thead>
