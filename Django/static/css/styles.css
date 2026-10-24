@@ -72,11 +72,17 @@
     --sidebar-collapsed-width: 80px;
     --sidebar-background: #d2e1ff;
     --sidebar-title: #012e5bf0;
-    --sidebar-text: #00013dbe;
+    --sidebar-text: #0a002bfb;
     --sidebar-text-hover: #ffffff;
     --sidebar-hover: rgba(97, 107, 255, 0.53);
     --sidebar-border: rgba(255, 255, 255, 0.08); /* Probably wont use it */
     --sidebar-active: #2563eb;
+    /* SERVICES TABLE BUTTONS */
+    --button-services-text: #03066fe3;
+    --button-services-background: #73f3fcf2;
+    --button-services-border: #9bffa5df;
+    --button-services-border-var1: #ff9b9bdf;
+    --button-services-border-var2: #c6e0ffdf;
 }
 /* radial-gradient(at 20% 70%, #d1ddff, #ffffff); */
 

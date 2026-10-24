@@ -3,6 +3,7 @@
 
 {% block extra_js %} 
 <script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
+<script> const SERVICE_ICONS = {start: "{% static 'images/play.png' %}", stop:"{% static 'images/stop.png' %}", restart:"{% static 'images/restart.png' %}"};</script>
 <script src="{% static 'js/device_details.js' %}" defer></script>
 {% endblock %}
 
@@ -168,7 +169,7 @@
 <h3>Latests Services</h3>
 <!-- >> SORT SERVICES -->
 <div class="table-controls">
-    <label for="services-sort">Sort services by:</label>
+    <label for="services-sort" class="label-process-sort bolded">Sort services by:</label>
     <select id="services-sort" class="table-sort-dropdown">
         <option value="name-asc">Name: A → Z</option>
         <option value="name-desc">Name: Z → A</option>

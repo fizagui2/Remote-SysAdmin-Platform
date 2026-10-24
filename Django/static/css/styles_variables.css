@@ -76,4 +76,10 @@
     --sidebar-border: rgba(255, 255, 255, 0.08);
     --sidebar-hover: rgb(141, 190, 251);
     --sidebar-active: #2563eb;
+    /* SERVICES TABLE BUTTONS */
+    --button-services-text: #3a0092df;
+    --button-services-background: #c7feffe7;
+    --button-services-border: #9bffa5df;
+    --button-services-border-var1: #ff9b9bdf;
+    --button-services-border-var2: #c6e0ffdf;
 }
