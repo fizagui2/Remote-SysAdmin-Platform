@@ -1,7 +1,36 @@
-<nav class="dashboard-navbar">
+<!-- NAVBAR FOR LOGGED IN USERS (DASHBOARD) -->
+<nav class="navbar navbar-expand-lg dashboard-navbar navbar_options">
+    <div class="container-fluid dashboard-navbar-container">
+        <a href="{% url 'dashboard' %}" class="dashboard-brand fw-bold">HostWeb Inc. | Network Dashboard</a>
+        <!-- toggle button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNavbarContent" aria-controls="dashboardNavbarContent" aria-expanded="false" aria-label="Toggle dashboard navigation"> 
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- COLLAPSE NAVIGATION -->
+        <div class="collapse navbar-collapse" id="dashboardNavbarContent">
+            <ul class="navbar-nav dashboard-nav ms-lg-auto">
+                <li><a href="{% url 'dashboard' %}" class="nav-link dashboard-nav-link bolded">📱Devices</a></li>
+                <li><a href="#" class="nav-link dashboard-nav-link bolded">🟢Active Devices</a></li>
+                <li><a href="#" class="nav-link dashboard-nav-link bolded">🔴Offline Devices</a></li>
+                <li><a href="{% url 'home' %}" class="nav-link dashboard-nav-link bolded">🏠Homepage</a></li>
+                <!-- Search stuff -->
+            </ul>
+            <form class="d-flex dashboard-search" role="search">
+                <input class="form-control" type="search" placeholder="Search devices..." aria-label="Search devices">
+                <button class="general-button button-search" type="submit">🔍Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- <nav class="navbar navbar-expand-lg dashboard-navbar navbar_options">
     <div class="dashboard-navbar-container">
-        <a href="{% url 'dashboard' %}" class="dashboard-brand">HostWeb Inc. | Network Dashboard</a>
-        <!-- <span></span>  -->
+        <a href="{% url 'dashboard' %}" class="dashboard-brand fw-bold">HostWeb Inc. | Network Dashboard</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation"> 
+            <span class="navbar-toggler-icon"></span> 
+        </button>
         
         <ul class="dashboard-nav">
             <li><a href="{% url 'dashboard' %}" class="dashboard-nav-link bolded">📱Devices</a></li>
@@ -14,4 +43,4 @@
             </form>
         </ul>
     </div>
-</nav>
+</nav> -->

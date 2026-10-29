@@ -11,18 +11,22 @@
 
 {% block title %}Dashboard{% endblock %}
 
-{% block content %} 
-<section class="dashboard-devices">
-    <div class="dashboard-devices-header">
-        <!-- <h2>My Devices</h2> -->
-        <h1>Devices connected</h1>
-        <a href="{% url 'add_device' %}" class="add-device-button-var1">+ Add Device</a>
-        <a href="#" class="add-device-button-var1 remove-device-button-var1">- Remove Device</a>
-        
+{% block content %}
+<div class="app-layout">
+    <div class="app-body">
+        <section class="dashboard-devices">
+            <div class="dashboard-devices-header">
+                <!-- <h2>My Devices</h2> -->
+                <h1>Devices connected</h1>
+                <a href="{% url 'add_device' %}" class="add-device-button-var1">+ Add Device</a>
+                <a href="#" class="add-device-button-var1 remove-device-button-var1">- Remove Device</a>
+                
+            </div>
+            <div id="computers-container" class="devices-block">
+                <p class="devices-loading" id="load-advertisement">Loading your devices...</p>
+            </div>
+        </section>
     </div>
-    <div id="computers-container" class="devices-block">
-        <p class="devices-loading" id="load-advertisement">Loading your devices...</p>
-    </div>
-</section>
+</div>
 <!-- <p id="show-no-devices">You have no devices in the network yet. Please add a device in order to access and manage its features</p> -->
 {% endblock %}
