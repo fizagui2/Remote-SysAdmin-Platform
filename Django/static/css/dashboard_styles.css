@@ -5,3 +5,26 @@
     justify-content: flex-end;
     margin: 20px 0;
 }
+
+.app-layout{
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+.app-body{
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.main-content{
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+.app-footer{
+    flex-shrink: 0;
+}

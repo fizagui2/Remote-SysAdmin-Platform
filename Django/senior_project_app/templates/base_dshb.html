@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{% static 'css/register_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/device_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/images_styles.css'%}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css'%}">
     <!-- <link rel="stylesheet" href="{% static 'css/.css'%}"> -->
     {% block extra_css %} {% endblock %}
 </head>
@@ -115,6 +116,9 @@
             {% block content %}{% endblock %}
         </main>
     </div>
-    {% include 'includes/footer.html' %}
+    <div class="app-footer">
+        {% include 'includes/footer.html' %}
+    </div>
+    
 </body>
 </html>

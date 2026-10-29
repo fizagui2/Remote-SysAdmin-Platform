@@ -18,67 +18,74 @@
 <h2 class="extra-title device-title" id="hostname"></h2>
 <!-- >>> REPORT -->
 <hr>
-<h3>Latest report</h3>
-<div class="report-grid row">
-    <div class="info-card-container col">
-        <h4 class="bolded">User Info</h4>
-        <div class="info-card">
-            <span>Logged-in User:</span>
-            <strong id="logged-in-user">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>Windows version:</span>
-            <strong id="win-version">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>Uptime hours:</span>
-            <strong id="uptime-hours">Loading...</strong>
+<section class="device-section">
+    <div class="section-heading">
+        <div>
+            <h3>Latest report</h3>
+            <p class="section-subtitle">System information collected from this device</p>
         </div>
     </div>
-
-    <div class="info-card-container col">
-        <h4 class="bolded">Network Info</h4>
-        <div class="info-card">
-            <span>Network Adapter:</span>
-            <strong id="net-adapter">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>IP Address:</span>
-            <strong id="ip-address">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>MAC Address:</span>
-            <strong id="mac-address">Loading...</strong>
-        </div>
+    <div class="report-grid">
+        <article class="info-card-container">
+            <h4 class="report-card-title"><span class="report-heading-icon">👤</span> User Info</h4>
+            <div class="info-card">
+                <span class="extra-info">Logged-in User:</span>
+                <strong id="logged-in-user">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">Windows version:</span>
+                <strong id="win-version">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">Uptime hours:</span>
+                <strong id="uptime-hours">Loading...</strong>
+            </div>
+        </article>
+        
+        <article class="info-card-container">
+            <h4 class="report-card-title"><span class="report-heading-icon">🌐</span>Network Info</h4>
+            <div class="info-card">
+                <span class="extra-info">Network Adapter:</span>
+                <strong id="net-adapter">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">IP Address:</span>
+                <strong id="ip-address">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">MAC Address:</span>
+                <strong id="mac-address">Loading...</strong>
+            </div>
+        </article>
+        
+        <article class="info-card-container">
+            <h4 class="report-card-title"><span class="report-heading-icon">💻</span>Memory Info</h4>
+            <div class="info-card">
+                <span class="extra-info">CPU Cores:</span>
+                <strong id="cpu-cores">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">CPU:</span>
+                <strong id="cpu-model">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">RAM:</span>
+                <strong id="total-ram">Loading...</strong>
+            </div>
+            <div class="info-card">
+                <span class="extra-info">Drives:</span>
+                <strong id="drives">Loading...</strong>
+            </div>
+        </article>
     </div>
-    
-    <div class="info-card-container row">
-        <h4 class="bolded">Memory Info</h4>
-        <div class="info-card">
-            <span>CPU Cores:</span>
-            <strong id="cpu-cores">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>CPU:</span>
-            <strong id="cpu-model">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>RAM:</span>
-            <strong id="total-ram">Loading...</strong>
-        </div>
-        <div class="info-card">
-            <span>Drives:</span>
-            <strong id="drives">Loading...</strong>
-        </div>
-    </div>
-</div>
+</section>
 
 <!-- >>> HEARTBEAT -->
 <hr>
 <h3> Latest Heartbeat</h3>
 <div class="heartbeat-grid">
     <div class="info-card">
-        <span class="features-highlight">Timestamp:</span>
+        <span class="features-highlight extra-info">Timestamp:</span>
         <strong id="heartbeat-timestamp">Loading...</strong>
     </div>
 </div>

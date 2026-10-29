@@ -3,18 +3,39 @@
     --base-variant: #080e2c;
     --base-variant1: #0b012af2;
     --base-variant2: #502497f8;
-    --banner: #f1ff54e0;
+    --base-variant3: #240350d2;
+    --accent-color:#0071ff;
+    --accent-color2: #9bfff2d6;
+    --accent-color3: #b3fff1;
+    --primary-color:#290049d0;
     --white-col: #ffffff;
     --black-col: #000000;
     --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
     --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
+    /* TEXT */
     --text-color: #1f2231;
     --text-color-var1: #a5e1facb;
     --secondary-text:#5f6270;
-    --primary-color:#290049d0;
-    --accent-color:#0071ff;
-    --accent-color2: #9bfff2d6;
-    --accent-color3: #b3fff1;
+    --extra-info: #cfc0f3e6;
+    /* BANNER */
+    --title-banner: #d5efff;
+    --title-banner-var1: #f27ffb;
+    --title-banner-highlight: #aea9ff;
+    --subtitle-banner: rgb(2, 51, 58); 
+    --subtitle-banner-var1:#b5a3ff;
+    --button-banner: #b29dff;
+    --button-text-banner: #18002ece;
+    --button-text-banner2: #72f8ffce;
+    --button-border-banner: #4a08ff6d;
+    --button-shadow-banner: #77f2fb;
+    --banner: #f1ff54e0;
+    --banner-text: #000c36;
+    --banner-text-var1: #110031;
+    --banner-text-var2: #ffffff;
+    --banner-small-text: #ffffff;
+    --banner-small-subtitle: #0f2a3d;
+    --banner-small-subtitle-var1: #d0ffc2;
+    /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
     --buttons-color-var2: #00300a;
@@ -39,10 +60,12 @@
     --secondary-buttons-border:#04012e;
     --secondary-buttons-hover:#fffsfff;
     --navbar-options:#010020;
+    /* SHADOWS / HIGHLIGHTS */
     --text-shadow1:#0b0037d8;
     --highlight-text-color1: #8eff47db;
     --highlight-text-color2: #2f4b91db;
     --highlight-text-color3: #f1f666db;
+    /* TITLES */
     --title:#021e38;
     --title-var1: #b6acfff9;
     --extra-title:#34277dc9;
