@@ -31,6 +31,16 @@
         0 0 25px var(--accent-color2);
 }
 
+.banner-button-secondary{
+    color: var(--button-text-banner2);
+    background: var(--button-banner2);
+    border-color: var(--button-border-banner2);
+}
+.banner-button-secondary:hover{
+    border-color: var(--button-text-banner2);
+}
+
+
 /* /////// HOMEPAGE (HOME.HTML) ///////// */
 .home-page{
     overflow: hidden;

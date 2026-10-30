@@ -242,13 +242,14 @@
     border: 0;
     border-radius: 10px;
     background: transparent;
-    color: #f8fafc;
+    color: var(--sidebar-button);
     font-size: 22px;
     cursor: pointer;
     transition: background-color 0.25s ease;
 }
 .sidebar-toggle:hover{
     background: var(--sidebar-hover);
+    color: var(--sidebar-button-hover);
 }
 /* NAVIGATION */
 .dashboard-sidebar .nav{

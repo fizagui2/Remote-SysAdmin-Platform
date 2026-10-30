@@ -24,9 +24,11 @@
     --subtitle-banner: rgb(2, 51, 58); 
     --subtitle-banner-var1:#b5a3ff;
     --button-banner: #b29dff;
+    --button-banner2: #b0eaff;
     --button-text-banner: #18002ece;
     --button-text-banner2: #72f8ffce;
     --button-border-banner: #4a08ff6d;
+    --button-border-banner2: #bdeefc;
     --button-shadow-banner: #77f2fb;
     --banner: #f1ff54e0;
     --banner-text: #000c36;
@@ -99,6 +101,8 @@
     --sidebar-border: rgba(255, 255, 255, 0.08);
     --sidebar-hover: rgb(141, 190, 251);
     --sidebar-active: #2563eb;
+    --sidebar-button: #ccfbffde;
+    --sidebar-button-hover: #0a0f49;
     /* SERVICES TABLE BUTTONS */
     --button-services-text: #3a0092df;
     --button-services-background: #c7feffe7;

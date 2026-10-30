@@ -20,10 +20,12 @@
     --title-banner-highlight: #aea9ff;
     --subtitle-banner: #aaf2f9; 
     --subtitle-banner-var1:#ffffff;
-    --button-banner: #80a4ff;
-    --button-text-banner: #18002ece;
-    --button-text-banner2: #72f8ffce;
-    --button-border-banner: #d7c9ff;
+    --button-banner: #a0eae1;
+    --button-banner2: #b0eaff;
+    --button-text-banner: #00092ef0;
+    --button-text-banner2: #00244cd8;
+    --button-border-banner: #0942b3e6;
+    --button-border-banner2: #bdeefc;
     --button-shadow-banner: #77f2fb;
     --banner: #f1ff54e0;
     --banner-text: #d2dcff;
@@ -99,6 +101,8 @@
     --sidebar-hover: rgba(97, 107, 255, 0.53);
     --sidebar-border: rgba(255, 255, 255, 0.08); /* Probably wont use it */
     --sidebar-active: #2563eb;
+    --sidebar-button: #270e93;
+    --sidebar-button-hover: #ffffff;
     /* SERVICES TABLE BUTTONS */
     --button-services-text: #03066fe3;
     --button-services-background: #73f3fcf2;

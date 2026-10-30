@@ -21,6 +21,20 @@ from .models import Computer, Command
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 
+# >> FOR LIVE SEARCH (Devices)
+from django.db.models import Q
+# test (PLEASE IGNORE, porque no se si functionara ay Dios mio santo :O)
+def live_search_view(request):
+    query = request.GET.get('q', '').strip()
+    results = []
+    if query:
+        results = Computer.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))[:10]
+        context = {'results':results, 'query':query,}
+    if request.headers.get('x-requested-width') == 'XMLHttpRequest':
+        return render(request, 'partials/search_results.html', context)
+    return render(request, 'search_page.html', context)
+# ////////////////////////
+
 def _save_snapshot(data, field, computer=None):
     """Store data as the latest `field` payload for the machine that sent it.
 

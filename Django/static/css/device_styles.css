@@ -42,8 +42,8 @@
 .devices-block{
     width: 90%;
     max-width: 1400px;
-    margin: 40px auto;
-    padding: 30px;
+    margin: 15px auto;
+    padding: 15px;
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -51,7 +51,8 @@
 }
 .device-card{
     background: var(--comp-gradient);
-    min-height: 430px;
+    /* height: 300px; */
+    min-height: 390px;
     padding: 25px;
     box-sizing: border-box;
     border-radius: 18px;
