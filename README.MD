@@ -1,4 +1,4 @@
-# Remote System Administration Platform
+# Remote System Administration Platform (HostWeb Inc.)
 
 Senior Project for **CSCI 4390 – Senior Project**
 
@@ -6,7 +6,6 @@ Senior Project for **CSCI 4390 – Senior Project**
 
 - Francisco Izaguirre - GitHub: fizagui2
 - Luis Chavez - GitHub: LuisJC-creator
-- ~~Mauricio Garza - GitHub: mgdgit~~ (teammate terminated)
 - Omar Villalobos - GitHub: oumarvi76
 
 ## Overview
@@ -83,3 +82,5 @@ The project will be developed incrementally, beginning with basic communication 
 The repository is structured so that development of the **Windows agent** and **Django application** can occur independently before the components are integrated through the REST API.
 
 This repository is currently under active development as part of the CSCI 4390 Senior Project.
+
+
