@@ -1,0 +1,6 @@
+{% for computer in results %}
+<div class="device-card">
+    <h3>{{computer.hostname}}</h3>
+    <a href="{% url 'device_details' computer.id%}">View Device</a>
+</div>
+{% endfor %}

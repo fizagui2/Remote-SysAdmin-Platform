@@ -20,12 +20,13 @@
     --title-banner-highlight: #aea9ff;
     --subtitle-banner: #aaf2f9; 
     --subtitle-banner-var1:#ffffff;
+    --subtitle-container-banner: #e5f87ef5;
+    --subtitle-container-banner-var1: #b5d6ff;
     --button-banner: #a0eae1;
     --button-banner2: #b0eaff;
     --button-text-banner: #00092ef0;
-    --button-text-banner2: #00244cd8;
+    --button-text-banner2: #001328;
     --button-border-banner: #0942b3e6;
-    --button-border-banner2: #bdeefc;
     --button-shadow-banner: #77f2fb;
     --banner: #f1ff54e0;
     --banner-text: #d2dcff;
@@ -33,6 +34,7 @@
     --banner-text-var2: #ffffff;
     --banner-small-subtitle: #5cf1ff;
     --banner-small-subtitle-var1: #d0ffc2;
+    --bottom-banner-section-rg: #a5b7e5db;
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;

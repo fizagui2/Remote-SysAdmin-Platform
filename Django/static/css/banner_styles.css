@@ -34,12 +34,20 @@
 .banner-button-secondary{
     color: var(--button-text-banner2);
     background: var(--button-banner2);
-    border-color: var(--button-border-banner2);
+    border-color: var(--button-banner2);
 }
 .banner-button-secondary:hover{
     border-color: var(--button-text-banner2);
 }
 
+.banner-button-third{
+    color: var(--nose);
+    background-color: var(--nose);
+    border: none;
+}
+.banner-button-third:hover{
+    color: var(--nose);
+}
 
 /* /////// HOMEPAGE (HOME.HTML) ///////// */
 .home-page{
@@ -199,10 +207,10 @@
     font-weight: 700;
 }
 .home-team-card h3{
-    color: var(--title);
+    color: var(--subtitle-container-banner);
 }
 .home-team-role{
-    color: var(--extra-subtitle);
+    color: var(--subtitle-container-banner-var1);
     font-weight: 600;
 }
 .home-team-card p:last-child{
@@ -274,7 +282,7 @@
 .home-cta{
     padding: 110px 20px;
     text-align: center;
-    background: radial-gradient(circle at 50% 100%, var(--highlight-text-color2), transparent 50%);
+    background: radial-gradient(circle at 50% 100%, var(--bottom-banner-section-rg), transparent 50%);
 }
 .home-cta h2{
     color: var(--title);

@@ -23,11 +23,13 @@
     --title-banner-highlight: #aea9ff;
     --subtitle-banner: rgb(2, 51, 58); 
     --subtitle-banner-var1:#b5a3ff;
-    --button-banner: #b29dff;
-    --button-banner2: #b0eaff;
+    --subtitle-container-banner: #9dffed;
+    --subtitle-container-banner-var1: #cbb5ff;
+    --button-banner: #c8baf9;
+    --button-banner2: #011821;
     --button-text-banner: #18002ece;
     --button-text-banner2: #72f8ffce;
-    --button-border-banner: #4a08ff6d;
+    --button-border-banner: #25008cbb;
     --button-border-banner2: #bdeefc;
     --button-shadow-banner: #77f2fb;
     --banner: #f1ff54e0;

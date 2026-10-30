@@ -23,7 +23,10 @@ from .forms import RegisterForm
 
 # >> FOR LIVE SEARCH (Devices)
 from django.db.models import Q
+
+
 # test (PLEASE IGNORE, porque no se si functionara ay Dios mio santo :O)
+@login_required
 def live_search_view(request):
     query = request.GET.get('q', '').strip()
     results = []

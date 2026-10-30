@@ -65,15 +65,23 @@ function createHeartbeatCard(hostname, timestamp){
         const online = elapsed >= 0 && elapsed <= OFFLINE_THRESOLD_MS;
         status.textContent = online ? "Online" : "Offline";
         status.classList.add(online ? "status-online" : "status-offline");
+        
+        dateLabel.textContent = date.toLocaleDateString();
+        relativeLabel.textContent = getRelativeTime(date);
+
         header.append(name, status);
         details.append(dateLabel, relativeLabel);
         card.append(header, details);
         return card;
     }
+    header.append(name, status);
+    details.append(dateLabel, relativeLabel);
+    card.append(header, details);
+    return card;
 }
 
 async function loadDevicesHeartbeat(){
-    const container = document.getElementById("hearbeats-cards");
+    const container = document.getElementById("heartbeats-cards");
     if(!container || loadingHeartbeats) { return; }
 
     loadingHeartbeats = true;
