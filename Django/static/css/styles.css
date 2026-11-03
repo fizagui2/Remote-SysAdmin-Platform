@@ -20,6 +20,7 @@
     --title-banner-highlight: #aea9ff;
     --subtitle-banner: #aaf2f9; 
     --subtitle-banner-var1:#ffffff;
+    --title-container-banner: #c3b7de;
     --subtitle-container-banner: #e5f87ef5;
     --subtitle-container-banner-var1: #b5d6ff;
     --button-banner: #a0eae1;
@@ -35,6 +36,14 @@
     --banner-small-subtitle: #5cf1ff;
     --banner-small-subtitle-var1: #d0ffc2;
     --bottom-banner-section-rg: #a5b7e5db;
+    --bottom-banner-title: #3184e2;
+    --bottom-banner-title-extra: #a6b6ff;
+    --hvc-title: #70ffe3eb;
+    --hvc-info: #d3c5ff;
+    --hsl-small-title: #5cf1ff;
+    --hsl-title: #3184e2;
+    --hsl-title-extra: #a6b6ff;
+    --hsl-info: #b5c4f7;
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
@@ -91,7 +100,6 @@
     --login-cont-background:#98b9f7;
     --login-cont-glow: 0 5px 15px rgba(76, 177, 255, 0.774);
     --login-cont-text: #1d2180;
-    --footer-text:#7070da;
     --profile-shadow: rgb(168, 255, 246);
     /* SIDEBAR VARIABLES */
     --sidebar-expanded-width: 280px;
@@ -111,6 +119,9 @@
     --button-services-border: #9bffa5df;
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
+    /* FOOTER */
+    --footer-text: #7070da;
+    --footer-text-transition: #c28cff;
 }
 
 /* *{
@@ -120,6 +131,10 @@
 
 *, *::before, *::after {
     box-sizing: border-box;
+}
+
+.no-transitions{
+    pointer-events: none;
 }
 
 .divider-variant1{
@@ -186,7 +201,7 @@
     transition: color 0.25s ease, font-weight 0.35s ease;
 }
 .footer-styles:hover{
-    color:var(--accent-color2) !important;
+    color:var(--footer-text-transition) !important;
     font-weight: bold !important;
 }
 /* ////////////////// */

@@ -49,6 +49,21 @@
     color: var(--nose);
 }
 
+/* EXTRA STUFF */
+.hls-small-title{
+    color: var(--hsl-small-title) !important;
+}
+.hsl-title{
+    color: var(--hsl-title) !important;
+}
+.hsl-title-extra{
+    color: var(--hsl-title-extra) !important;
+}
+.hsl-info{
+    color: var(--hsl-info) !important;
+}
+
+
 /* /////// HOMEPAGE (HOME.HTML) ///////// */
 .home-page{
     overflow: hidden;
@@ -164,7 +179,7 @@
     margin-bottom: 20px;
 }
 .home-feature-card h3{
-    color: var(--title);
+    color: var(--title-container-banner);
     margin-bottom: 15px;
 }
 .home-feature-card p{
@@ -226,7 +241,7 @@
     background: var(--base-variant1);
 }
 .home-featurette-title{
-    color: var(--title);
+    color: var(--bottom-banner-title);
     font-size: clamp(2rem, 4vw, 3rem);
     line-height: 1.1;
     margin: 15px 0 25px;
@@ -264,7 +279,7 @@
 }
 .home-visual-content span{
     display: block;
-    color: var(--extra-subtitle);
+    color: var(--hvc-title);
     font-size: 0.8rem;
     letter-spacing: 0.1rem;
 }
@@ -275,7 +290,7 @@
     font-size: 2rem;
 }
 .home-visual-content small{
-    color: var(--secondary-text);
+    color: var(--hvc-info);
 }
 
 /* FINAL CTA */

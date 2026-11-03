@@ -29,11 +29,14 @@ from django.db.models import Q
 @login_required
 def live_search_view(request):
     query = request.GET.get('q', '').strip()
-    results = []
+    computers = Computer.objects.filter(user=request.user)
+    # results = []
     if query:
-        results = Computer.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))[:10]
-        context = {'results':results, 'query':query,}
-    if request.headers.get('x-requested-width') == 'XMLHttpRequest':
+        # results = Computer.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))[:10]
+        # context = {'results':results, 'query':query,}
+        computers = computers.filter(Q(hostname__icontains=query))
+        context = {'results':computers, 'query':query,}
+    if request.headers.get('X-Requested-Width') == 'XMLHttpRequest':
         return render(request, 'partials/search_results.html', context)
     return render(request, 'search_page.html', context)
 # ////////////////////////

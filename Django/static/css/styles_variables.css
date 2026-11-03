@@ -23,9 +23,10 @@
     --title-banner-highlight: #aea9ff;
     --subtitle-banner: rgb(2, 51, 58); 
     --subtitle-banner-var1:#b5a3ff;
+    --title-container-banner: #8eb1fff2;
     --subtitle-container-banner: #9dffed;
     --subtitle-container-banner-var1: #cbb5ff;
-    --button-banner: #c8baf9;
+    --button-banner: #ede8ff;
     --button-banner2: #011821;
     --button-text-banner: #18002ece;
     --button-text-banner2: #72f8ffce;
@@ -39,6 +40,15 @@
     --banner-small-text: #ffffff;
     --banner-small-subtitle: #0f2a3d;
     --banner-small-subtitle-var1: #d0ffc2;
+    --bottom-banner-section-rg: #a5b7e5db;
+    --bottom-banner-title: #153960;
+    --bottom-banner-title-extra: #5067d4;
+    --hvc-title: #c0d9fceb;
+    --hvc-info: #c2abff;
+    --hsl-small-title: #5cf1ff;
+    --hsl-title: #3184e2;
+    --hsl-title-extra: #a6b6ff;
+    --hsl-info: #ffffff;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
@@ -91,7 +101,6 @@
     --login-cont-background:#20202081;
     --login-cont-glow: 0 5px 15px rgba(111, 72, 255, 0.774);
     --login-cont-text: #622a8a;
-    --footer-text:#1d1d39;
     --profile-shadow: rgb(21, 31, 31);
     /* SIDEBAR VARIABLES */
     --sidebar-expanded-width: 280px;
@@ -111,4 +120,7 @@
     --button-services-border: #9bffa5df;
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
+    /* FOOTER */
+    --footer-text: #1d1d39;
+    --footer-text-transition: #200045;
 }
