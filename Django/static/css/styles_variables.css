@@ -64,6 +64,8 @@
     --plan-table-row-title: #d3ddfe;
     --plan-table-row-border: #9f4cdc;
     --plan-popular-label: #ff5b5b;
+    /* ABOUT US */
+    --about-cont-title: #2d0037dc;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
@@ -118,8 +120,8 @@
     --login-cont-text: #622a8a;
     --profile-shadow: rgb(21, 31, 31);
     /* SIDEBAR VARIABLES */
-    --sidebar-expanded-width: 280px;
-    --sidebar-collapsed-width: 80px;
+    --sidebar-expanded-width: 260px;
+    --sidebar-collapsed-width: 70px;
     --sidebar-background: #171d2b;
     --sidebar-title: #daecfff0;
     --sidebar-text: #ddddfa;

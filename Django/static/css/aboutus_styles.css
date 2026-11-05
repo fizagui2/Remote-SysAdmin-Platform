@@ -69,7 +69,7 @@
 .sidebar-mission-block h2{
     font-size: 1.8rem;
     margin-bottom: 15px;
-    color: #87cdff;
+    color: var(--about-cont-title);
 }
 
 .text-block p{
