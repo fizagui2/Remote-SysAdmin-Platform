@@ -7,6 +7,7 @@
 
 {% block extra_js %}
 <script type="module" src="{% static 'js/no_devices_advertisement.js' %}"></script>
+<script src="{% static 'js/live_search.js' %}" defer></script>
 {% endblock %}
 
 {% block title %}Dashboard{% endblock %}
@@ -20,7 +21,6 @@
                 <h1>Devices connected</h1>
                 <a href="{% url 'add_device' %}" class="add-device-button-var1">+ Add Device</a>
                 <a href="#" class="add-device-button-var1 remove-device-button-var1">- Remove Device</a>
-                
             </div>
             <div id="computers-container" class="devices-block">
                 <p class="devices-loading" id="load-advertisement">Loading your devices...</p>

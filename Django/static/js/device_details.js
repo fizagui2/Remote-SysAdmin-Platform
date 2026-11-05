@@ -1,5 +1,7 @@
 // RETRIEVEN THE DATA OF THE COMPUTERS FROM THE DATABASE INTO JSON VARIABLE
 // COMMAND BUTTONS (terminate a process / start, stop, restart a service)
+// import * as TableSorting from './table_sorting.js';
+
 let currentProcesses = [];
 let processSortOrder = "memory-desc";
 
@@ -165,7 +167,6 @@ if(serviceSortDropdown){
     });
 }
 
-
 function loadDeviceDetails(){
     if(isLoadingDeviceDetails){ return; }
     isLoadingDeviceDetails = true;
@@ -260,28 +261,6 @@ function loadDeviceDetails(){
                 queueCommand(button.dataset.command, {service_name: button.dataset.service }, button);
             };
         }
-        // SERVICES
-        // const serviceTable = document.getElementById("services-table-body");
-        // serviceTable.innerHTML = "";
-        // services.forEach(service => {
-        //     const row = document.createElement("tr");
-        //     row.innerHTML = `
-        //         <td>${service.Name ?? "Unknown"}</td>
-        //         <td>${service.DisplayName ?? "Unknown"}</td>
-        //         <td>${service.Status ?? "Unknown"}</td>
-        //         <td>
-        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="start_service" data-service="${escapeAttr(service.Name)}">Start</button>
-        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="stop_service" data-service="${escapeAttr(service.Name)}">Stop</button>
-        //             <button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-command="restart_service" data-service="${escapeAttr(service.Name)}">Restart</button>
-        //         </td>
-        //     `
-        //     serviceTable.appendChild(row);
-        // });
-        // serviceTable.onclick = (event) => {
-        //     const button = event.target.closest("button[data-command]");
-        //     if(!button){ return; }
-        //     queueCommand(button.dataset.command, { service_name: button.dataset.service }, button);
-        // };
     })
     .catch(error => {
         console.error("Could not retrieve computer information: ", error);
