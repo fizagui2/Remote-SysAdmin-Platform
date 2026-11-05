@@ -49,6 +49,21 @@
     --hsl-title: #3184e2;
     --hsl-title-extra: #a6b6ff;
     --hsl-info: #ffffff;
+    /* PLANS */
+    --plan-gen-text: #252248;
+    --plan-container: #0a053af2;
+    --plan-container-border: #506ef1;
+    --plan-container-glow: #0d0d0d;
+    --plan-container-title: #73fc61;
+    --plan-container-price: #a2ffe9fc;
+    --plan-container-price-info: #7a92ff;
+    --plan-button: #afbcff;
+    --plan-button-text: #1c0738;
+    --plan-transition: #ffffff;
+    --plan-table-col-title: #8e6afc;
+    --plan-table-row-title: #d3ddfe;
+    --plan-table-row-border: #9f4cdc;
+    --plan-popular-label: #ff5b5b;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);

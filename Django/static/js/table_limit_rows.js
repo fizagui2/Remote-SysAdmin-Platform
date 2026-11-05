@@ -1,3 +1,4 @@
+/* Probably will be deleted, need fixes */
 function LimitProcessesRows(table){
     document.addEventListener("DOMContentLoaded", function(){
         const table = document.getElementById("");

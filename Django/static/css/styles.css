@@ -44,6 +44,22 @@
     --hsl-title: #3184e2;
     --hsl-title-extra: #a6b6ff;
     --hsl-info: #b5c4f7;
+    /* PLANS */
+    --plan-gen-text: #b3adfff2;
+    --plan-container: #223564f2;
+    --plan-container-border: #acbefe;
+    --plan-container-glow: #9fffffca;
+    --plan-container-featurette-border: #ffffff;
+    --plan-container-title: #73fc61;
+    --plan-container-price: #5cc4fffc;
+    --plan-container-price-info: #7590ff;
+    --plan-button: #5974fa;
+    --plan-button-text: #ecdeff;
+    --plan-transition: #ffffff;
+    --plan-table-col-title: #95adff;
+    --plan-table-row-title: #dbbbff;
+    --plan-table-row-border: #ead1fc;
+    --plan-popular-label: #ae3b3b;
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
@@ -78,7 +94,7 @@
     --highlight-text-color2: #477bffdb;
     --highlight-text-color3: #f1f666db;
     /* TITLES */
-    --title:#80bbff;
+    --title:#95c6ff;
     --title-var1: #80f4ffee;
     --extra-title:#563de7c9;
     --subtitle: #99b8d4;
