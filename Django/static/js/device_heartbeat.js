@@ -135,32 +135,3 @@ async function loadDevicesHeartbeat(){
 
 loadDevicesHeartbeat();
 setInterval(loadDevicesHeartbeat, HEARBEAT_REFRESH_INTERVAL);
-
-// const device_name = document.createElement("h2");
-//         const device_info = document.createElement("div");
-
-// if (computers.length === 0){
-//             device_name.textContent = "No mames no hay :V";
-//             device_info.textContent = "No devices found.";
-//             divbody.appendChild(device_name);
-//             divbody.appendChild(device_info);
-//         }
-//         computers.forEach(computer => {
-//             const hostname = document.createElement("div");
-//             hostname.textContent = computer.hostname ?? "Unknown";
-//             const lastSeenDiv = document.createElement("div");
-//             const lastSeen = computer.last_seen ? new Date(computer.last_seen) : null;
-
-//         });
-
-// fetch()
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log(data);
-//         data.computers.forEach(computer => {
-//             const card = document.createElement("div");
-//             const computer_names = computer.hostname;
-            
-//         });
-        
-//     });

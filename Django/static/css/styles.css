@@ -15,9 +15,12 @@
     --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
     --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
     /* BANNER */
+    --slide-col1: #166981;
+    --slide-title: #28dff4e0;
     --title-banner: #d5efff;
     --title-banner-var1: #f27ffb;
     --title-banner-highlight: #aea9ff;
+    --title-banner-highlight2: #7d76f3;
     --subtitle-banner: #aaf2f9; 
     --subtitle-banner-var1:#ffffff;
     --title-container-banner: #c3b7de;

@@ -18,9 +18,12 @@
     --secondary-text:#5f6270;
     --extra-info: #cfc0f3e6;
     /* BANNER */
+    --slide-col1: #9a86b3;
+    --slide-title: #28dff4e0;
     --title-banner: #d5efff;
     --title-banner-var1: #f27ffb;
     --title-banner-highlight: #aea9ff;
+    --title-banner-highlight2: #291e8a;
     --subtitle-banner: rgb(2, 51, 58); 
     --subtitle-banner-var1:#b5a3ff;
     --title-container-banner: #8eb1fff2;

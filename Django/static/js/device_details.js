@@ -193,14 +193,14 @@ function loadDeviceDetails(){
         const processes = data.processes.data?.Processes || [];
         const services = data.services.data?.Services || [];
         
-        //console tests FOR JSONS AND DATA 
-        console.log("Computer data:", data);
-        console.log("Hostname:", data.hostname);
-        console.log("Report:", data.report);
-        console.log("Heartbeat:", data.heartbeat);
-        console.log("Performance:", data.performance);
-        console.log("Processes:", data.processes);
-        console.log("Services:", data.services);
+        //console tests FOR JSONS AND DATA (can be removed now)
+        // console.log("Computer data:", data);
+        // console.log("Hostname:", data.hostname);
+        // console.log("Report:", data.report);
+        // console.log("Heartbeat:", data.heartbeat);
+        // console.log("Performance:", data.performance);
+        // console.log("Processes:", data.processes);
+        // console.log("Services:", data.services);
         
         // >> DEVICE INFORMATION (showing data in html element basis on their id's)
         // REPORT (completed)
