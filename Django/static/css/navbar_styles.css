@@ -12,6 +12,21 @@
     white-space: nowrap;
 }
 
+/* >> DROPDOWN SIDEBAR USER OPTIONS */
+.dropdown-toggle{
+    color: var(--sidebar-dropdown-toggle) !important;
+}
+.dropdown-menu-user{
+    background: var(--sidebar-dropdown-bg-color) !important;
+    color: var(--sidebar-dropdown-color) !important;
+}
+.dmu-item{
+    transition: background-color 0.25s ease !important;
+}
+.dmu-item:hover{
+    background-color: var(--sidebar-dropdown-bg-color-var1) !important;
+}
+
 /* NAVIGATION*/
 .navbar_options .navbar-nav{
     gap: 6px;

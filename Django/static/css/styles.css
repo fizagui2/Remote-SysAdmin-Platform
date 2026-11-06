@@ -65,6 +65,15 @@
     --plan-popular-label: #ae3b3b;
     /* ABOUT US */
     --about-cont-title: #7dff69dc;
+    /* REPORTS PAGE */
+    --report-card-color: #161956;
+    --report-card-text-color: #baffdf;
+    --report-card-title-color: #ffffff;
+    --report-card-title-color-var1: #ffffff;
+    --report-card-title-color-var2: #ffffff;
+    --report-card-border: #a9d0ff;
+    --report-card-shadow: #dad4fd;
+    
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
@@ -134,6 +143,7 @@
     --sidebar-active: #2563eb;
     --sidebar-button: #270e93;
     --sidebar-button-hover: #ffffff;
+    --sidebar-dropdown-toggle: #182c71;
     /* SERVICES TABLE BUTTONS */
     --button-services-text: #03066fe3;
     --button-services-background: #73f3fcf2;
@@ -180,7 +190,8 @@
 }
 
 .hide-bro{
-    display: block;
+    /* display: block; */
+    display: none !important;
 }
 
 

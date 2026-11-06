@@ -134,6 +134,10 @@
     --sidebar-active: #2563eb;
     --sidebar-button: #ccfbffde;
     --sidebar-button-hover: #0a0f49;
+    --sidebar-dropdown-toggle: #b3c4ff;
+    --sidebar-dropdown-bg-color: #0f2439;
+    --sidebar-dropdown-color: #a9effd;
+    --sidebar-dropdown--bg-color-var1: #2b2b5143;
     /* SERVICES TABLE BUTTONS */
     --button-services-text: #3a0092df;
     --button-services-background: #c7feffe7;

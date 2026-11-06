@@ -2,6 +2,14 @@
 {% load static %}
 
 {% block extra_js %} 
+<script id="image-reports-data" type="application/json">
+    {
+        "online": "{% static 'images/online.png' %}",
+        "offline": "{% static 'images/offline.png' %}",
+        "selected": "{% static 'images/selected-item.png' %}",
+        "unselected": "{% static 'images/unselected-item.png' %}"
+    }
+</script>
 <script src="{% static 'js/device_report.js' %}" defer></script>
 {% endblock %}
 
