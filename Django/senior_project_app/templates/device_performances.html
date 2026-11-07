@@ -1,3 +1,18 @@
 {% extends 'base_dshb.html' %}
+{% load static %}
 
-{% block title %} Dont mames no esta listo :V {% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/device_performance.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/device_heartbeats_styles.css'%}">
+{% endblock %}
+
+{% block title %}📈Performances📈{% endblock %}
+
+{% block content %}
+<div>
+    <div></div>
+</div>
+{% endblock %}
