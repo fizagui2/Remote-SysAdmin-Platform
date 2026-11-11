@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block extra_js %} 
-<script> const COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
+<script> window.COMPUTER_HOSTNAME = "{{ computer.hostname|escapejs }}"; </script> 
 <script> const SERVICE_ICONS = {start: "{% static 'images/play.png' %}", stop:"{% static 'images/stop.png' %}", restart:"{% static 'images/restart.png' %}"};</script>
-<script src="{% static 'js/device_details.js' %}" defer></script>
+<script type="module" src="{% static 'js/device_details.js' %}"></script>
 {% endblock %}
 
 {% block extra_css %} 
