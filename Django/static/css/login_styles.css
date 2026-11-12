@@ -1,0 +1,27 @@
+@import 'styles_variables.css';
+
+/* >>> LOGIN */
+.login-container{
+    background: var(--login-cont-background);
+    margin: 40px auto;
+    padding: 30px;
+    width: 400px;
+    min-height: 400px;
+    box-sizing: border-box;
+    border-radius: 28px;
+    box-shadow: var(--login-cont-glow);
+}
+.login-header{
+    color: var(--base-color);
+}
+.login-text{
+    color: var(--login-cont-text);
+}
+
+.login-button-group{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

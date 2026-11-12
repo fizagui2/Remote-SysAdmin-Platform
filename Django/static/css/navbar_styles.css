@@ -63,8 +63,8 @@
     gap: 8px;
 }
 .navbar_options .navbar-toggler{
-    background-color: transparent !important;
-    border: 1px solid var(--base-color);
+    background-color: var(--navbar-toggle-btn-bg) !important;
+    border: 2px solid var(--base-color);
     padding: 6px 9px;
 }
 .navbar_options .navbar-toggler-icon{

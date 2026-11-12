@@ -69,6 +69,7 @@
     --plan-popular-label: #ff5b5b;
     /* ABOUT US */
     --about-cont-title: #2d0037dc;
+    /* CONTACTS (probably) */
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
@@ -89,11 +90,18 @@
     --base-variant2: #bdeefcf8;
     --button-glow: 0 0 15px rgba(106, 255, 208, 0.4);
     --button-glow-var1:  0 0 15px rgba(116, 233, 246, 0.788);
+    --button-glow-var2: 0 0 24px rgb(174, 240, 253);
     --secondary-button-background:#ffffff;
     --secondary-button-text: #ffd9fe;
     --secondary-buttons-border:#04012e;
     --secondary-buttons-hover:#fffsfff;
+    /* NAVBAR i guess */
+    --navbar-toggle-btn-bg: #6d76f7;
     --navbar-options:#010020;
+    /* SEPARATORS */
+    --hr-bg1: #dacefc;
+    --hr-bg2: #86fbff;  
+    --hr-shw: #bab2ff;
     /* SHADOWS / HIGHLIGHTS */
     --text-shadow1:#0b0037d8;
     --highlight-text-color1: #8eff47db;
@@ -118,8 +126,13 @@
     --darkmode-button-background: #f4fc83;
     --darkmode-button-background2: #c8f9ff;
     --comp-gradient: radial-gradient(circle at 25% 70%, #4789a0 0%, #1b64ad 40%, #172554 75%, #101b45 100%);
-    --login-cont-background:#20202081;
+    /* LOGIN / PROFILE */
+    --login-title-color: #ffffff;
+    --login-button-text: #200836;
+    --login-cont-background:#8e9fff;
     --login-cont-glow: 0 5px 15px rgba(111, 72, 255, 0.774);
+    --login-button-bg: #ddbbff;
+    --login-button-glow: 0 0 22px rgb(179, 234, 255);
     --login-cont-text: #622a8a;
     --profile-shadow: rgb(21, 31, 31);
     /* SIDEBAR VARIABLES */

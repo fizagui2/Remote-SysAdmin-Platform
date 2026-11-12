@@ -33,7 +33,7 @@
 
         <!-- Email Field -->
         <div class="register-field">
-            <label for="email" class="form-label small fw-semibold text-secondary">Email Address</label>
+            <label for="email">Email Address</label>
             <div class="input-group has-validation">
                 <input type="email" name="email" value="{{ form.email.value|default_if_none:'' }}" class="form-control border-start-0 ps-0{% if form.email.errors %} is-invalid{% endif %}" id="email" placeholder="name@example.com" autocomplete="email" required>
                 <div class="invalid-feedback register-error">{% if form.email.errors %}{{ form.email.errors|first }}{% else %}Please provide a valid email address.{% endif %}</div>
@@ -42,7 +42,7 @@
 
         <!-- Password Field with Toggle Visibility -->
         <div class="register-field">
-            <label for="password" class="form-label small fw-semibold text-secondary">Password</label>
+            <label for="password">Password</label>
             <div class="input-group has-validation">
                 {# The password is never sent back into the page, even after an error. #}
                 <input type="password" name="password" class="form-control border-start-0 border-end-0 ps-0{% if form.password.errors %} is-invalid{% endif %}" id="password" placeholder="Create a strong password" autocomplete="new-password" required minlength="8">
@@ -64,9 +64,9 @@
 
         <!-- Submit Button -->
         <div class="register-button-container">
-            <button type="submit" class="btn secondary-button rounded-pill px-3">Create Account</button>
-            <hr>
-            <p class="small text-muted mb-0">Already have an account? <a href="{% url 'login' %}" class="btn secondary-button rounded-pill px-3">Log In</a></p>
+            <button type="submit" class="login-buttons">Create Account</button>
+            <hr class="hr-variant">
+            <p class="small text-muted mb-0">Already have an account? <a href="{% url 'login' %}" class="login-buttons">Log In</a></p>
         </div>
     </form>
 </div>
