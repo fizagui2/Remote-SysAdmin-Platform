@@ -1,3 +1,11 @@
 // DEVICE SERVICES (TABLE)
-fetch("/api/agent/status/")
-    .then(response => response.json())
+import * as DeviceNavigation from './computer_navigation.js';
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    DeviceNavigation.ComputerNavigation.initialize(async (hostname) => {
+        await LoadServices(hostname);
+    });
+});

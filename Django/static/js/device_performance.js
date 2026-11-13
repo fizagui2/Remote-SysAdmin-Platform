@@ -43,15 +43,8 @@ function CreateCircleGraph(label, value, color, details = "") {
 
 // >> STORAGE DRIVES
 function CreateDriveInfo(drives) {
-
     if (!Array.isArray(drives) || drives.length === 0) {
-
-        return `
-            <p class="no-drive-info">
-                No storage information available.
-            </p>
-        `;
-
+        return `<p class="no-drive-info">No storage information available.</p>`;
     }
 
     return drives.map(drive => {

@@ -1,25 +1,33 @@
 {% extends 'base_dshb.html' %}
-{% block title %} Processes {% endblock %}
+{% load static %}
+
+{% block extra_js %}
+<script src="{% static 'js/computer_navigation.js' %}" defer></script>
+<script src="{% static 'js/device_processes.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/device_processes_styles.css'%}">
+{% endblock %}
+
+{% block title %}📊Processes {% endblock %}
 <!-- >> PROCESSES -->
 {% block content %}
 
-<h1>Device Processes</h1><hr>
-<h3> Latest Processes</h3>
-<div class="table-container">
-    <table class="webhost-table">
-        <!-- columns -->
-        <thead>
-            <tr>
-                <th>Process ID</th>
-                <th>Name</th>
-                <th>Memory (MB)</th>
-                <!-- <th>Time Stamp</th> (should be a 'total' column) -->
-            </tr>
-        </thead>
-        <!-- rows -->
-        <tbody id="processes-table-body">
-        </tbody>
-    </table>
-    <div></div>
+<h1>📊 Device Processes 📊</h1><hr>
+<div class="computer_navigation">
+    <button id="gofirst-computer" disabled>First</button>
+    <button id="previous-computer" disabled>&larr; Previous</button>
+    <div class="selected-computer">
+        <h3 id="computer-hostname">Loading...</h3>
+        <span id="computer-counter"></span>
+    </div>
+
+    <button id="next-computer">Next &rarr;</button>
+    <button id="first-computer">Last computer</button>
+</div>
+
+<div id="processes-container">
+    <p>Loading processes...</p>
 </div>
 {% endblock %}
