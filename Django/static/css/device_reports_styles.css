@@ -1,0 +1,116 @@
+@import 'styles_variables.css';
+
+/* >> pos THE WHOLE REPORTS CARDS CONTAINER  */
+.reports-card{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+}
+
+/* >> INDIVIDUAL REPORT CARD */
+.individual-report-card{
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 280px;
+    padding: 1.25rem;
+    /*8px 8px*/
+    border-radius: 16px;
+    border: 3px solid var(--report-card-border);
+    background: var(--report-card-color);
+    box-shadow: 0 0 12px var(--report-card-shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.individual-report-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 0 24px var(--report-card-shadow);
+}
+
+/* >> REPORT IND CARDS HEADER */
+.report-header-card{
+    text-align: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    /* font-size: 700;
+    padding: 8px 8px;
+    margin: 5px auto;
+    margin-bottom: 10px;
+    align-items: center;
+    text-align: center; */
+}
+.report-header-card h4{
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+    animation: ChangeDeviceTitleColor 3.2s infinite steps(1);
+    color: var(--report-ind-card-title);
+    box-shadow: var(--report-ind-card-title);
+}
+
+/* REPORTS IND CARDS INFORMATION CARD */
+.report-ind-card-info{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    font-size: clamp(0.875, 4cqw, 1.1rem);
+    word-break: break-word;
+    /* padding: 5px 5px;
+    margin: 15px auto;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(11px, 8cqi, 30px);
+    overflow-wrap: break-word;
+    white-space: nowrap; */
+}
+
+.report-info-card p{
+    color: var(--report-card-text-color);
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.report-info-card span{
+    color: var(--report-card-title-color);
+    font-weight: 600;
+}
+
+/* IND CARD IMAGES (user actions / options) */
+.device-report-options{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    margin-top: auto;
+    margin-bottom: 8px;
+    /* gap: 16px;
+    padding: 5px 5px;
+    margin: 2px auto;
+    text-align: center;
+    align-items: center;
+    justify-content: center; */
+}
+.device-report-options img{
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+.device-report-options img:hover{
+    transform: scale(1.15);
+}
+
+@keyframes ChangeDeviceTitleColor{
+    0%{
+        color: var(--title-var1);
+    } 
+    100%{
+        color: var(--accent-color);
+    }
+}

@@ -1,11 +1,29 @@
 {% extends 'base_dshb.html' %}
-{% block title %}📝Reports{% endblock %}
+{% load static %}
 
+{% block extra_js %} 
+<script id="image-reports-data" type="application/json">
+    {
+        "online": "{% static 'images/online.png' %}",
+        "offline": "{% static 'images/offline.png' %}",
+        "selected": "{% static 'images/selected-item.png' %}",
+        "unselected": "{% static 'images/unselected-item.png' %}"
+    }
+</script>
+<script src="{% static 'js/device_report.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/device_reports_styles.css'%}">
+{% endblock %}
+
+{% block title %}📝Reports{% endblock %}
 
 {% block content %}
 
-<div>
+<div class="container-fluid py-4">
     <h1>📝Device Reports📝</h1><hr>
+    <div class="reports-card" id="reports-card"></div>
 </div>
 
 {% endblock %}

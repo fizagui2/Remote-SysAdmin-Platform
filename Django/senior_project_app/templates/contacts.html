@@ -1,8 +1,91 @@
 {% extends 'base.html' %}
-{% block title %} Contacts {% endblock %}
-{% block content %} 
+{% load static %}
 
-<p><strong>Email: </strong><a href=""></a></p>
+{% block title %}📞Contacts{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/contact_styles.css'%}">{% endblock %}
+
+{% block content %}
+<div class="office-page-container">
+    <header>
+        <h1>📱 Get in Touch 📱</h1><hr>
+        <p class="subtitle">Have a question, feedback, or need support? Reach out to our team!</p>
+    </header>
+    <hr class="contact-divider">
+    <div class="office-content-grid">
+        <!-- LEFT COLUMN -->
+        <section class="general-text-container contact-container">
+            <h3>Direct Contact Information</h3>
+            <p>Choose the channel that works best for you. We typically respond within <strong>24 business hours</strong>.</strong></p>
+            <ul class="contact-info-list">
+                <li>
+                    <span class="contact-label">📧 General & Support Email:</span>
+                    <a href="mailto:omar.villalobos01@utrgv.edu" class="contact-link">omar.villalobos01@utrgv.edu</a>
+                </li>
+                <li>
+                    <span class="contact-label">📞 Phone / WhatsApp:</span>
+                    <a href="tel:+19565555555" class="contact-link">+1 (956) 555-55555</a>
+                </li>
+                <li>
+                    <span class="contact-label">📍 Headquarters:</span>
+                    <span> 1201 W. University Dr., Edinburg, TX 78539 (See <a href="{% url 'offices' %}" class="contact-link">Office Map</a>)</span>
+                </li>
+                <li>
+                    <span class="contact-label">🕒 Support Hours:</span>
+                    <span>Mon - Fri: 9:00 AM - 5:00 PM (EST)</span>
+                </li>
+            </ul>
+
+            <div class="contact-extra-box">
+                <span class="contact-label">🌐 Connect With Us</span>
+                <div class="social-links-row">
+                    <a href="#" class="contact-badge-link" target="_blank" rel="noopener">Discord</a>
+                    <a href="#" class="contact-badge-link" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="#" class="contact-badge-link" target="_blank" rel="noopener">GitHub</a>
+                    <a href="#" class="contact-badge-link" target="_blank" rel="noopener">X / Twitter</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <section class="general-text-container">
+            <h3>Send Us a Message</h3>
+            <p>Fill out the form below and we will get back to you via mail!</p>
+
+            <form method="POST" action="" class="contact-form">
+                <div class="form-group">
+                    <label for="contact-name">Your Name</label>
+                    <input type="text" id="contact-name" name="name" placeholder="Jane Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-email">Email Address</label>
+                    <input type="email" id="contact-email" name="email" placeholder="jane@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-subject">Topic / Subject</label>
+                    <select id="contact-subject" name="subject" required>
+                        <option value="" disabled selected>Select a topic</option>
+                        <option value="support">Technical Support</option>
+                        <option value="billing">Plans & Billing</option>
+                        <option value="partnership">Business & Partnerships</option>
+                        <option value="other">General Inquiry</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" name="message" rows="4" placeholder="How can we help you today" required></textarea>
+                </div>
+                <button type="submit" class="contact-submit-btn">Send Message 🚀</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+
+<!-- <p><strong>Email: </strong><a href=""></a></p>
 <p><strong>Phone: </strong><a href=""></a></p>
 <p><strong>Extra: </strong><a href=""></a></p>
 
@@ -10,6 +93,5 @@
     <p>Sent us an email!</p>
     <label></label>
     <input> 
-</div>
-
+</div> -->
 {% endblock %}

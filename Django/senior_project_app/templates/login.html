@@ -4,10 +4,12 @@
 
 {% block extra_js %}<script src="{% static 'js/show_hide_password.js' %}" defer></script>{% endblock %}
 
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/login_styles.css'%}">{% endblock %}
+
 {% block content %}
 <div class="container-sm text-center login-container">
     <h1 class="login-header">Sign in</h1>
-    <hr>
+    <hr class="hr-variant">
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
@@ -34,22 +36,22 @@
             </div>
         </div>
         <!-- Remember me: unchecked means the session ends when the browser closes -->
-        <div class="form-check d-flex justify-content-start mb-4">
+        <div class="form-check d-flex justify-content-start mb-4 checkboxes-space">
             <input class="form-check-input" type="checkbox" name="remember" id="rememberPassword">
             <label class="form-check-label" for="rememberPassword"> Remember me </label>
         </div>
 
         <!-- Show password -->
-        <div class="form-check d-flex justify-content-start mb-4">
+        <div class="form-check d-flex justify-content-start mb-4 checkboxes-space">
             <input class="form-check-input" type="checkbox" id="toggleButton">
             <label class="form-check-label" for="toggleButton">Show password</label>
         </div>
 
         <!-- Login Buttons -->
-        <div>
-            <button class="btn secondary-button rounded-pill px-3" type="submit">Login</button>
+        <div class="login-button-group">
+            <button class="login-buttons" type="submit">Login</button>
             {# Not wired up yet. type="button" keeps it from submitting the login form. #}
-            <button class="btn secondary-button rounded-pill px-3" type="button"><i class="fab fa-google me-2"></i>Sign in with google</button>
+            <button class="login-buttons" type="button"><i class="fab fa-google me-2"></i>Sign in with google</button>
         </div>
     </form>
     <p class="mt-4">Don't have an account? <a href="{% url 'register' %}">Create one</a></p>
