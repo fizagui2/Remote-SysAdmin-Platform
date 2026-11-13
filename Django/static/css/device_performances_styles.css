@@ -1,0 +1,192 @@
+@import 'styles_variables.css';
+
+.performance-cards-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 25px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* PERFORMANCE CARD */
+.performance-card{
+    background: var(--comp-gradient);
+    color: var(--text-color);
+    border: 1px solid var(--report-card-border);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 5px 15px var(--accent-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.performance-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px var(--container-shadow);
+}
+
+/* CARD HEADER */
+.performance-card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.performance-card-header h2{
+    color: var(--title);
+    font-size: 1.4rem;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.performance-last-seen{
+    color: var(--extra-info);
+    font-size: 0.85rem;
+}
+
+.device-status{
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.device-status.online{
+    color: #4dff9b;
+    background: rgba(0, 180, 90, 0.2);
+    border: 1px solid #4dff9b;
+}
+
+.device-status.offline{
+    color: #ff7777;
+    background: rgba(220, 40, 40, 0.2);
+    border: 1px solid #ff7777;
+}
+
+
+/* CIRCULAR GRAPH */
+.performance-metrics{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.performance-metric{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+}
+
+.performance-circle{
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--circle-color) var(--progress), rgba(150, 150, 150, 0.2) var(--progress));
+    position: relative;
+}
+
+.performance-circle::before{
+    content: "";
+    position: absolute;
+    inset: 8px;
+    background: var(--base-variant);
+    border-radius: 50%;
+}
+
+.circle-value{
+    position: relative;
+    z-index: 1;
+    color: var(--text-color);
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+
+.performance-metric h3{
+    margin-top: 12px;
+    color: var(--title);
+    font-size: 1rem;
+    font-weight: bold;
+}
+.performance-metric p{
+    color: var(--extra-info);
+    font-size: 0.8rem;
+    overflow-wrap: anywhere;
+}
+
+/* STORAGE DRIVES */
+.performance-drives{
+    border-top: 1px solid var(--report-card-border);
+    padding-top: 20px;
+}
+.performance-drives h3{
+    color: var(--title);
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+}
+
+.drive-info{
+    margin-bottom: 18px;
+}
+
+.drive-header{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.drive-progress{
+    width: 100%;
+    height: 10px;
+    background: rgba(150, 150, 150, 0.25);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.drive-progress-fill{
+    height: 100%;
+    background : linear-gradient(90deg, #16a36a, #62e6a1);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+.drive-info small{
+    display: block;
+    margin-top: 6px;
+    color: var(--extra-info);
+}
+
+.no-drive-info{
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+}
+
+/* SMALL SCREENS */
+@media (max-width: 480px){
+    .performance-card{
+        padding: 18px;
+    }
+    .performance-circle{
+        width: 75px;
+        height: 75px;
+    }
+    .circle-value{
+        font-size: 0.95rem;
+    }
+    .performance-metric h3{
+        font-size: 0.85rem;
+    }
+    .performance-metric p{
+        font-size: 0.7rem;
+    }
+}

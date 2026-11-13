@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}📞Contacts{% endblock %}
 
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/contact_styles.css'%}">{% endblock %}
@@ -12,7 +14,7 @@
     <hr class="contact-divider">
     <div class="office-content-grid">
         <!-- LEFT COLUMN -->
-        <section class="general-text-container">
+        <section class="general-text-container contact-container">
             <h3>Direct Contact Information</h3>
             <p>Choose the channel that works best for you. We typically respond within <strong>24 business hours</strong>.</strong></p>
             <ul class="contact-info-list">
@@ -26,7 +28,7 @@
                 </li>
                 <li>
                     <span class="contact-label">📍 Headquarters:</span>
-                    <span> (See <a href="/location" class="contact-link">Office Map</a>)</span>
+                    <span> 1201 W. University Dr., Edinburg, TX 78539 (See <a href="{% url 'offices' %}" class="contact-link">Office Map</a>)</span>
                 </li>
                 <li>
                     <span class="contact-label">🕒 Support Hours:</span>

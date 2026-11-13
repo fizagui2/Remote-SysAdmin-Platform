@@ -69,7 +69,11 @@
     --plan-popular-label: #ff5b5b;
     /* ABOUT US */
     --about-cont-title: #2d0037dc;
-    /* CONTACTS (probably) */
+    /* CONTACTS */
+    --contacts-container-bg: #424c88;
+    --contacts-btn-bg: #bcd7ff;
+    --contacts-btn-txt: #20023e;
+
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
