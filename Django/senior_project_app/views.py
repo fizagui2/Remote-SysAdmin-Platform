@@ -230,6 +230,7 @@ def agent_status(request):
         "performance": _section(computer, "latest_performance"),
         "processes": _section(computer, "latest_processes"),
         "services": _section(computer, "latest_services"),
+        "files": _section(computer, "latest_files"),
     })
 
 @login_required_json
@@ -356,6 +357,20 @@ def agent_services(request):
 
 @csrf_exempt
 @agent_token
+def agent_files(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    if not _save_snapshot(data, "latest_files", request.agent_computer):
+        return JsonResponse({"error": "Hostname required"}, status=400)
+    print("Received file listing:", data)
+    return JsonResponse({"status": "received"})
+
+@csrf_exempt
+@agent_token
 def agent_commands(request):
     if request.agent_computer is not None:
         hostname = request.agent_computer.hostname
@@ -375,6 +390,8 @@ def agent_commands(request):
             "Hostname": hostname,
             "Pid": c.pid,
             "ServiceName": c.service_name,
+            "FilePath": c.file_path,
+            "NewPath": c.new_path,
         }
         for c in pending
     ]
@@ -421,9 +438,11 @@ def debug_queue_command(request):
         command=request.POST.get("command"),
         pid=int(pid) if pid else None,
         service_name=request.POST.get("service_name") or None,
+        file_path=request.POST.get("file_path") or None,
+        new_path=request.POST.get("new_path") or None,
     )
     if request.POST.get("redirect"):
-        return redirect("view_report")
+        return redirect(request.POST.get("next") or "view_report")
     return JsonResponse({"queued_id": command.id})
 
 def _queue_form(request, hostname, command, label, *, pid=None, service_name=None):

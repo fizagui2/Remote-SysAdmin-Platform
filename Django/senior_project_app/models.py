@@ -42,6 +42,7 @@ class Computer(models.Model):
     latest_performance = models.JSONField(null=True, blank=True)
     latest_processes = models.JSONField(null=True, blank=True)
     latest_services = models.JSONField(null=True, blank=True)
+    latest_files = models.JSONField(null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -108,6 +109,8 @@ class Command(models.Model):
     command = models.CharField(max_length=50)
     pid = models.IntegerField(null=True, blank=True)
     service_name = models.CharField(max_length=255, null=True, blank=True)
+    file_path = models.CharField(max_length=500, null=True, blank=True)
+    new_path = models.CharField(max_length=500, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     message = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

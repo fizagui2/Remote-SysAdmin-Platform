@@ -15,7 +15,25 @@
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
 {% block content %}
-<h2 class="extra-title device-title" id="hostname"></h2>
+<div class="device-header-row">
+    <h2 class="extra-title device-title" id="hostname"></h2>
+    <button type="button" id="open-file-manager">File Management</button>
+</div>
+<style>
+.device-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+</style>
+
+<!-- Skeleton only  -->
+<div id="file-manager" style="display:none;">
+    <p>
+        Path: <span id="fm-current-path"></span>
+        <button type="button" id="fm-up">Up</button>
+        <button type="button" id="fm-refresh">Refresh</button>
+        <button type="button" id="fm-new-folder">New Folder</button>
+    </p>
+    <ul id="fm-entries"></ul>
+    <p id="fm-status"></p>
+</div>
 <!-- >>> REPORT -->
 <hr>
 <section class="device-section">
@@ -204,5 +222,135 @@
     </table>
     <div></div>
 </div>
+
+<!-- Skeleton file manager logic  -->
+<script>
+(function() {
+    const hostname = window.COMPUTER_HOSTNAME;
+    let currentPath = null;
+
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+        return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    function queueCommand(command, filePath, newPath) {
+        const body = new URLSearchParams({ hostname, command, file_path: filePath });
+        if (newPath) body.set("new_path", newPath);
+        return fetch("/debug/queue-command/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: body.toString(),
+        }).then(response => {
+            if (!response.ok) throw new Error(`Could not queue command (${response.status})`);
+        });
+    }
+
+    function fetchFiles() {
+        return fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
+            .then(response => response.json())
+            .then(data => data.files.data);
+    }
+
+    function waitForListing(path, queuedAt) {
+        let attempts = 0;
+        function attempt() {
+            attempts += 1;
+            return new Promise(resolve => setTimeout(resolve, 1000)).then(fetchFiles).then(files => {
+                if (files && files.Path === path && new Date(files.Timestamp) >= queuedAt) {
+                    return files;
+                }
+                if (attempts >= 10) {
+                    throw new Error("Timed out waiting for the agent. Is it running and online?");
+                }
+                return attempt();
+            });
+        }
+        return attempt();
+    }
+
+    function renderEntries(files) {
+        document.getElementById("fm-current-path").textContent = files.Path;
+        const list = document.getElementById("fm-entries");
+        list.innerHTML = "";
+        (files.Entries || []).forEach(entry => {
+            const li = document.createElement("li");
+            const label = entry.IsDirectory ? `[Folder] ${entry.Name}` : `${entry.Name} (${entry.SizeBytes} bytes)`;
+            li.textContent = `${label} — modified ${entry.ModifiedUtc}`;
+
+            if (entry.IsDirectory) {
+                li.style.cursor = "pointer";
+                li.addEventListener("click", () => loadFolder(`${files.Path}\\${entry.Name}`));
+            }
+
+            const renameBtn = document.createElement("button");
+            renameBtn.type = "button";
+            renameBtn.textContent = "Rename";
+            renameBtn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const newName = prompt("New name:", entry.Name);
+                if (!newName || newName === entry.Name) return;
+                const oldFull = `${files.Path}\\${entry.Name}`;
+                const newFull = `${files.Path}\\${newName}`;
+                document.getElementById("fm-status").textContent = "Renaming...";
+                queueCommand("move_path", oldFull, newFull)
+                    .then(() => setTimeout(() => loadFolder(currentPath), 1500))
+                    .catch(err => { document.getElementById("fm-status").textContent = err.message; });
+            });
+            li.appendChild(renameBtn);
+
+            list.appendChild(li);
+        });
+    }
+
+    function loadFolder(path) {
+        const status = document.getElementById("fm-status");
+        status.textContent = "Loading...";
+        const queuedAt = new Date();
+        queueCommand("list_directory", path)
+            .then(() => waitForListing(path, queuedAt))
+            .then(files => {
+                currentPath = path;
+                renderEntries(files);
+                status.textContent = "";
+            })
+            .catch(err => { status.textContent = err.message; });
+    }
+
+    document.getElementById("open-file-manager").addEventListener("click", () => {
+        const panel = document.getElementById("file-manager");
+        const isHidden = panel.style.display === "none";
+        panel.style.display = isHidden ? "block" : "none";
+        if (isHidden && !currentPath) {
+            const loggedInUser = document.getElementById("logged-in-user")?.textContent?.trim();
+            const start = loggedInUser && loggedInUser !== "Loading..." ? `C:\\Users\\${loggedInUser}` : prompt("Enter a starting folder path:");
+            if (start) loadFolder(start);
+        }
+    });
+
+    document.getElementById("fm-up").addEventListener("click", () => {
+        if (!currentPath) return;
+        const parent = currentPath.substring(0, currentPath.lastIndexOf("\\"));
+        if (parent) loadFolder(parent);
+    });
+
+    document.getElementById("fm-refresh").addEventListener("click", () => {
+        if (currentPath) loadFolder(currentPath);
+    });
+
+    document.getElementById("fm-new-folder").addEventListener("click", () => {
+        if (!currentPath) return;
+        const name = prompt("New folder name:");
+        if (!name) return;
+        document.getElementById("fm-status").textContent = "Creating...";
+        queueCommand("create_folder", `${currentPath}\\${name}`)
+            .then(() => setTimeout(() => loadFolder(currentPath), 1500))
+            .catch(err => { document.getElementById("fm-status").textContent = err.message; });
+    });
+})();
+</script>
 
 {% endblock %}
