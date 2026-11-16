@@ -1,11 +1,4 @@
-// nose Frank's function
-function escapeAttr(value){ 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g), "&gt;"; 
-}
+import { escapeHTML } from './escape_html.js';
 
 // >> TO SORT 'SERVICES' TABLE
 export function renderServices(currentServices, serviceSortOrder){
@@ -34,14 +27,14 @@ export function renderServices(currentServices, serviceSortOrder){
     sortedServies.forEach(service => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${service.Name ?? "Unknown"}</td>
-            <td>${service.DisplayName ?? "Unknown"}</td>
-            <td>${service.Status ?? "Unknown"}</td>
+            <td>${escapeHTML(service.Name ?? "Unknown")}</td>
+            <td>${escapeHTML(service.DisplayName ?? "Unknown")}</td>
+            <td>${escapeHTML(service.Status ?? "Unknown")}</td>
             <td>
                 <div class="service-actions">
-                    <button type="button" class="button-services start-device" data-command="start_service" data-service="${escapeAttr(service.Name)}" title="Start service"><img src="/static/images/play.png" class="button-services-icon" aria-hidden="true"><span>Start</span></button>
-                    <button type="button" class="button-services stop-service" data-command="stop_service" data-service="${escapeAttr(service.Name)}" title="Stop service"><img src="/static/images/stop.png" class="button-services-icon" aria-hidden="true"><span>Stop</span></button>
-                    <button type="button" class="button-services restart-service" data-command="restart_service" data-service="${escapeAttr(service.Name)}" title="Restart service"><img src="/static/images/restart.png" class="button-services-icon" aria-hidden="true"><span>Restart</span></button>
+                    <button type="button" class="button-services start-device" data-command="start_service" data-service="${escapeHTML(service.Name)}" title="Start service"><img src="/static/images/play.png" class="button-services-icon" aria-hidden="true"><span>Start</span></button>
+                    <button type="button" class="button-services stop-service" data-command="stop_service" data-service="${escapeHTML(service.Name)}" title="Stop service"><img src="/static/images/stop.png" class="button-services-icon" aria-hidden="true"><span>Stop</span></button>
+                    <button type="button" class="button-services restart-service" data-command="restart_service" data-service="${escapeHTML(service.Name)}" title="Restart service"><img src="/static/images/restart.png" class="button-services-icon" aria-hidden="true"><span>Restart</span></button>
                 </div>
             </td>
         `;

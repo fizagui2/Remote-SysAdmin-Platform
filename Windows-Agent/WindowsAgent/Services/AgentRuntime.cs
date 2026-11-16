@@ -214,6 +214,12 @@ public class AgentRuntime
                 await ResendSystemInfoAsync();
             }
         }
+        //a status code means the server answered but with an error (404, 500, ...), no status code means it was never reached
+        catch (HttpRequestException ex) when (ex.StatusCode is not null)
+        {
+            Log($"[{label}] Server returned an error: {ex.Message}", LogSeverity.Error);
+            ConnectionStatusChanged?.Invoke(this, false);
+        }
         catch (HttpRequestException ex)
         {
             Log($"[{label}] Could not reach server: {ex.Message}", LogSeverity.Error);
@@ -268,6 +274,11 @@ public class AgentRuntime
             {
                 await ResendSystemInfoAsync();
             }
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode is not null)
+        {
+            Log($"[commands] Server returned an error: {ex.Message}", LogSeverity.Error);
+            ConnectionStatusChanged?.Invoke(this, false);
         }
         catch (HttpRequestException ex)
         {

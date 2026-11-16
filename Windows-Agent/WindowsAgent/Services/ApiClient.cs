@@ -96,6 +96,13 @@ public class ApiClient
             throw new UnauthorizedAccessException($"{(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
 
+        //anything else outside 2xx (404, 500, ...) means the server got the request but didn't take the data,
+        //so throw instead of handing it back like a normal response. StatusCode lets callers tell it apart from a network failure
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"{(int)response.StatusCode} {response.ReasonPhrase}: {body}", null, response.StatusCode);
+        }
+
         return $"{(int)response.StatusCode} {response.ReasonPhrase}: {body}";
     }
 }
