@@ -1,3 +1,5 @@
+import { escapeHTML } from './escape_html.js';
+
 /* DEVICES CALL ROLL FUNCTION */
 export function LoadAvailableComputers(){
     fetch("/api/agent/computers/")
@@ -24,27 +26,31 @@ export function LoadAvailableComputers(){
             card.classList.add("device-card");
             card.innerHTML = `
                 <div class="device-picture">
-                    <img src="${COMPUTER_IMAGE}" alt="${computer.hostname} Device picture">
+                    <img src="${COMPUTER_IMAGE}" alt="${escapeHTML(computer.hostname)} Device picture">
                 </div>
             
-                <h3>${computer.hostname}</h3>
+                <h3>${escapeHTML(computer.hostname)}</h3>
                 <div class="device-status">
                     <span class="status ${status === "Online" ? "status-online" : "status-offline"}"> ${status} </span>
                 </div>
 
                 <div class="device-info">
-                    <p><strong>IP:</strong> ${report.IpAddress}</p>
-                    <p><strong>OS:</strong>  ${report.WindowsVersion}</p>
-                    <p><strong>CPU:</strong> ${report.CpuModel}</p>
-                    <p><strong>Cores:</strong> ${report.CpuCores}</p>
-                    <p><strong>RAM:</strong> ${report.TotalRamGb}</p>
-                    <p><strong>LAST SEEN:</strong> ${computer.last_seen}</p>
+                    <p><strong>IP:</strong> ${escapeHTML(report.IpAddress)}</p>
+                    <p><strong>OS:</strong>  ${escapeHTML(report.WindowsVersion)}</p>
+                    <p><strong>CPU:</strong> ${escapeHTML(report.CpuModel)}</p>
+                    <p><strong>Cores:</strong> ${escapeHTML(report.CpuCores)}</p>
+                    <p><strong>RAM:</strong> ${escapeHTML(report.TotalRamGb)}</p>
+                    <p><strong>LAST SEEN:</strong> ${escapeHTML(computer.last_seen)}</p>
                 </div>
                 
                 <div class="see-device-button">
-                    <button class="container-buttons-main btn rounded-pill px-3" onclick="window.location.href='/device-details-${encodeURIComponent(computer.hostname)}/'"><strong>View Computer</strong></button>
+                    <button class="container-buttons-main btn rounded-pill px-3"><strong>View Computer</strong></button>
                 </div>
             `;
+            // The hostname stays out of the HTML string here: inside an onclick attribute it could run as code.
+            card.querySelector(".see-device-button button").addEventListener("click", () => {
+                window.location.href = `/device-details-${encodeURIComponent(computer.hostname)}/`;
+            });
             computersContainer.appendChild(card);
         });
     })
