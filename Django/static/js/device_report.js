@@ -1,3 +1,5 @@
+import { escapeHTML } from './escape_html.js';
+
 // >> DEVICE REPORT
 const REPORT_REFRESH_INTERVAL = 10000;
 const OFFLINE_THRESOLD_MS = 2 * 60 * 1000;
@@ -42,53 +44,57 @@ function CreateReportsCards(hostname, report){
         </div>
         <!-- >> TITLE -->
         <div class="report-header-card">
-            <h4 class="card-title">${hostname}</h4>
+            <h4 class="card-title">${escapeHTML(hostname)}</h4>
             <p class="card-text"><strong>Status</strong> ${report ? 'Active' : 'No report data'}</p>
         </div>
         <!-- >> INFO -->
         <div class="report-ind-card-info">
             <div class="report-info-card">
                 <span class="bolded">Logged In User: </span>
-                <p>${logInUser}</p>
+                <p>${escapeHTML(logInUser)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">IP Address: </span>
-                <p>${ipAddress}</p>
+                <p>${escapeHTML(ipAddress)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">MAC Address: </span>
-                <p>${macAddress}</p>
+                <p>${escapeHTML(macAddress)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">Network Adapter: </span>
-                <p>${netAdapter}</p>
+                <p>${escapeHTML(netAdapter)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">Total RAM: </span>
-                <p>${totalRamGB}</p>
+                <p>${escapeHTML(totalRamGB)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">CPU Model: </span>
-                <p>${cpuModel}</p>
+                <p>${escapeHTML(cpuModel)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">CPU Cores: </span>
-                <p>${cpuCores}</p>
+                <p>${escapeHTML(cpuCores)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">Windows: </span>
-                <p>${winVersion}</p>
+                <p>${escapeHTML(winVersion)}</p>
             </div>
             <div class="report-info-card">
                 <span class="bolded">Uptime hours: </span>
-                <p>${uptimeHours}</p>
+                <p>${escapeHTML(uptimeHours)}</p>
             </div>
             <!-- >> BUTTON TO SEE DEVICE DEPEER DETAILS -->
             <div class="see-device-button">
-                <button class="container-buttons-main btn rounded-pill px-3" onclick="window.location.href='/device-details-${encodeURIComponent(hostname)}/'"><strong>More Details</strong></button>
+                <button class="container-buttons-main btn rounded-pill px-3"><strong>More Details</strong></button>
             </div>
         </div>
     `;
+    // The hostname stays out of the HTML string here: inside an onclick attribute it could run as code.
+    card.querySelector(".see-device-button button").addEventListener("click", () => {
+        window.location.href = `/device-details-${encodeURIComponent(hostname)}/`;
+    });
     // <div class=""></div>
     return card;
 }

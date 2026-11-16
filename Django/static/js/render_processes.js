@@ -1,3 +1,5 @@
+import { escapeHTML } from './escape_html.js';
+
 /* >> SORTING PROCESSES TABLE */
 export function renderProcesses(currentProcesses, processSortOrder){
     const processTable = document.getElementById("processes-table-body");
@@ -28,10 +30,10 @@ export function renderProcesses(currentProcesses, processSortOrder){
     sortedProcesses.forEach(process => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${process.Pid ?? "N/A"}</td>
-            <td>${process.Name ?? "Unknown"}</td>
-            <td>${process.MemoryMb ?? "N/A"} MB</td>
-            <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${process.Pid}">Terminate</button></td>
+            <td>${escapeHTML(process.Pid ?? "N/A")}</td>
+            <td>${escapeHTML(process.Name ?? "Unknown")}</td>
+            <td>${escapeHTML(process.MemoryMb ?? "N/A")} MB</td>
+            <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${escapeHTML(process.Pid)}">Terminate</button></td>
         `;
         processTable.appendChild(row);
     });
