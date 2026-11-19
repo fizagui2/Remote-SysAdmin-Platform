@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import F
 from django.utils import timezone
 from django.utils.html import escape
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .decorators import agent_token, login_required_json
 from .enrollment import active_code_for, create_enrollment_code, format_code, redeem_enrollment_code
@@ -366,7 +367,6 @@ def agent_files(request):
         return JsonResponse({"error": "Invalid JSON"}, status=400)
     if not _save_snapshot(data, "latest_files", request.agent_computer):
         return JsonResponse({"error": "Hostname required"}, status=400)
-    print("Received file listing:", data)
     return JsonResponse({"status": "received"})
 
 @csrf_exempt
@@ -374,14 +374,14 @@ def agent_files(request):
 def agent_commands(request):
     if request.agent_computer is not None:
         hostname = request.agent_computer.hostname
-        pending = list(Command.objects.filter(computer=request.agent_computer, status="pending"))
+        pending = list(Command.objects.filter(computer=request.agent_computer, status="pending").order_by("id"))
     else:
         # No token: only commands for machines that haven't enrolled, so a
         # request naming an enrolled machine's hostname can't take its commands.
         hostname = request.GET.get("hostname")
         pending = list(Command.objects.filter(
             computer__hostname=hostname, computer__token_hash__isnull=True, status="pending",
-        ))
+        ).order_by("id"))
 
     result = [
         {
@@ -442,8 +442,24 @@ def debug_queue_command(request):
         new_path=request.POST.get("new_path") or None,
     )
     if request.POST.get("redirect"):
-        return redirect(request.POST.get("next") or "view_report")
+        next_url = request.POST.get("next")
+        #'next' comes straight from the POST body, validates same way djangos login view does
+        if next_url and url_has_allowed_host_and_scheme(
+            next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure(),
+        ):
+            return redirect(next_url)
+        return redirect("view_report")
     return JsonResponse({"queued_id": command.id})
+
+@login_required_json
+def agent_command_status(request):
+    queued_id = request.GET.get("queued_id")
+    if not queued_id or not queued_id.isdigit():
+        return JsonResponse({"error": "queued_id required"}, status=400)
+    command = get_object_or_404(
+        Command.objects.filter(computer__in=_visible_computers(request.user)), pk=queued_id,
+    )
+    return JsonResponse({"status": command.status, "message": command.message})
 
 def _queue_form(request, hostname, command, label, *, pid=None, service_name=None):
     # a small POST method, CSRF protected form that queues a command and comes back to this page

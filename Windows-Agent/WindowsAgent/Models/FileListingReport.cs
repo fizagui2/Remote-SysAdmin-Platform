@@ -2,6 +2,7 @@ namespace WindowsAgent.Models;
 
 public class FileListingReport
 {
+    public int CommandId { get; set; }
     public string Hostname { get; set; } = string.Empty;
     public string Timestamp { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;

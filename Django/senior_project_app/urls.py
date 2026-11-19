@@ -38,6 +38,7 @@ urlpatterns = [
     path('api/agent/files/', views.agent_files, name="agent_files"),
     path('api/agent/commands/', views.agent_commands, name="agent_commands"),
     path('api/agent/commands/result/', views.agent_command_result, name="agent_command_result"),
+    path('api/agent/commands/status/', views.agent_command_status, name="agent_command_status"),
     path('debug/queue-command/', views.debug_queue_command, name="debug_queue_command"),
 # ///////////////////Franks Testing URL's////////////////////////////////////
 ]

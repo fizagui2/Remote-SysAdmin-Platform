@@ -246,28 +246,43 @@
             body: body.toString(),
         }).then(response => {
             if (!response.ok) throw new Error(`Could not queue command (${response.status})`);
-        });
+            return response.json();
+        }).then(data => data.queued_id);
+    }
+
+    function fetchStatus() {
+        return fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
+            .then(response => response.json());
     }
 
     function fetchFiles() {
-        return fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
-            .then(response => response.json())
-            .then(data => data.files.data);
+        return fetchStatus().then(data => data.files.data);
     }
 
-    function waitForListing(path, queuedAt) {
+    function fetchCommandStatus(queuedId) {
+        return fetch(`/api/agent/commands/status/?queued_id=${queuedId}`)
+            .then(response => response.json());
+    }
+
+    //Matches on the commandid the agent echos back on the listing, not on timestamps
+    function waitForListing(path, queuedId) {
         let attempts = 0;
         function attempt() {
             attempts += 1;
-            return new Promise(resolve => setTimeout(resolve, 1000)).then(fetchFiles).then(files => {
-                if (files && files.Path === path && new Date(files.Timestamp) >= queuedAt) {
-                    return files;
-                }
-                if (attempts >= 10) {
-                    throw new Error("Timed out waiting for the agent. Is it running and online?");
-                }
-                return attempt();
-            });
+            return new Promise(resolve => setTimeout(resolve, 1000))
+                .then(() => Promise.all([fetchFiles(), fetchCommandStatus(queuedId)]))
+                .then(([files, commandStatus]) => {
+                    if (files && files.Path === path && files.CommandId === queuedId) {
+                        return files;
+                    }
+                    if (commandStatus && commandStatus.status === "failed") {
+                        throw new Error(commandStatus.message || "Command failed.");
+                    }
+                    if (attempts >= 10) {
+                        throw new Error("Timed out waiting for the agent. Is it running and online?");
+                    }
+                    return attempt();
+                });
         }
         return attempt();
     }
@@ -309,9 +324,8 @@
     function loadFolder(path) {
         const status = document.getElementById("fm-status");
         status.textContent = "Loading...";
-        const queuedAt = new Date();
         queueCommand("list_directory", path)
-            .then(() => waitForListing(path, queuedAt))
+            .then(queuedId => waitForListing(path, queuedId))
             .then(files => {
                 currentPath = path;
                 renderEntries(files);
@@ -325,9 +339,12 @@
         const isHidden = panel.style.display === "none";
         panel.style.display = isHidden ? "block" : "none";
         if (isHidden && !currentPath) {
-            const loggedInUser = document.getElementById("logged-in-user")?.textContent?.trim();
-            const start = loggedInUser && loggedInUser !== "Loading..." ? `C:\\Users\\${loggedInUser}` : prompt("Enter a starting folder path:");
-            if (start) loadFolder(start);
+            //FileRoot is the agents real PathGuard.AllowedRoot, not a guess built from username
+            fetchStatus().then(data => {
+                const root = data.report && data.report.data && data.report.data.FileRoot;
+                const start = root || prompt("Enter a starting folder path:");
+                if (start) loadFolder(start);
+            });
         }
     });
 

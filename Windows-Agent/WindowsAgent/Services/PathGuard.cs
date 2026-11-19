@@ -22,7 +22,30 @@ public static class PathGuard
             return false;
         }
 
-        return fullPath.Equals(fullRoot, StringComparison.OrdinalIgnoreCase)
+        var withinRoot = fullPath.Equals(fullRoot, StringComparison.OrdinalIgnoreCase)
             || fullPath.StartsWith(fullRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+
+        return withinRoot && !HasReparsePointBetween(fullRoot, fullPath);
+    }
+
+    //Path.GetFullPath only resolves ".." segments, not junctions/symlinks, so a reparse point sitting
+    //inside the allowed root could otherwise point anywhere on disk.
+    //This walks every existing folder from the target up to the root and rejects any of them thats a link
+    private static bool HasReparsePointBetween(string root, string target)
+    {
+        var current = target;
+
+        while (current is not null && current.Length >= root.Length)
+        {
+            if (Directory.Exists(current) && new DirectoryInfo(current).Attributes.HasFlag(FileAttributes.ReparsePoint))
+                return true;
+
+            if (current.Equals(root, StringComparison.OrdinalIgnoreCase))
+                break;
+
+            current = Path.GetDirectoryName(current);
+        }
+
+        return false;
     }
 }

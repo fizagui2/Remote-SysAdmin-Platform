@@ -14,4 +14,7 @@ public class SystemInfo
     public string LoggedInUser { get; set; } = string.Empty;
     public string NetworkAdapter { get; set; } = string.Empty;
     public string MacAddress { get; set; } = string.Empty;
+    //the real folder file commands are restricted to (PathGuard.AllowedRoot), since LoggedInUser is only
+    //a display name and isnt guaranteed to match the actual profile folder name
+    public string FileRoot { get; set; } = string.Empty;
 }

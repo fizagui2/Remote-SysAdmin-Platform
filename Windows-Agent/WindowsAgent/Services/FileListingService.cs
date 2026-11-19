@@ -5,7 +5,7 @@ namespace WindowsAgent.Services;
 //features 23/24, only used when called, not apart of the loop as that would not be necessary info
 public class FileListingService
 {
-    public FileListingReport Collect(string hostname, string path)
+    public FileListingReport Collect(string hostname, string path, int commandId)
     {
         var entries = new List<FileEntry>();
 
@@ -35,6 +35,7 @@ public class FileListingService
 
         return new FileListingReport
         {
+            CommandId = commandId,
             Hostname = hostname,
             Timestamp = DateTime.UtcNow.ToString("o"),
             Path = path,

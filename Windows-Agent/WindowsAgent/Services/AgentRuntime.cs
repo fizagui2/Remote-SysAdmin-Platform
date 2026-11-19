@@ -252,7 +252,7 @@ public class AgentRuntime
                 {
                     try
                     {
-                        var listing = _fileListingService.Collect(_hostname, command.FilePath);
+                        var listing = _fileListingService.Collect(_hostname, command.FilePath, command.CommandId);
                         await SendAsync(() => _apiClient.SendFileListingAsync(listing), "files");
                     }
                     catch (Exception ex)
@@ -263,13 +263,17 @@ public class AgentRuntime
                     }
                 }
 
-                var entry = new ActionHistoryEntry
+                //browsing a folder happens on every click which crowds actions so it's the one command type that isn't recorded there
+                if (command.Command != "list_directory")
                 {
-                    Description = DescribeCommand(command, processName),
-                    Success = result.Status == "success",
-                };
-                _historyStore.Append(entry);
-                ActionRecorded?.Invoke(this, entry);
+                    var entry = new ActionHistoryEntry
+                    {
+                        Description = DescribeCommand(command, processName),
+                        Success = result.Status == "success",
+                    };
+                    _historyStore.Append(entry);
+                    ActionRecorded?.Invoke(this, entry);
+                }
             }
 
             //a command just changed process or service state, push a new snapshot right away instead of waiting

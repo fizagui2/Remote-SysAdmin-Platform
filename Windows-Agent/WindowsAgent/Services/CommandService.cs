@@ -86,8 +86,9 @@ public class CommandService
         return Succeeded(command, $"Service '{command.ServiceName}' restarted successfully.");
     }
 
-    //just validates the path, AgentRuntime does the actual read right after, since that
-    //goes out as a FileListingReport rather than a plain CommandResult
+    //AgentRuntime does the real enumeration right after this, since the entries go out as a separate
+    //FileListingReport rather than on this CommandResult, but this still has to try the read itself
+    //first, so a folder that exists but cant actually be enumerated is reporte as failed instead of a false "success" with no listing ever following it
     private static CommandResult ListDirectory(AgentCommand command)
     {
         if (string.IsNullOrEmpty(command.FilePath))
@@ -98,6 +99,16 @@ public class CommandService
 
         if (!Directory.Exists(command.FilePath))
             return Failed(command, $"Folder '{command.FilePath}' does not exist.");
+
+        try
+        {
+            _ = Directory.GetDirectories(command.FilePath);
+            _ = Directory.GetFiles(command.FilePath);
+        }
+        catch (Exception ex)
+        {
+            return Failed(command, $"Could not read '{command.FilePath}': {ex.Message}");
+        }
 
         return Succeeded(command, $"Listed '{command.FilePath}'.");
     }
