@@ -27,6 +27,15 @@ export function renderProcesses(currentProcesses, processSortOrder){
         }
     });
     processTable.innerHTML = "";
+
+    if(sortedProcesses.length === 0){
+        processTable.innerHTML = `
+            <tr>
+                <td colspan="4">No processes found.</td>
+            </tr>
+        `;
+    }
+
     sortedProcesses.forEach(process => {
         const row = document.createElement("tr");
         row.innerHTML = `
