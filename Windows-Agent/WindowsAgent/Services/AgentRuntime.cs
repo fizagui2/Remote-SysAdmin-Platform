@@ -30,6 +30,7 @@ public class AgentRuntime
     private readonly ProcessService _processService = new();
     private readonly ServiceMonitorService _serviceMonitorService = new();
     private readonly CommandService _commandService = new();
+    private readonly FileListingService _fileListingService = new();
 
     //guards re-enrollment so report/command loop cant both prompt for new code at same time if 401 is hit
     private readonly SemaphoreSlim _reenrollLock = new(1, 1);
@@ -245,13 +246,34 @@ public class AgentRuntime
                     result.Status == "success" ? LogSeverity.Success : LogSeverity.Error);
                 await SendAsync(() => _apiClient.SendCommandResultAsync(result), $"command {command.CommandId}");
 
-                var entry = new ActionHistoryEntry
+                //a successful list_directory needs to hand back what it saw, as a
+                //FileListingReport instead of just the success/failure CommandResult above
+                if (command.Command == "list_directory" && result.Status == "success" && command.FilePath is not null)
                 {
-                    Description = DescribeCommand(command, processName),
-                    Success = result.Status == "success",
-                };
-                _historyStore.Append(entry);
-                ActionRecorded?.Invoke(this, entry);
+                    try
+                    {
+                        var listing = _fileListingService.Collect(_hostname, command.FilePath, command.CommandId);
+                        await SendAsync(() => _apiClient.SendFileListingAsync(listing), "files");
+                    }
+                    catch (Exception ex)
+                    {
+                        //some folders inside the allowed root still refuse enumeration like AppData\Local\Application Data
+                        //without this catch, anexception here would kill CommandLoopAsync silently and commands would stop forever
+                        Log($"[files] Could not read '{command.FilePath}': {ex.Message}", LogSeverity.Error);
+                    }
+                }
+
+                //browsing a folder happens on every click which crowds actions so it's the one command type that isn't recorded there
+                if (command.Command != "list_directory")
+                {
+                    var entry = new ActionHistoryEntry
+                    {
+                        Description = DescribeCommand(command, processName),
+                        Success = result.Status == "success",
+                    };
+                    _historyStore.Append(entry);
+                    ActionRecorded?.Invoke(this, entry);
+                }
             }
 
             //a command just changed process or service state, push a new snapshot right away instead of waiting
@@ -318,6 +340,24 @@ public class AgentRuntime
         "start_service" => $"Started service '{command.ServiceName}'",
         "stop_service" => $"Stopped service '{command.ServiceName}'",
         "restart_service" => $"Restarted service '{command.ServiceName}'",
+        "list_directory" => $"Viewed folder '{command.FilePath}'",
+        "create_folder" => $"Created folder '{command.FilePath}'",
+        "move_path" => DescribeMoveOrRename(command),
         _ => $"Ran command '{command.Command}'",
     };
+
+    //a rename and a move are the same command, this just decides which word
+    //fits by checking whether the parent folder actually changed
+    private static string DescribeMoveOrRename(AgentCommand command)
+    {
+        var oldDir = Path.GetDirectoryName(command.FilePath);
+        var newDir = Path.GetDirectoryName(command.NewPath);
+
+        if (string.Equals(oldDir, newDir, StringComparison.OrdinalIgnoreCase))
+        {
+            return $"Renamed {Path.GetFileName(command.FilePath)} to {Path.GetFileName(command.NewPath)}";
+        }
+
+        return $"Moved {Path.GetFileName(command.FilePath)} to {command.NewPath}";
+    }
 }
