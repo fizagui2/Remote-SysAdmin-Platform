@@ -7,6 +7,7 @@
     --accent-color:#0071ff;
     --accent-color2: #9bfff2d6;
     --accent-color3: #b3fff1;
+    --accent-color4: #120e34;
     --primary-color:#290049d0;
     --white-col: #ffffff;
     --black-col: #000000;
@@ -15,8 +16,10 @@
     /* TEXT */
     --text-color: #1f2231;
     --text-color-var1: #a5e1facb;
-    --secondary-text:#5f6270;
-    --extra-info: #cfc0f3e6;
+    --secondary-text:#4500a0db;
+    --extra-info: #d6c5ff;
+    /* DEVICE DETAILS */
+    --dd-container-bg: #7e78f082;
     /* BANNER */
     --slide-col1: #9a86b3;
     --slide-title: #28dff4e0;
@@ -74,7 +77,10 @@
     --contacts-container-bg: #424c88;
     --contacts-btn-bg: #bcd7ff;
     --contacts-btn-txt: #20023e;
-
+    /* HEARTBEATS PAGE */
+    --heartbeat-card-bg: #30c7de;
+    --heartbeat-card-title: #0b0f23;
+    --heartbeat-card-glow: #141330;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
@@ -117,6 +123,7 @@
     --title-var1: #b6acfff9;
     --extra-title:#34277dc9;
     --subtitle: #26517a;
+    --subtitle2: #13395d;
     --extra-subtitle:#226eb5;
     --extra-subtitle-var1:rgb(49, 220, 140);
     --container-color: radial-gradient(circle at 25% 70%, #8ebfef 0%, #15214b 40%, #111d3d 75%, #070617 100%);
@@ -162,6 +169,8 @@
     --button-services-border: #9bffa5df;
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
+    /* TABLES */
+    --table-header: #131c52;
     /* FOOTER */
     --footer-text: #1d1d39;
     --footer-text-transition: #200045;

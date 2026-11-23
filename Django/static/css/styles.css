@@ -9,11 +9,14 @@
     --accent-color:#4d9aff;
     --accent-color2: #fa9bffd6;
     --accent-color3: #561eff;
+    --accent-color4: #64a7ff;
     --primary-color:#d3dd4b;
     --white-col: #ffffff;
     --black-col: #000000;
     --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
     --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
+    /* DEVICE DETAILS */
+    --dd-container-bg: #7e78f082;
     /* BANNER */
     --slide-col1: #166981;
     --slide-title: #28dff4e0;
@@ -74,11 +77,15 @@
     --report-card-title-color-var2: #ffffff;
     --report-card-border: #a9d0ff;
     --report-card-shadow: #dad4fd;
+    /* HEARTBEATS PAGE */
+    --heartbeat-card-bg: #032940;
+    --heartbeat-card-title: #faff97;
+    --heartbeat-card-glow: #716cf8;
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
-    --secondary-text:#c5c5c5;
-    --extra-info: #9cd2ffab;
+    --secondary-text: #a563fbdb;
+    --extra-info: #c2e7ffe6;
     /* BUTTONS */
     --buttons-color: #090124;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #e88fd8f0 0%, #4a215ccb 50%, #29153b 80%, #15081c 100%);
@@ -119,6 +126,7 @@
     --title-var1: #80f4ffee;
     --extra-title:#563de7c9;
     --subtitle: #99b8d4;
+    --subtitle2: #b197ff;
     --extra-subtitle:#5eb1ff;
     --extra-subtitle-var1:#a3f7ff;
     --container-color: radial-gradient(circle at 25% 70%, #63a5bc 0%, #2b154b 40%, #11143d 75%, #120617 100%);
@@ -157,6 +165,8 @@
     --button-services-border: #9bffa5df;
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
+    /* TABLES */
+    --table-header: #2c5d9c;
     /* FOOTER */
     --footer-text: #7070da;
     --footer-text-transition: #c28cff;

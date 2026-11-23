@@ -301,6 +301,60 @@
     transform: translateY(0);
 }
 
+/* BANNER BUTTONS */
+.banner-button{
+    width: max-content;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: 24px;
+    border: 3px solid var(--button-border-banner);
+    white-space: nowrap;
+    background: var(--button-banner);
+    color: var(--button-text-banner);
+    display: inline-flex;
+    justify-content: center;
+    text-decoration: none;
+    text-align: center;
+    align-items: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px var(--button-shadow-banner);
+}
+.banner-button:hover{
+    border-color: var(--button-text-banner);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+        0 0 25px var(--button-shadow-banner),
+        0 0 25px var(--accent-color2);
+}
+
+.banner-button-secondary{
+    color: var(--button-text-banner2);
+    background: var(--button-banner2);
+    border-color: var(--button-banner2);
+}
+.banner-button-secondary:hover{
+    border-color: var(--button-text-banner2);
+}
+
+.banner-button-third{
+    color: var(--nose);
+    background-color: var(--nose);
+    border: none;
+}
+.banner-button-third:hover{
+    color: var(--nose);
+}
+
+/* >> PROCESSES BUTTONS */
+.process-button{
+    border: none;
+    color: var(--process-btn-txt);
+    background: var(--process-btn-bg);
+}
+.process-button:hover{
+    box-shadow: var(--process-btn-bg2);
+}
+
 /* >> FOR SMALL SCREENS */
 @media (max-width: 1100px){
     .service-actions{ gap: 6px; }

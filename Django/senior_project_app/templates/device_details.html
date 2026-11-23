@@ -15,7 +15,7 @@
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
 {% block content %}
-<h2 class="extra-title device-title" id="hostname"></h2>
+<h2 class="device-title" id="hostname"></h2>
 <!-- >>> REPORT -->
 <hr>
 <section class="device-section">
@@ -84,7 +84,7 @@
 <hr>
 <h3> Latest Heartbeat</h3>
 <div class="heartbeat-grid">
-    <div class="info-card">
+    <div class="info-card info-card-bg">
         <span class="features-highlight extra-info">Timestamp:</span>
         <strong id="heartbeat-timestamp">Loading...</strong>
     </div>
@@ -204,5 +204,4 @@
     </table>
     <div></div>
 </div>
-
 {% endblock %}

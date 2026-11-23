@@ -40,7 +40,8 @@ export const ComputerNavigation = (() => {
     // HELPER FUNCTION TO DISPLAY COMPUTER NAME
     async function displayComputer(){
         const computer = computers[currentIndex];
-        const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
+        const hostname = typeof computer === "string" ? computer : (computer?.hostname ?? computer?.Hostname ?? "Unknown");
+        hostnameElement.textContent = hostname;
         counterElement.textContent = `Computer ${currentIndex + 1} of ${computers.length}`;
         // hostnameElement.textContent = computer.hostname;
         // previousButton.disabled = currentIndex === 0;
@@ -49,7 +50,7 @@ export const ComputerNavigation = (() => {
         if(previousButton){ previousButton.disabled = currentIndex === 0; }
         if(nextButton){ nextButton.disabled = currentIndex === computers.length - 1; }
         if(lastButton){ lastButton.disabled = currentIndex === computers.length - 1; }
-        await loadComputerData(computer.hostname);
+        await loadComputerData(hostname);
     }
     // >>> HELPER FUNCTIONS FOR NAV BUTTONS
     async function firstComputer(){

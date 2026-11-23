@@ -20,7 +20,7 @@
 
 /* >> TABLE HEADER */
 .webhost-table thead{
-    background: var(--accent-color);
+    background: var(--table-header);
     color:white;
 }
 .webhost-table th{

@@ -1,6 +1,7 @@
 @import 'styles_variables.css';
 
 .device-title{
+    color: var(--title);
     text-shadow: var(--text-shadow1);
 }
 
@@ -140,7 +141,7 @@
 }
 .section-heading h3{
     margin: 0;
-    color: var(--container-title);
+    color: var(--subtitle2);
     font-weight: 700;
 }
 .section-subtitle{
@@ -169,7 +170,7 @@
     color: var(--container-text);
     border: 1px solid var(--accent-color);
     border-radius: 16px;
-    box-shadow: 0 5px 16px var(--base-variant2);
+    box-shadow: 0 5px 16px var(--accent-color4);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -209,8 +210,12 @@
     gap: 5px;
     min-width: 0;
     padding: 11px 12px;
-    background: var(--base-variant3);
+    background: var(--dd-container-bg);
     border-radius: 10px;
+}
+
+.info-card-bg{
+    background: var(--plan-container);
 }
 
 .info-card > span{

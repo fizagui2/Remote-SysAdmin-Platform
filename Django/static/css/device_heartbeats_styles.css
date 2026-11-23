@@ -10,14 +10,14 @@
 .heartbeat-card{
     padding: 1.5rem;
     border-radius: 16px;
-    background-color: var(--container-color);
+    background-color: var(--heartbeat-card-bg);
     border: 1px solid var(--buttons-border-variant3);
-    box-shadow: 0 4px 12px var(--container-shadow-var1);
+    box-shadow: 0 4px 12px var(--heartbeat-card-glow);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .heartbeat-card:hover{
     transform: translateY(-4px);
-    box-shadow: 0 10px 24px var(--container-shadow-var1);
+    box-shadow: 0 10px 24px var(--heartbeat-card-glow);
 }
 
 .heartbeat-card-header{
@@ -28,7 +28,9 @@
     flex-wrap: wrap;
 }
 
+
 .heartbeat-hostname{
+    color: var(--heartbeat-card-title);
     font-size: 1.15rem;
     font-weight: 700;
     overflow-wrap: anywhere;
