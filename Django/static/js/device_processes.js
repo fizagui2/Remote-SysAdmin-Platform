@@ -17,14 +17,12 @@ if(processSortDropdown){
     processSortDropdown.addEventListener("change", () => {
         processSortOrder = processSortDropdown.value;
         renderProcesses(currentProcesses, processSortOrder)
-    })
+    });
 }
 
 // >> LOAD PROCESSES
 async function LoadDeviceProcesses(hostname){
-    
     const container = document.getElementById("processes-table-body");
-
     if(!container){ return; }
     const requestId = ++latestRequest;
     isLoadingDeviceProcesses = true;

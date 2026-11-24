@@ -14,7 +14,7 @@
 //         console.error("Could not retrieve agent status: ", error);
 //     });
 
-
+// FIXED SOME STATUS ISSUE (but probably this file wont be needed anymore)
 fetch("/api/agent/status/")
     .then(response => {
         if (!response.ok) {
@@ -24,27 +24,22 @@ fetch("/api/agent/status/")
     })
     .then(data => {
         console.log(data);
-
         const reportStatus = document.getElementById("report-status");
         const heartbeatStatus = document.getElementById("heartbeat-status");
         const performanceStatus = document.getElementById("performance-status");
         const processesStatus = document.getElementById("processes-status");
-
         if (reportStatus) {
             reportStatus.textContent =
                 data.report.has_data ? "Data available" : "No Data";
         }
-
         if (heartbeatStatus) {
             heartbeatStatus.textContent =
                 data.heartbeat.has_data ? "Online" : "No Data";
         }
-
         if (performanceStatus) {
             performanceStatus.textContent =
                 data.performance.has_data ? "Data available" : "No Data";
         }
-
         if (processesStatus) {
             processesStatus.textContent =
                 data.processes.has_data ? "Data available" : "No Data";

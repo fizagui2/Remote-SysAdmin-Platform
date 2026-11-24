@@ -111,16 +111,20 @@ async function LoadDevicesReports(){
             throw new Error(`Request failed bro: ${response.status}`);
         }
         const data = await response.json();
-        const computers = data.computers ?? [];
+        const computers = Array.isArray(data.computers) ? data.computers : [];
+        // const computers = data.computers ?? [];
         
         const cards = await Promise.all(computers.map(async computer => {
-                const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
-                if(!computer.last_seen || !computer.lastSeen){ return CreateReportsCards(hostname, null); }
+                //const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
+                const hostname = typeof computer === "string" ? computer : computer?.hostname ?? computer?.Hostname ?? "Unknown";
+
+                //if(!computer.last_seen || !computer.lastSeen){ return CreateReportsCards(hostname, null); }
                 try{
                     const statusRes = await fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`);
                     if(!statusRes.ok){ throw new Error(`Status HTTP ${statusRes.status}`); }
                     const statusData = await statusRes.json();
-                    const report = statusData?.report?.data ?? null;
+                    const report = statusData?.report?.has_data ? statusData.report.data : null;
+                    //const report = statusData?.report?.data ?? null;
                     //const report = data.report.data;
                     return CreateReportsCards(hostname, report);
                 }catch(error){
@@ -144,42 +148,3 @@ document.addEventListener("DOMContentLoaded", () => {
     LoadDevicesReports();
     setInterval(LoadDevicesReports, REPORT_REFRESH_INTERVAL);
 });
-
-// if(computer.last_seen || computer.lastSeen){
-//     fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
-//     .then(result => {
-//         if(!result.ok){
-//             throw new Error();
-//         }
-//         return result.json();
-//     })
-//     .then(data => {
-//         const report = data.report.data;
-//         console.log("Report (ALL COMPUTERS): ", report);
-        
-//         // document.getElementById("").textContent = `${hostname}`;
-
-//     })
-//     .finally(() => {
-//     });
-//     return createReportsCards(hostname, report);
-// }
-
-// .then(response => response.json())
-    // .then(data => {
-    //     console.log(data);
-    //     document.getElementById("hostname").textContent = data.report.data.Hostname;
-    //     document.getElementById("ip-address").textContent = data.report.data.IpAddress;
-    //     document.getElementById("mac-address").textContent = data.report.data.MacAddress;
-    //     document.getElementById("total-ram").textContent = data.report.data.TotalRamGb;
-    //     document.getElementById("logged-in-user").textContent = data.report.data.LoggedInUser;
-    //     document.getElementById("network-adapter").textContent = data.report.data.NetworkAdapter;
-    //     document.getElementById("cpu-cores").textContent = data.report.data.CpuCores;
-    //     document.getElementById("cpu-model").textContent = data.report.data.CpuModel;
-    //     document.getElementById("cpu-usage").textContent = `${data.performance.data.CpuUsagePercent}%`;
-    //     document.getElementById("memory-usage").textContent = `${data.performance.data.MemoryUsagePercent}%`;
-    //     document.getElementById("heartbeat-status").textContent = data.heartbeat.has_data ? "Online" : "Offline";
-    // })
-    // .catch(error => {
-    //     console.error("Could not retrieve agent status:", error);
-    // });
