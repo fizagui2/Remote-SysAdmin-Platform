@@ -77,11 +77,15 @@
     /* CONTACT US */
     --contacts-container-bg: #282f59;
     --contacts-btn-bg: #bcd7ff;
+    --contacts-btn-bg-var1: #bdfff3f3;
     --contacts-btn-txt: #20023e;
     --contacts-title-color: #94fdb6;
     --contacts-subtitle-color: #ccc3ff;
     --contacts-entries-bg: #c4e7fdde;
     --contacts-entries-border: #caeef7dc;
+    --contacts-links-color: #75ed7d;
+    --contacts-links-color-var1: #c1fdc5;
+    --contacts-links-shadow: #71afed;
     /* HEARTBEATS PAGE */
     --heartbeat-card-bg: #30c7de;
     --heartbeat-card-title: #0b0f23;

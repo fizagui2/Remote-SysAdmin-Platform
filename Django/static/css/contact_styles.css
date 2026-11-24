@@ -44,7 +44,8 @@
 }
 
 .contact-link{
-    color: var(--accent-color);
+    color: var(--contacts-links-color);
+    text-shadow: var(--contacts-links-shadow);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.25s ease, text-shadow 0.25s ease;
@@ -52,9 +53,9 @@
 }
 
 .contact-link:hover{
-    color: var(--hover-color);
-    text-shadow: 0 0 8px var(--accent-color);
-    text-decoration: underline;
+    color: var(--contacts-links-color-var1);
+    text-shadow: 0 0 12px var(--contacts-links-shadow);
+    
 }
 
 .contact-extra-box{
@@ -70,19 +71,21 @@
     gap: 10px;
 }
 
+/* CONTACT BUTTONS LINK */
 .contact-badge-link{
     padding: 6px 14px;
     border-radius: 20px;
     background: var(--contacts-btn-bg);
     color: var(--contacts-btn-txt);
     /* border: 1px solid var(--buttons-border); */
+    flex-direction: unset;
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.25s ease;
 }
 
 .contact-badge-link:hover{
-    background: var(--accent-color3);
+    background: var(--contacts-btn-bg-var1);
     box-shadow: var(--button-glow);
     transform: translateY(-2px);
 }
@@ -138,17 +141,16 @@
 }
 
 .contact-submit-btn{
-    margin-top: 8px;
-    padding: 12px 20px;
+    width: auto;
+    height: auto;
+    padding: 12px 10px;
     border-radius: 12px;
-    border: 1.5px solid var(--buttons-border);
-    background: var(--buttons-color);
-    color: var(--buttons-text);
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     box-shadow: var(--button-glow);
     transition: all 0.25s ease;
+    border: none !important;
 }
 
 .contact-sumbit-btn:hover{

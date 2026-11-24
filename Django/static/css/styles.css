@@ -77,6 +77,9 @@
     --contacts-subtitle-color: #98dce7;
     --contacts-entries-bg: #161a39;
     --contacts-entries-border: #d4c5fcee;
+    --contacts-links-color: #bdbbff;
+    --contacts-links-color-var1: #e2a3ff;
+    --contacts-links-shadow: #8983f8;
     /* REPORTS PAGE */
     --report-card-color: #161956;
     --report-card-text-color: #baffdf;
