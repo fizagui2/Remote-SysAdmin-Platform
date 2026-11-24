@@ -1,4 +1,9 @@
 @import 'styles_variables.css';
+
+.contacts-container-title{
+    color: var(--contacts-title-color) !important;
+}
+
 .contact-container{
     background: var(--contacts-container-bg) !important;
 }
@@ -34,7 +39,7 @@
 
 .contact-label{
     font-weight: bold;
-    color: var(--extra-subtitle-var1);
+    color: var(--contacts-subtitle-color);
     font-size: 0.95rem;
 }
 
@@ -103,15 +108,15 @@
 .form-group textarea{
     resize: none;
 }
-
+/* >> ENTRIES STYLES */
 .form-group input,
 .form-group select, 
 .form-group textarea{
     width: 100%;
     padding: 12px 14px;
     border-radius: 12px;
-    border: 1.5px solid var(--buttons-border-variant1);
-    background-color: var(--base-variant);
+    border: 1.5px solid var(--contacts-entries-border);
+    background-color: var(--contacts-entries-bg);
     color: var(--text-color);
     font-family: inherit;
     font-size: 1rem;
@@ -121,7 +126,7 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder{
-    color: var(--secondary-text);
+    color: var(--text-color) !important;
     opacity: 0.75;
 }
 

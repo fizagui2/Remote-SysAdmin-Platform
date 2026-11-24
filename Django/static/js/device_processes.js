@@ -1,13 +1,13 @@
 import { ComputerNavigation } from './computer_navigation.js';
 import { renderProcesses } from './render_processes.js';
-//import { escapeHTML } from './escape_html.js';
-// >> DEVICE PROCESSES (TABLE)
+
 let currentProcesses = [];
 let processSortOrder = "";
 let isLoadingDeviceProcesses = false;
 
-const PROCESSES_REFRESH_INTERVAL = 10000;
-const OFFLINE_THRESOLD_MS = 2 * 60 * 1000;
+// PRobabLy dont fokin need them
+// const PROCESSES_REFRESH_INTERVAL = 10000;
+// const OFFLINE_THRESOLD_MS = 2 * 60 * 1000;
 
 let latestRequest = 0;
 
@@ -22,14 +22,13 @@ if(processSortDropdown){
 
 // >> LOAD PROCESSES
 async function LoadDeviceProcesses(hostname){
-    const statusData = await response.json();
-    console.log("Requested hostname: ", hostname, "API response: ", statusData);
+    
     const container = document.getElementById("processes-table-body");
 
     if(!container){ return; }
     const requestId = ++latestRequest;
     isLoadingDeviceProcesses = true;
-    container.innerHTML = `<tr><td colspan="4">Loading processes...</td></tr>`;
+    //container.innerHTML = `<tr><td colspan="4">Loading processes...</td></tr>`;
 
     try{
         const response = await fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`);
@@ -38,11 +37,12 @@ async function LoadDeviceProcesses(hostname){
         }
         const statusData = await response.json();
         // getting the API response values
-        const processes = 
+        const processes =
+            statusData?.processes?.data?.Processes ??
             statusData?.Processes ??
             statusData?.report?.Processes ??
-            statusData?.processes ??
-            statusData?.report?.processes ??
+            statusData?.report?.data?.Processes ??
+            statusData?.processes?.Processes ??
             statusData?.data?.Processes ??
             statusData?.data?.processes ??
             [];
@@ -50,6 +50,8 @@ async function LoadDeviceProcesses(hostname){
         if(requestId !== latestRequest){ return; }
         // >> RETRIEVE EACH DEVICE
         currentProcesses = Array.isArray(processes) ? processes : [];
+        console.log("Processes retrieved: ", currentProcesses);
+        console.log("Number of processes: ", currentProcesses.length);
         renderProcesses(currentProcesses, processSortOrder);
     }catch(error){
         if(requestId !== latestRequest){ return; }

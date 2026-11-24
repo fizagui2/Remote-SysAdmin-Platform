@@ -69,6 +69,14 @@
     --plan-popular-label: #ae3b3b;
     /* ABOUT US */
     --about-cont-title: #7dff69dc;
+    /* CONTACT US */
+    --contacts-container-bg: #424c88;
+    --contacts-btn-bg: #bcd7ff;
+    --contacts-btn-txt: #20023e;
+    --contacts-title-color: #f2fd94;
+    --contacts-subtitle-color: #98dce7;
+    --contacts-entries-bg: #161a39;
+    --contacts-entries-border: #d4c5fcee;
     /* REPORTS PAGE */
     --report-card-color: #161956;
     --report-card-text-color: #baffdf;
@@ -84,6 +92,7 @@
     /* TEXT */
     --text-color:#ffffff;
     --text-color-var1: #a5e1facb;
+    --sample-text: #6b8058e8;
     --secondary-text: #a563fbdb;
     --extra-info: #c2e7ffe6;
     /* BUTTONS */

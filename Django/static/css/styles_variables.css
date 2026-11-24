@@ -16,6 +16,7 @@
     /* TEXT */
     --text-color: #1f2231;
     --text-color-var1: #a5e1facb;
+    --sample-text: #575e81e8;
     --secondary-text:#4500a0db;
     --extra-info: #d6c5ff;
     /* DEVICE DETAILS */
@@ -73,10 +74,14 @@
     --plan-popular-label: #ff5b5b;
     /* ABOUT US */
     --about-cont-title: #2d0037dc;
-    /* CONTACTS */
-    --contacts-container-bg: #424c88;
+    /* CONTACT US */
+    --contacts-container-bg: #282f59;
     --contacts-btn-bg: #bcd7ff;
     --contacts-btn-txt: #20023e;
+    --contacts-title-color: #94fdb6;
+    --contacts-subtitle-color: #ccc3ff;
+    --contacts-entries-bg: #c4e7fdde;
+    --contacts-entries-border: #caeef7dc;
     /* HEARTBEATS PAGE */
     --heartbeat-card-bg: #30c7de;
     --heartbeat-card-title: #0b0f23;

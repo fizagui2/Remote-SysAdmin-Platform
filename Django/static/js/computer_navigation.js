@@ -18,7 +18,8 @@ export const ComputerNavigation = (() => {
                 throw new Error(`Computers HTTP: ${response.status}`);
             }
             const data = await response.json();
-            computers = data.computers ?? [];
+            //computers = data.computers ?? [];
+            computers = Array.isArray(data.computers) ? data.computers : [];
             if(computers.length === 0){
                 hostnameElement.textContent = "No computers found";
                 counterElement.textContent = "";
