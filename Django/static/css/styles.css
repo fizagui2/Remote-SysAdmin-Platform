@@ -1,6 +1,7 @@
 @import 'styles_variables.css';
 
 .darkmode{
+    /* GENERAL */
     --base-color: #120227;
     --base-variant: #0d0837;
     --base-variant1: #050741ad;
@@ -15,6 +16,7 @@
     --black-col: #000000;
     --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
     --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
+    --container-shadow: rgb(105, 93, 218);
     /* DEVICE DETAILS */
     --dd-container-bg: #7e78f082;
     /* BANNER */
@@ -81,15 +83,14 @@
     --contacts-links-color-var1: #e2a3ff;
     --contacts-links-shadow: #8983f8;
     /* REPORTS PAGE */
-    --report-card-color: #161956;
-    --report-card-text-color: #baffdf;
+    --report-card-text-color: #d1e1fe;
     --report-card-title-color: #ffffff;
-    --report-card-title-color-var1: #ffffff;
+    --report-card-title-color-var1: #e6b3ffa4;
     --report-card-title-color-var2: #ffffff;
     --report-card-border: #a9d0ff;
     --report-card-shadow: #dad4fd;
     /* HEARTBEATS PAGE */
-    --heartbeat-card-bg: #032940;
+    --heartbeat-card-bg: #3c4a76;
     --heartbeat-card-title: #faff97;
     --heartbeat-card-glow: #716cf8;
     /* TEXT */
@@ -133,6 +134,7 @@
     --highlight-text-color1: #8eff47db;
     --highlight-text-color2: #477bffdb;
     --highlight-text-color3: #f1f666db;
+    --highlight-info: rgba(165, 243, 255, 0.17);
     /* TITLES */
     --title:#95c6ff;
     --title-var1: #80f4ffee;

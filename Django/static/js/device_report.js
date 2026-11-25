@@ -44,46 +44,38 @@ function CreateReportsCards(hostname, report){
         </div>
         <!-- >> TITLE -->
         <div class="report-header-card">
-            <h4 class="card-title">${escapeHTML(hostname)}</h4>
-            <p class="card-text"><strong>Status</strong> ${report ? 'Active' : 'No report data'}</p>
+           
+        <h4 class="card-title">${escapeHTML(hostname)}</h4>
+            <p class="report-status"><strong >Status</strong> ${report ? 'Active' : 'No report data'}</p>
         </div>
         <!-- >> INFO -->
         <div class="report-ind-card-info">
             <div class="report-info-card">
-                <span class="bolded">Logged In User: </span>
-                <p>${escapeHTML(logInUser)}</p>
+                <p><strong>Logged In User:</strong> ${escapeHTML(logInUser)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">IP Address: </span>
-                <p>${escapeHTML(ipAddress)}</p>
+                <p><strong>IP Address:</strong> ${escapeHTML(ipAddress)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">MAC Address: </span>
-                <p>${escapeHTML(macAddress)}</p>
+                <p><strong>MAC Address:</strong> ${escapeHTML(macAddress)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Network Adapter: </span>
-                <p>${escapeHTML(netAdapter)}</p>
+                <p><strong>Network Adapter:</strong> ${escapeHTML(netAdapter)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Total RAM: </span>
-                <p>${escapeHTML(totalRamGB)}</p>
+                <p><strong>Total RAM:</strong> ${escapeHTML(totalRamGB)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">CPU Model: </span>
-                <p>${escapeHTML(cpuModel)}</p>
+                <p><strong>CPU Model:</strong ${escapeHTML(cpuModel)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">CPU Cores: </span>
-                <p>${escapeHTML(cpuCores)}</p>
+                <p><strong>CPU Cores:</strong> ${escapeHTML(cpuCores)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Windows: </span>
-                <p>${escapeHTML(winVersion)}</p>
+                <p><strong>Windows version:</strong> ${escapeHTML(winVersion)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Uptime hours: </span>
-                <p>${escapeHTML(uptimeHours)}</p>
+                <p><strong>Uptime hours:</strong> ${escapeHTML(uptimeHours)}</p>
             </div>
             <!-- >> BUTTON TO SEE DEVICE DEPEER DETAILS -->
             <div class="see-device-button">
