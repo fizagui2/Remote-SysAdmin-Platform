@@ -23,6 +23,7 @@
     --extra-info: #d6c5ff;
     /* DEVICE DETAILS */
     --dd-container-bg: #7e78f082;
+    --dd-performance-text: #f6f2feed;
     /* BANNER */
     --slide-col1: #9a86b3;
     --slide-title: #28dff4e0;
@@ -99,6 +100,14 @@
     --heartbeat-card-bg: #8cd5e1;
     --heartbeat-card-title: #0b0f23;
     --heartbeat-card-glow: #141330;
+    /* PROCESSES PAGE */
+    --process-btn-bg: #c6f3ff;
+    --process-btn-txt: #2c1e50;
+    --process-btn-bg2: #ffffff;
+    /* SERVICES PAGE */
+    --services-start-btn-bg: #b1ffcfef;
+    --services-stop-btn-bg: #ff4949;
+    --services-restart-btn-bg: #ffd035;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);

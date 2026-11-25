@@ -201,62 +201,23 @@
     padding: 8px 4px;
 }
 
-.button-services{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 100px;
-    min-height: 38px;
-    border: 1px solid var(--button-services-border);
-    border-radius: 10px;
-    background: var(--button-services-background);
-    color: var(--button-services-text);
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.2;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: 
-        transform 0.25 ease,
-        background-color 0.25s ease,
-        border-color 0.25 ease,
-        box-shadow 0.25s ease; 
+/* SERVICES BUTTONS */
+.start-service{
+    background: var(--services-start-btn-bg) !important;
+    border: none !important;
+    color: var(--black-col) !important;
 }
-.button-services:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px var(--button-glow);
+.stop-service{
+    background: var(--services-stop-btn-bg) !important;
+    border: none !important;
+    color: var(--black-col) !important;
 }
-.button-services:focus-visible{
-    outline: 2px solid var(--accent-color);
+.restart-service{
+    background: var(--services-restart-btn-bg) !important;
+    border: none !important;
+    color: var(--black-col) !important;
 }
 
-.button-services.start-service{
-    background: #166534;
-    border-color: #22c55e;
-    color: #fff;
-}
-.button-services.start-service{
-    background: #15803d;
-}
-
-.button-services.stop-service{
-    background: #7f1d1d;
-    border-color: #ef4444;
-    color: #fff;
-}
-.button-services.stop-service:hover{
-    background: #991b1b;
-}
-
-.button-services.restart-service{
-    background: #854d0e;
-    border-color: #eab308;
-    color: #fff;
-}
-.button-services.restart-service:hover{
-    background: #a16207;
-}
 
 .button-services-icon{
     display: block;
@@ -348,11 +309,11 @@
 /* >> PROCESSES BUTTONS */
 .process-button{
     border: none;
-    color: var(--process-btn-txt);
-    background: var(--process-btn-bg);
+    color: var(--process-btn-txt) !important;
+    background: var(--process-btn-bg) !important;
 }
 .process-button:hover{
-    box-shadow: var(--process-btn-bg2);
+    box-shadow: var(--process-btn-bg2) !important;
 }
 
 /* >> FOR SMALL SCREENS */

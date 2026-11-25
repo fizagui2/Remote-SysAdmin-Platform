@@ -9,8 +9,12 @@
     color: var(--extra-info) !important;
 }
 
+.highlight-container{
+    background: var(--highlight-info) !important;
+    padding: 10px 10px;
+    border-radius: 8px;
+}
 .features-highlight{
-    background-color: var(--highlight-text-color2);
     padding: 4px 4px;
     border-radius: 8px;
 }
@@ -82,7 +86,7 @@
 /* >>> PERFORMANCE DESCRIPTION */
 .performance-description{
     margin-top: 15px;
-    color: var(--secondary-text);
+    color: var(--dd-performance-text);
     font-size: 0.9rem;
     text-align: center;
 }
@@ -141,7 +145,6 @@
 }
 .section-heading h3{
     margin: 0;
-    color: var(--subtitle2);
     font-weight: 700;
 }
 .section-subtitle{
@@ -210,7 +213,7 @@
     gap: 5px;
     min-width: 0;
     padding: 11px 12px;
-    background: var(--dd-container-bg);
+    background: var(--highlight-info);
     border-radius: 10px;
 }
 
