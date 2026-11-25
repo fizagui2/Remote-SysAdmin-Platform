@@ -214,7 +214,7 @@
 
 .plans-table tbody tr:hover th,
 .plans-table tbody tr:hover td{
-    background: var(--base-variant2);
+    background: var(--plan-row-hover);
 }
 
 .plans-table .table-check{

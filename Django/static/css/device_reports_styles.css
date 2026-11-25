@@ -18,29 +18,21 @@
     width: 100%;
     min-height: 280px;
     padding: 1.25rem;
-    /*8px 8px*/
     border-radius: 16px;
     border: 3px solid var(--report-card-border);
-    background: var(--report-card-color);
-    box-shadow: 0 0 12px var(--report-card-shadow);
+    background: var(--comp-gradient);
+    box-shadow: 0 0 12px var(--container-shadow);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .individual-report-card:hover{
     transform: translateY(-6px);
-    box-shadow: 0 0 24px var(--report-card-shadow);
+    box-shadow: 0 0 24px var(--container-shadow);
 }
 
 /* >> REPORT IND CARDS HEADER */
 .report-header-card{
     text-align: center;
-    margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
-    /* font-size: 700;
-    padding: 8px 8px;
-    margin: 5px auto;
-    margin-bottom: 10px;
-    align-items: center;
-    text-align: center; */
 }
 .report-header-card h4{
     font-size: 1.25rem;
@@ -48,8 +40,16 @@
     margin: 0;
     letter-spacing: 0.5px;
     animation: ChangeDeviceTitleColor 3.2s infinite steps(1);
-    color: var(--report-ind-card-title);
+    color: var(--report-card-title-color-var1);
     box-shadow: var(--report-ind-card-title);
+}
+
+.report-status{
+    color: var(--white-col);
+}
+
+.report-status strong{
+    color: var(--report-card-title-color-var1) !important;
 }
 
 /* REPORTS IND CARDS INFORMATION CARD */
@@ -60,13 +60,12 @@
     padding: 0.5rem 0;
     font-size: clamp(0.875, 4cqw, 1.1rem);
     word-break: break-word;
-    /* padding: 5px 5px;
-    margin: 15px auto;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(11px, 8cqi, 30px);
-    overflow-wrap: break-word;
-    white-space: nowrap; */
+}
+
+.report-info-card{
+    background-color: var(--highlight-info);
+    border-radius: 8px;
+    padding: 4px 4px;
 }
 
 .report-info-card p{
@@ -77,7 +76,7 @@
     align-items: center;
 }
 
-.report-info-card span{
+.report-info-card strong{
     color: var(--report-card-title-color);
     font-weight: 600;
 }

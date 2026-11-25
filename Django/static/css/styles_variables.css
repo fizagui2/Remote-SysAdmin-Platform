@@ -1,4 +1,5 @@
 :root{
+    /* GENERAL */
     --base-color: #ffffff;
     --base-variant: #080e2c;
     --base-variant1: #0b012af2;
@@ -7,16 +8,22 @@
     --accent-color:#0071ff;
     --accent-color2: #9bfff2d6;
     --accent-color3: #b3fff1;
+    --accent-color4: #120e34;
     --primary-color:#290049d0;
     --white-col: #ffffff;
     --black-col: #000000;
     --green-color: radial-gradient(circle at 50% 50%, #8fe89ef0 0%, #215c2fcb 50%, #153b19 80%, #081c17 100%);
     --red-color: radial-gradient(circle at 50% 50%, #e88f8ff0 0%, #5c2121cb 50%, #3b1515 80%, #1c0808 100%);
+    --container-shadow: rgba(8, 6, 27, 1);
     /* TEXT */
     --text-color: #1f2231;
     --text-color-var1: #a5e1facb;
-    --secondary-text:#5f6270;
-    --extra-info: #cfc0f3e6;
+    --sample-text: #575e81e8;
+    --secondary-text:#4500a0db;
+    --extra-info: #d6c5ff;
+    /* DEVICE DETAILS */
+    --dd-container-bg: #7e78f082;
+    --dd-performance-text: #f6f2feed;
     /* BANNER */
     --slide-col1: #9a86b3;
     --slide-title: #28dff4e0;
@@ -63,17 +70,44 @@
     --plan-button: #afbcff;
     --plan-button-text: #1c0738;
     --plan-transition: #ffffff;
+    --plan-row-hover: #94fffb42;
     --plan-table-col-title: #8e6afc;
     --plan-table-row-title: #d3ddfe;
     --plan-table-row-border: #9f4cdc;
     --plan-popular-label: #ff5b5b;
     /* ABOUT US */
     --about-cont-title: #2d0037dc;
-    /* CONTACTS */
-    --contacts-container-bg: #424c88;
+    /* CONTACT US */
+    --contacts-container-bg: #282f59;
     --contacts-btn-bg: #bcd7ff;
+    --contacts-btn-bg-var1: #bdfff3f3;
     --contacts-btn-txt: #20023e;
-
+    --contacts-title-color: #94fdb6;
+    --contacts-subtitle-color: #ccc3ff;
+    --contacts-entries-bg: #c4e7fdde;
+    --contacts-entries-border: #caeef7dc;
+    --contacts-links-color: #75ed7d;
+    --contacts-links-color-var1: #c1fdc5;
+    --contacts-links-shadow: #71afed;
+    /* REPORTS PAGE */
+    --report-card-text-color: #baffdf;
+    --report-card-title-color: #ffffff;
+    --report-card-title-color-var1: #c7ffe9;
+    --report-card-title-color-var2: #ffffff;
+    --report-card-border: #a9d0ff;
+    --report-card-shadow: #dad4fd;
+    /* HEARTBEATS PAGE */
+    --heartbeat-card-bg: #8cd5e1;
+    --heartbeat-card-title: #0b0f23;
+    --heartbeat-card-glow: #141330;
+    /* PROCESSES PAGE */
+    --process-btn-bg: #c6f3ff;
+    --process-btn-txt: #2c1e50;
+    --process-btn-bg2: #ffffff;
+    /* SERVICES PAGE */
+    --services-start-btn-bg: #b1ffcfef;
+    --services-stop-btn-bg: #ff4949;
+    --services-restart-btn-bg: #ffd035;
     /* BUTTONS */
     --buttons-color:#9debff;
     --buttons-color-var1: radial-gradient(circle at 50% 50%, #5fafa3d7 0%, #15174b 50%, #111b3d 80%, #060617 100%);
@@ -111,11 +145,13 @@
     --highlight-text-color1: #8eff47db;
     --highlight-text-color2: #2f4b91db;
     --highlight-text-color3: #f1f666db;
+    --highlight-info: rgba(32, 27, 65, 0.44);
     /* TITLES */
     --title:#021e38;
     --title-var1: #b6acfff9;
     --extra-title:#34277dc9;
     --subtitle: #26517a;
+    --subtitle2: #13395d;
     --extra-subtitle:#226eb5;
     --extra-subtitle-var1:rgb(49, 220, 140);
     --container-color: radial-gradient(circle at 25% 70%, #8ebfef 0%, #15214b 40%, #111d3d 75%, #070617 100%);
@@ -161,6 +197,8 @@
     --button-services-border: #9bffa5df;
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
+    /* TABLES */
+    --table-header: #131c52;
     /* FOOTER */
     --footer-text: #1d1d39;
     --footer-text-transition: #200045;

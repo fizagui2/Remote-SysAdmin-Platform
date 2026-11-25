@@ -34,13 +34,3 @@ async function loadComputers(){
 }
 
 loadComputers();
-
-// function showMessages(){
-//     const object = document.getElementById("show-no-devices");
-    
-//     const deviceShowcaseEmpty = (element) => {
-//         return element.children.length === 0 && element.textContent.trim() === '';
-//     };
-    
-//     if (device){}
-// }

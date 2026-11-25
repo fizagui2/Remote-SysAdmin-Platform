@@ -1,25 +1,58 @@
 {% extends 'base_dshb.html' %}
-{% block title %} Processes {% endblock %}
+{% load static %}
+
+{% block extra_js %}
+<script type="module" src="{% static 'js/device_processes.js' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/device_processes_styles.css'%}">
+<link rel="stylesheet" href="{% static 'css/table_styles.css'%}">
+{% endblock %}
+
+{% block title %}📊Processes {% endblock %}
 <!-- >> PROCESSES -->
 {% block content %}
 
-<h1>Device Processes</h1><hr>
-<h3> Latest Processes</h3>
-<div class="table-container">
+<h1>📊 Device Processes 📊</h1><hr>
+<div class="computer_navigation">
+    <button id="gofirst-computer" disabled>First</button>
+    <button id="previous-computer" disabled>Previous</button>
+    <div class="selected-computer">
+        <h3 id="computer-hostname">Loading...</h3>
+        <span id="computer-counter"></span>
+    </div>
+
+    <button id="next-computer" disabled>Next</button>
+    <button id="last-computer" disabled>Last</button>
+</div>
+
+<div id="processes-card-container">
+    <label for="process-sort">Sort by:</label>
+    <select id="process-sort">
+        <option value="">Default</option>
+        <option value="name-asc">Name (A-Z)</option>
+        <option value="name-desc">Name (Z-A)</option>
+        <option value="memory-asc">Memory (Low - High)</option>
+        <option value="memory-desc">Memory (High - Low)</option>
+        <option value="pid-asc">ID Ascending</option>
+        <option value="pid-desc">ID Descending</option>
+    </select>
+    
     <table class="webhost-table">
-        <!-- columns -->
         <thead>
             <tr>
-                <th>Process ID</th>
-                <th>Name</th>
-                <th>Memory (MB)</th>
-                <!-- <th>Time Stamp</th> (should be a 'total' column) -->
+                <th>PID</th>
+                <th>Process Name</th>
+                <th>Memory Usage</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <!-- rows -->
         <tbody id="processes-table-body">
+            <tr>
+                <td colspan="4">Loading processes...</td>
+            </tr>
         </tbody>
     </table>
-    <div></div>
 </div>
 {% endblock %}

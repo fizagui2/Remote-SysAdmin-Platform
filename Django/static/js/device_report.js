@@ -44,46 +44,38 @@ function CreateReportsCards(hostname, report){
         </div>
         <!-- >> TITLE -->
         <div class="report-header-card">
-            <h4 class="card-title">${escapeHTML(hostname)}</h4>
-            <p class="card-text"><strong>Status</strong> ${report ? 'Active' : 'No report data'}</p>
+           
+        <h4 class="card-title">${escapeHTML(hostname)}</h4>
+            <p class="report-status"><strong >Status</strong> ${report ? 'Active' : 'No report data'}</p>
         </div>
         <!-- >> INFO -->
         <div class="report-ind-card-info">
             <div class="report-info-card">
-                <span class="bolded">Logged In User: </span>
-                <p>${escapeHTML(logInUser)}</p>
+                <p><strong>Logged In User:</strong> ${escapeHTML(logInUser)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">IP Address: </span>
-                <p>${escapeHTML(ipAddress)}</p>
+                <p><strong>IP Address:</strong> ${escapeHTML(ipAddress)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">MAC Address: </span>
-                <p>${escapeHTML(macAddress)}</p>
+                <p><strong>MAC Address:</strong> ${escapeHTML(macAddress)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Network Adapter: </span>
-                <p>${escapeHTML(netAdapter)}</p>
+                <p><strong>Network Adapter:</strong> ${escapeHTML(netAdapter)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Total RAM: </span>
-                <p>${escapeHTML(totalRamGB)}</p>
+                <p><strong>Total RAM:</strong> ${escapeHTML(totalRamGB)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">CPU Model: </span>
-                <p>${escapeHTML(cpuModel)}</p>
+                <p><strong>CPU Model:</strong ${escapeHTML(cpuModel)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">CPU Cores: </span>
-                <p>${escapeHTML(cpuCores)}</p>
+                <p><strong>CPU Cores:</strong> ${escapeHTML(cpuCores)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Windows: </span>
-                <p>${escapeHTML(winVersion)}</p>
+                <p><strong>Windows version:</strong> ${escapeHTML(winVersion)}</p>
             </div>
             <div class="report-info-card">
-                <span class="bolded">Uptime hours: </span>
-                <p>${escapeHTML(uptimeHours)}</p>
+                <p><strong>Uptime hours:</strong> ${escapeHTML(uptimeHours)}</p>
             </div>
             <!-- >> BUTTON TO SEE DEVICE DEPEER DETAILS -->
             <div class="see-device-button">
@@ -111,16 +103,20 @@ async function LoadDevicesReports(){
             throw new Error(`Request failed bro: ${response.status}`);
         }
         const data = await response.json();
-        const computers = data.computers ?? [];
+        const computers = Array.isArray(data.computers) ? data.computers : [];
+        // const computers = data.computers ?? [];
         
         const cards = await Promise.all(computers.map(async computer => {
-                const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
-                if(!computer.last_seen || !computer.lastSeen){ return CreateReportsCards(hostname, null); }
+                //const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
+                const hostname = typeof computer === "string" ? computer : computer?.hostname ?? computer?.Hostname ?? "Unknown";
+
+                //if(!computer.last_seen || !computer.lastSeen){ return CreateReportsCards(hostname, null); }
                 try{
                     const statusRes = await fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`);
                     if(!statusRes.ok){ throw new Error(`Status HTTP ${statusRes.status}`); }
                     const statusData = await statusRes.json();
-                    const report = statusData?.report?.data ?? null;
+                    const report = statusData?.report?.has_data ? statusData.report.data : null;
+                    //const report = statusData?.report?.data ?? null;
                     //const report = data.report.data;
                     return CreateReportsCards(hostname, report);
                 }catch(error){
@@ -144,42 +140,3 @@ document.addEventListener("DOMContentLoaded", () => {
     LoadDevicesReports();
     setInterval(LoadDevicesReports, REPORT_REFRESH_INTERVAL);
 });
-
-// if(computer.last_seen || computer.lastSeen){
-//     fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
-//     .then(result => {
-//         if(!result.ok){
-//             throw new Error();
-//         }
-//         return result.json();
-//     })
-//     .then(data => {
-//         const report = data.report.data;
-//         console.log("Report (ALL COMPUTERS): ", report);
-        
-//         // document.getElementById("").textContent = `${hostname}`;
-
-//     })
-//     .finally(() => {
-//     });
-//     return createReportsCards(hostname, report);
-// }
-
-// .then(response => response.json())
-    // .then(data => {
-    //     console.log(data);
-    //     document.getElementById("hostname").textContent = data.report.data.Hostname;
-    //     document.getElementById("ip-address").textContent = data.report.data.IpAddress;
-    //     document.getElementById("mac-address").textContent = data.report.data.MacAddress;
-    //     document.getElementById("total-ram").textContent = data.report.data.TotalRamGb;
-    //     document.getElementById("logged-in-user").textContent = data.report.data.LoggedInUser;
-    //     document.getElementById("network-adapter").textContent = data.report.data.NetworkAdapter;
-    //     document.getElementById("cpu-cores").textContent = data.report.data.CpuCores;
-    //     document.getElementById("cpu-model").textContent = data.report.data.CpuModel;
-    //     document.getElementById("cpu-usage").textContent = `${data.performance.data.CpuUsagePercent}%`;
-    //     document.getElementById("memory-usage").textContent = `${data.performance.data.MemoryUsagePercent}%`;
-    //     document.getElementById("heartbeat-status").textContent = data.heartbeat.has_data ? "Online" : "Offline";
-    // })
-    // .catch(error => {
-    //     console.error("Could not retrieve agent status:", error);
-    // });

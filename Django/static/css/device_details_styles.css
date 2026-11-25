@@ -1,6 +1,7 @@
 @import 'styles_variables.css';
 
 .device-title{
+    color: var(--title);
     text-shadow: var(--text-shadow1);
 }
 
@@ -8,8 +9,12 @@
     color: var(--extra-info) !important;
 }
 
+.highlight-container{
+    background: var(--highlight-info) !important;
+    padding: 10px 10px;
+    border-radius: 8px;
+}
 .features-highlight{
-    background-color: var(--highlight-text-color2);
     padding: 4px 4px;
     border-radius: 8px;
 }
@@ -81,7 +86,7 @@
 /* >>> PERFORMANCE DESCRIPTION */
 .performance-description{
     margin-top: 15px;
-    color: var(--secondary-text);
+    color: var(--dd-performance-text);
     font-size: 0.9rem;
     text-align: center;
 }
@@ -140,7 +145,6 @@
 }
 .section-heading h3{
     margin: 0;
-    color: var(--container-title);
     font-weight: 700;
 }
 .section-subtitle{
@@ -169,7 +173,7 @@
     color: var(--container-text);
     border: 1px solid var(--accent-color);
     border-radius: 16px;
-    box-shadow: 0 5px 16px var(--base-variant2);
+    box-shadow: 0 5px 16px var(--accent-color4);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -209,8 +213,12 @@
     gap: 5px;
     min-width: 0;
     padding: 11px 12px;
-    background: var(--base-variant3);
+    background: var(--highlight-info);
     border-radius: 10px;
+}
+
+.info-card-bg{
+    background: var(--plan-container);
 }
 
 .info-card > span{

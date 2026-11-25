@@ -7,12 +7,14 @@ let loadingHeartbeats = false;
 
 
 /* HELPER FUNCTIONS FOR TIME (FOR TIMESTAMP) */
-function formatTimestamp(timestamp){
-    if(!timestamp){ return null; }
-    const date = new Date(timestamp);
-    if (Number.isNaN(date.getTime())){ return null; }
+function formatTimestamp(timestamp) {
+    if (!timestamp) { return null; }
+    const value = typeof timestamp === "number" && timestamp < 1e12 ? timestamp * 1000 : timestamp;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) { return null; }
     return date;
 }
+
 function getRelativeTime(date){
     const elapsedSeconds = Math.max(0, Math.floor(Date.now() - date.getTime()) / 1000);
     if (elapsedSeconds < 60){ return "Just now"; }
@@ -97,7 +99,7 @@ async function loadDevicesHeartbeat(){
             const hostname = computer.hostname ?? computer.Hostname ?? "Unknown";
                 try{
                     if(computer.last_seen || computer.lastSeen){
-                        return createHeartbeatCard(hostname, computer.lastSeen ?? computer.lastSeen);
+                        return createHeartbeatCard(hostname, computer.lastSeen ?? computer.last_seen);
                     }
                     const statusResponse = await fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`);
                     

@@ -15,6 +15,7 @@
 {% block title %} {{ computer.hostname }} - Details {% endblock %}
 
 {% block content %}
+<h2 class="device-title" id="hostname"></h2>
 <h2 class="extra-title device-title" id="hostname"></h2>
 
 <!-- >>> REPORT -->
@@ -85,9 +86,12 @@
 <hr>
 <h3> Latest Heartbeat</h3>
 <div class="heartbeat-grid">
-    <div class="info-card">
-        <span class="features-highlight extra-info">Timestamp:</span>
-        <strong id="heartbeat-timestamp">Loading...</strong>
+    <div class="info-card-container">
+        <div class="highlight-container">
+            <span class="features-highlight extra-info">Timestamp:</span>
+            <strong id="heartbeat-timestamp">Loading...</strong>
+        </div>
+        
     </div>
 </div>
 
@@ -238,6 +242,7 @@
     <button type="button" class="fm-context-menu-item" data-action="new-folder">New Folder</button>
 </div>
 
+<!-- FRANK'S NEW TEMPLATE -->
 <script>
 (function() {
     const hostname = window.COMPUTER_HOSTNAME;

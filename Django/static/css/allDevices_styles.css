@@ -107,7 +107,7 @@
     margin: 0;
     padding: 7px 10px;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--highlight-info);
     font-size: 0.9rem;
 }
 .device-info strong{

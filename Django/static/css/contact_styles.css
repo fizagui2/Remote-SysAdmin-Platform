@@ -1,4 +1,9 @@
 @import 'styles_variables.css';
+
+.contacts-container-title{
+    color: var(--contacts-title-color) !important;
+}
+
 .contact-container{
     background: var(--contacts-container-bg) !important;
 }
@@ -34,12 +39,13 @@
 
 .contact-label{
     font-weight: bold;
-    color: var(--extra-subtitle-var1);
+    color: var(--contacts-subtitle-color);
     font-size: 0.95rem;
 }
 
 .contact-link{
-    color: var(--accent-color);
+    color: var(--contacts-links-color);
+    text-shadow: var(--contacts-links-shadow);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.25s ease, text-shadow 0.25s ease;
@@ -47,9 +53,9 @@
 }
 
 .contact-link:hover{
-    color: var(--hover-color);
-    text-shadow: 0 0 8px var(--accent-color);
-    text-decoration: underline;
+    color: var(--contacts-links-color-var1);
+    text-shadow: 0 0 12px var(--contacts-links-shadow);
+    
 }
 
 .contact-extra-box{
@@ -65,19 +71,21 @@
     gap: 10px;
 }
 
+/* CONTACT BUTTONS LINK */
 .contact-badge-link{
     padding: 6px 14px;
     border-radius: 20px;
     background: var(--contacts-btn-bg);
     color: var(--contacts-btn-txt);
     /* border: 1px solid var(--buttons-border); */
+    flex-direction: unset;
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.25s ease;
 }
 
 .contact-badge-link:hover{
-    background: var(--accent-color3);
+    background: var(--contacts-btn-bg-var1);
     box-shadow: var(--button-glow);
     transform: translateY(-2px);
 }
@@ -103,15 +111,15 @@
 .form-group textarea{
     resize: none;
 }
-
+/* >> ENTRIES STYLES */
 .form-group input,
 .form-group select, 
 .form-group textarea{
     width: 100%;
     padding: 12px 14px;
     border-radius: 12px;
-    border: 1.5px solid var(--buttons-border-variant1);
-    background-color: var(--base-variant);
+    border: 1.5px solid var(--contacts-entries-border);
+    background-color: var(--contacts-entries-bg);
     color: var(--text-color);
     font-family: inherit;
     font-size: 1rem;
@@ -121,7 +129,7 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder{
-    color: var(--secondary-text);
+    color: var(--text-color) !important;
     opacity: 0.75;
 }
 
@@ -133,17 +141,16 @@
 }
 
 .contact-submit-btn{
-    margin-top: 8px;
-    padding: 12px 20px;
+    width: auto;
+    height: auto;
+    padding: 12px 10px;
     border-radius: 12px;
-    border: 1.5px solid var(--buttons-border);
-    background: var(--buttons-color);
-    color: var(--buttons-text);
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     box-shadow: var(--button-glow);
     transition: all 0.25s ease;
+    border: none !important;
 }
 
 .contact-sumbit-btn:hover{

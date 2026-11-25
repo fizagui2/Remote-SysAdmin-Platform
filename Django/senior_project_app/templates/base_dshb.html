@@ -12,7 +12,7 @@
     <script> const IMAGE_NOT_FOUND = "{% static 'images/WebHost-imageNotFound.png' %}"; </script>
     <script> const COMPUTER_IMAGE = "{% static 'images/computer_image.png' %}"; </script>
     <script src="{% static 'js/darkmode.js' %}" defer></script>
-    <script src="{% static 'js/device_status.js' %}" defer></script>
+    <!-- <script src="{% static 'js/device_status.js' %}" defer></script> -->
     <script src="{% static 'js/image_not_found.js' %}" defer></script>
     <script src="{% static 'js/sidebar.js' %}" defer></script>
     <!-- <script src="{% static 'js/.js' %}" defer></script> -->
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="{% static 'css/buttons_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/navbar_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/register_styles.css'%}">
-    <link rel="stylesheet" href="{% static 'css/device_styles.css'%}">
+    <link rel="stylesheet" href="{% static 'css/allDevices_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/images_styles.css'%}">
     <link rel="stylesheet" href="{% static 'css/dashboard_styles.css'%}">
     <!-- <link rel="stylesheet" href="{% static 'css/.css'%}"> -->
@@ -77,13 +77,13 @@
                 <li> 
                     <a href="{% url 'processes' %}" class="nav-link"> 
                         <span class="sidebar-icon">📊</span>
-                        <span class="sidebar-text">Devices processes</span>
+                        <span class="sidebar-text">Devices Processes</span>
                     </a> 
                 </li>
                 <li> 
                     <a href="{% url 'services' %}" class="nav-link"> 
                         <span class="sidebar-icon">📋</span>
-                        <span class="sidebar-text">Devices services</span>
+                        <span class="sidebar-text">Devices Services</span>
                     </a> 
                 </li>
                 <!-- <li> 

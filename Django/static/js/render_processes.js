@@ -27,13 +27,23 @@ export function renderProcesses(currentProcesses, processSortOrder){
         }
     });
     processTable.innerHTML = "";
+
+    if(sortedProcesses.length === 0){
+        processTable.innerHTML = `
+            <tr>
+                <td colspan="4">No processes found.</td>
+            </tr>
+        `;
+        return;
+    }
+
     sortedProcesses.forEach(process => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${escapeHTML(process.Pid ?? "N/A")}</td>
             <td>${escapeHTML(process.Name ?? "Unknown")}</td>
             <td>${escapeHTML(process.MemoryMb ?? "N/A")} MB</td>
-            <td><button class="container-buttons-main btn rounded-pill px-3 btn-sm" data-pid="${escapeHTML(process.Pid)}">Terminate</button></td>
+            <td><button class="process-button banner-button banner-button-secondary bolded" data-pid="${escapeHTML(process.Pid)}">Terminate</button></td>
         `;
         processTable.appendChild(row);
     });
