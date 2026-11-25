@@ -300,7 +300,29 @@
                         throw new Error(commandStatus.message || "Command failed.");
                     }
                     if (attempts >= 10) {
-                        throw new Error("Timed out waiting for the agent. Is it running and online?");
+                        throw new Error("Timed out waiting for a response. The device may be offline, this folder may be too large to list, or another tab may be browsing it at the same time.");
+                    }
+                    return attempt();
+                });
+        }
+        return attempt();
+    }
+
+    //For move_path/create_folder, which dont produce a listing to wait for, just the result. Reused
+    //insteaf of blindly reloading after queueing since it only confirms command was accepted, not if agent completed it.
+    function waitForCommandResult(queuedId) {
+        let attempts = 0;
+        function attempt() {
+            attempts += 1;
+            return new Promise(resolve => setTimeout(resolve, 1000))
+                .then(() => fetchCommandStatus(queuedId))
+                .then(commandStatus => {
+                    if (commandStatus && commandStatus.status === "success") return;
+                    if (commandStatus && commandStatus.status === "failed") {
+                        throw new Error(commandStatus.message || "Command failed.");
+                    }
+                    if (attempts >= 10) {
+                        throw new Error("Timed out waiting for a response. Is the device online?");
                     }
                     return attempt();
                 });
@@ -467,10 +489,10 @@
         const newFull = `${currentPath}\\${newName}`;
         clearStatus();
         showLoading("Renaming…");
-        // No extra delay needed before reloading - order_by("id") on the agent's command poll plus
-        // CommandId matching in waitForListing already guarantee this rename is applied before the
-        // listing loadFolder queues next is read.
+        //waits on teh commands own result not just that it was queued, before reloading so a taken name or 
+        //invalid char, or locked file shows the real failure instead of just reloading the unchanged folder.
         queueCommand("move_path", oldFull, newFull)
+            .then(queuedId => waitForCommandResult(queuedId))
             .then(() => loadFolder(currentPath))
             .catch(err => { hideLoading(); setError(err.message); });
     }
@@ -481,6 +503,7 @@
         clearStatus();
         showLoading("Creating folder…");
         queueCommand("create_folder", `${currentPath}\\${name}`)
+            .then(queuedId => waitForCommandResult(queuedId))
             .then(() => loadFolder(currentPath))
             .catch(err => { hideLoading(); setError(err.message); });
     }

@@ -12,6 +12,11 @@ public class FileListingService
         foreach (var dir in Directory.GetDirectories(path))
         {
             var info = new DirectoryInfo(dir);
+            //junctions like Documents/My Videos are reparse points, pathguard already doesnt open them
+            //so listing them is useless
+            if (info.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                continue;
+
             entries.Add(new FileEntry
             {
                 Name = info.Name,

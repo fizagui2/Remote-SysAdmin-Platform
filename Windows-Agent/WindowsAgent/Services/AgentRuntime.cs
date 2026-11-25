@@ -199,13 +199,16 @@ public class AgentRuntime
         await SendAsync(() => _apiClient.SendSystemInfoAsync(systemInfo), "system info (post re-enroll)");
     }
 
-    private async Task SendAsync(Func<Task<string>> send, string label)
+    //returns whether send succeeded, so a caller that needs to know, like the file-listing post
+    //can react to a failure without this having to throw
+    private async Task<bool> SendAsync(Func<Task<string>> send, string label)
     {
         try
         {
             var result = await send();
             Log($"[{label}] {result}", LogSeverity.Info);
             ConnectionStatusChanged?.Invoke(this, true);
+            return true;
         }
         catch (UnauthorizedAccessException)
         {
@@ -214,17 +217,20 @@ public class AgentRuntime
             {
                 await ResendSystemInfoAsync();
             }
+            return false;
         }
         //a status code means the server answered but with an error (404, 500, ...), no status code means it was never reached
         catch (HttpRequestException ex) when (ex.StatusCode is not null)
         {
             Log($"[{label}] Server returned an error: {ex.Message}", LogSeverity.Error);
             ConnectionStatusChanged?.Invoke(this, false);
+            return false;
         }
         catch (HttpRequestException ex)
         {
             Log($"[{label}] Could not reach server: {ex.Message}", LogSeverity.Error);
             ConnectionStatusChanged?.Invoke(this, false);
+            return false;
         }
     }
 
@@ -253,13 +259,20 @@ public class AgentRuntime
                     try
                     {
                         var listing = _fileListingService.Collect(_hostname, command.FilePath, command.CommandId);
-                        await SendAsync(() => _apiClient.SendFileListingAsync(listing), "files");
+                        var sent = await SendAsync(() => _apiClient.SendFileListingAsync(listing), "files");
+                        if (!sent)
+                        {
+                            //the command result above already says success before we knew the listing itself wouldnt make it. Correct it
+                            //so the browsers status check sees a real failure instead of waiting out a timeout for a listing that wont arrive.
+                            await CorrectToFailedAsync(command.CommandId, "Could not send the folder listing to the server (it may be too large).");
+                        }
                     }
                     catch (Exception ex)
                     {
                         //some folders inside the allowed root still refuse enumeration like AppData\Local\Application Data
                         //without this catch, anexception here would kill CommandLoopAsync silently and commands would stop forever
                         Log($"[files] Could not read '{command.FilePath}': {ex.Message}", LogSeverity.Error);
+                        await CorrectToFailedAsync(command.CommandId, $"Could not read '{command.FilePath}': {ex.Message}");
                     }
                 }
 
@@ -308,6 +321,16 @@ public class AgentRuntime
             ConnectionStatusChanged?.Invoke(this, false);
         }
     }
+
+    //overwrites a commands sent success result with a failed one for when the failure only became known afterward
+    //Djangos command result endpoint just updates the row, so a second resuslt for the same CommandID repolaces the first.
+    private Task CorrectToFailedAsync(int commandId, string message) =>
+        SendAsync(() => _apiClient.SendCommandResultAsync(new CommandResult
+        {
+            CommandId = commandId,
+            Status = "failed",
+            Message = message,
+        }), $"command {commandId} (files)");
 
     private void Log(string message, LogSeverity severity)
     {
