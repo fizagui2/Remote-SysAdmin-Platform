@@ -683,6 +683,28 @@ class OwnershipTests(TestCase):
         self.assertEqual(Computer.objects.count(), 3)
         self.assertFalse(Command.objects.exists())
 
+    def test_queue_command_ignores_offsite_next(self):
+        self.client.force_login(self.ana)
+        response = self.queue(hostname="ANA-PC", redirect="1", next="https://evil.example.com/")
+        self.assertRedirects(response, "/agent/", fetch_redirect_response=False)
+
+    def test_can_read_your_own_command_status(self):
+        self.client.force_login(self.ana)
+        self.queue(hostname="ANA-PC")
+        command = Command.objects.get()
+        response = self.client.get(f"/api/agent/commands/status/?queued_id={command.id}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "pending")
+
+    def test_cannot_read_another_accounts_command_status(self):
+        self.client.force_login(self.ana)
+        self.queue(hostname="ANA-PC")
+        command = Command.objects.get()
+
+        self.client.force_login(self.bo)
+        response = self.client.get(f"/api/agent/commands/status/?queued_id={command.id}")
+        self.assertEqual(response.status_code, 404)
+
     def test_deleting_an_account_deletes_its_machines(self):
         self.ana.delete()
         self.assertFalse(Computer.objects.filter(hostname="ANA-PC").exists())

@@ -19,6 +19,9 @@ public class CommandService
                 "start_service" => ControlService(command, s => s.Start(), ServiceControllerStatus.Running),
                 "stop_service" => ControlService(command, s => s.Stop(), ServiceControllerStatus.Stopped),
                 "restart_service" => RestartService(command),
+                "list_directory" => ListDirectory(command),
+                "create_folder" => CreateFolder(command),
+                "move_path" => MovePath(command),
                 _ => Failed(command, $"Unknown command '{command.Command}'.")
             };
         }
@@ -81,6 +84,71 @@ public class CommandService
         service.Start();
         service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(15));
         return Succeeded(command, $"Service '{command.ServiceName}' restarted successfully.");
+    }
+
+    //AgentRuntime does the real enumeration right after this, since the entries go out as a separate
+    //FileListingReport rather than on this CommandResult, but this still has to try the read itself
+    //first, so a folder that exists but cant actually be enumerated is reporte as failed instead of a false "success" with no listing ever following it
+    private static CommandResult ListDirectory(AgentCommand command)
+    {
+        if (string.IsNullOrEmpty(command.FilePath))
+            return Failed(command, "No FilePath provided.");
+
+        if (!PathGuard.IsAllowed(command.FilePath))
+            return Failed(command, $"'{command.FilePath}' is outside the folders this agent is allowed to access.");
+
+        if (!Directory.Exists(command.FilePath))
+            return Failed(command, $"Folder '{command.FilePath}' does not exist.");
+
+        try
+        {
+            _ = Directory.GetDirectories(command.FilePath);
+            _ = Directory.GetFiles(command.FilePath);
+        }
+        catch (Exception ex)
+        {
+            return Failed(command, $"Could not read '{command.FilePath}': {ex.Message}");
+        }
+
+        return Succeeded(command, $"Listed '{command.FilePath}'.");
+    }
+
+    private static CommandResult CreateFolder(AgentCommand command)
+    {
+        if (string.IsNullOrEmpty(command.FilePath))
+            return Failed(command, "No FilePath provided.");
+
+        if (!PathGuard.IsAllowed(command.FilePath))
+            return Failed(command, $"'{command.FilePath}' is outside the folders this agent is allowed to access.");
+
+        Directory.CreateDirectory(command.FilePath);
+        return Succeeded(command, $"Created folder '{command.FilePath}'.");
+    }
+
+    //covers both rename and move since a rename is just a move to a new name in the same folder, so there is
+    //no separate command for it
+    private static CommandResult MovePath(AgentCommand command)
+    {
+        if (string.IsNullOrEmpty(command.FilePath) || string.IsNullOrEmpty(command.NewPath))
+            return Failed(command, "Both FilePath and NewPath are required.");
+
+        if (!PathGuard.IsAllowed(command.FilePath) || !PathGuard.IsAllowed(command.NewPath))
+            return Failed(command, "Source and destination must both be inside the folders this agent is allowed to access.");
+
+        if (Directory.Exists(command.FilePath))
+        {
+            Directory.Move(command.FilePath, command.NewPath);
+        }
+        else if (File.Exists(command.FilePath))
+        {
+            File.Move(command.FilePath, command.NewPath);
+        }
+        else
+        {
+            return Failed(command, $"'{command.FilePath}' does not exist.");
+        }
+
+        return Succeeded(command, $"Moved '{command.FilePath}' to '{command.NewPath}'.");
     }
 
     private static CommandResult Succeeded(AgentCommand command, string message) =>

@@ -66,6 +66,9 @@ public class ApiClient
     public Task<string> SendServiceReportAsync(ServiceReport serviceReport) =>
         PostAsync(serviceReport, "api/agent/services/");
 
+    public Task<string> SendFileListingAsync(FileListingReport fileListingReport) =>
+        PostAsync(fileListingReport, "api/agent/files/");
+
     public Task<string> SendCommandResultAsync(CommandResult result) =>
         PostAsync(result, "api/agent/commands/result/");
 

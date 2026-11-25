@@ -24,7 +24,8 @@ public class SystemInfoService
             UptimeHours = Math.Round(Environment.TickCount64 / 1000.0 / 3600.0, 2),
             LoggedInUser = Environment.UserName,
             NetworkAdapter = activeInterface?.Name ?? "Unknown",
-            MacAddress = GetMacAddress(activeInterface)
+            MacAddress = GetMacAddress(activeInterface),
+            FileRoot = PathGuard.AllowedRoot
         };
     }
 
