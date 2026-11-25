@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block extra_css %} 
-<link rel="stylesheet" href="{% static 'css/device_details_styles.css'%}">
+<link rel="stylesheet" href="{% static 'css/device_details_styles.css'%}?v=2">
 <link rel="stylesheet" href="{% static 'css/table_styles.css'%}">
 {% endblock %}
 
@@ -16,6 +16,8 @@
 
 {% block content %}
 <h2 class="device-title" id="hostname"></h2>
+<h2 class="extra-title device-title" id="hostname"></h2>
+
 <!-- >>> REPORT -->
 <hr>
 <section class="device-section">
@@ -204,4 +206,427 @@
     </table>
     <div></div>
 </div>
+
+<!-- >>>>>>>>>>>>>>>>>> FILE MANAGEMENT >>>>>>>>>>>>>>>>>> -->
+<hr>
+<h3>File Management</h3>
+<p id="fm-offline-banner" class="fm-offline-banner" hidden></p>
+<div id="fm-container">
+    <div class="table-controls fm-toolbar">
+        <div class="fm-path-display">
+            <span class="extra-info">Path:</span>
+            <nav id="fm-breadcrumbs" class="fm-breadcrumbs" aria-label="Folder path"></nav>
+        </div>
+        <div class="fm-toolbar-buttons">
+            <button type="button" id="fm-up" class="fm-toolbar-button">Up</button>
+            <button type="button" id="fm-refresh" class="fm-toolbar-button">Refresh</button>
+        </div>
+    </div>
+    <div class="table-container">
+        <div class="fm-panel">
+            <div id="fm-entries" class="fm-icon-grid"></div>
+            <div id="fm-loading-overlay" class="fm-loading-overlay" hidden>
+                <div class="fm-spinner" aria-hidden="true"></div>
+                <p>Loading…</p>
+            </div>
+        </div>
+        <div id="fm-details-bar" class="fm-details-bar">Select an item to see its details.</div>
+        <p id="fm-status" class="fm-status"></p>
+    </div>
+</div>
+<div id="fm-context-menu" class="fm-context-menu" hidden>
+    <button type="button" class="fm-context-menu-item" data-action="rename">Rename</button>
+    <button type="button" class="fm-context-menu-item" data-action="new-folder">New Folder</button>
+</div>
+
+<script>
+(function() {
+    const hostname = window.COMPUTER_HOSTNAME;
+    let currentPath = null;
+    let fileRoot = null;
+    let currentEntries = [];
+    let contextTarget = null; // {name, isDir} of the entry the open context menu applies to, or null for "New Folder"
+
+    const FOLDER_ICON = '<svg class="fm-icon fm-icon-folder" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+    const FILE_ICON = '<svg class="fm-icon fm-icon-file" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/></svg>';
+
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+        return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    function queueCommand(command, filePath, newPath) {
+        const body = new URLSearchParams({ hostname, command, file_path: filePath });
+        if (newPath) body.set("new_path", newPath);
+        return fetch("/debug/queue-command/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: body.toString(),
+        }).then(response => {
+            if (!response.ok) throw new Error(`Could not queue command (${response.status})`);
+            return response.json();
+        }).then(data => data.queued_id);
+    }
+
+    function fetchStatus() {
+        return fetch(`/api/agent/status/?hostname=${encodeURIComponent(hostname)}`)
+            .then(response => response.json());
+    }
+
+    function fetchFiles() {
+        return fetchStatus().then(data => data.files.data);
+    }
+
+    function fetchCommandStatus(queuedId) {
+        return fetch(`/api/agent/commands/status/?queued_id=${queuedId}`)
+            .then(response => response.json());
+    }
+
+    // Matches on the CommandId the agent echoes back on the listing, not on timestamps - comparing
+    // the agent's clock to the browser's clock would misfire whenever the two disagree even slightly.
+    function waitForListing(path, queuedId) {
+        let attempts = 0;
+        function attempt() {
+            attempts += 1;
+            return new Promise(resolve => setTimeout(resolve, 1000))
+                .then(() => Promise.all([fetchFiles(), fetchCommandStatus(queuedId)]))
+                .then(([files, commandStatus]) => {
+                    if (files && files.Path === path && files.CommandId === queuedId) {
+                        return files;
+                    }
+                    if (commandStatus && commandStatus.status === "failed") {
+                        throw new Error(commandStatus.message || "Command failed.");
+                    }
+                    if (attempts >= 10) {
+                        throw new Error("Timed out waiting for a response. The device may be offline, this folder may be too large to list, or another tab may be browsing it at the same time.");
+                    }
+                    return attempt();
+                });
+        }
+        return attempt();
+    }
+
+    //For move_path/create_folder, which dont produce a listing to wait for, just the result. Reused
+    //insteaf of blindly reloading after queueing since it only confirms command was accepted, not if agent completed it.
+    function waitForCommandResult(queuedId) {
+        let attempts = 0;
+        function attempt() {
+            attempts += 1;
+            return new Promise(resolve => setTimeout(resolve, 1000))
+                .then(() => fetchCommandStatus(queuedId))
+                .then(commandStatus => {
+                    if (commandStatus && commandStatus.status === "success") return;
+                    if (commandStatus && commandStatus.status === "failed") {
+                        throw new Error(commandStatus.message || "Command failed.");
+                    }
+                    if (attempts >= 10) {
+                        throw new Error("Timed out waiting for a response. Is the device online?");
+                    }
+                    return attempt();
+                });
+        }
+        return attempt();
+    }
+
+    function showLoading(message) {
+        const overlay = document.getElementById("fm-loading-overlay");
+        overlay.querySelector("p").textContent = message;
+        overlay.hidden = false;
+        document.getElementById("fm-up").disabled = true;
+        document.getElementById("fm-refresh").disabled = true;
+    }
+
+    function hideLoading() {
+        document.getElementById("fm-loading-overlay").hidden = true;
+        document.getElementById("fm-refresh").disabled = false;
+        updateUpButtonState();
+    }
+
+    // "Up" is disabled once you're already at the agent's allowed root, rather than letting
+    // the click queue a command PathGuard will just reject
+    function updateUpButtonState() {
+        document.getElementById("fm-up").disabled =
+            !currentPath || !fileRoot || currentPath.toUpperCase() === fileRoot.toUpperCase();
+    }
+
+    function renderBreadcrumbs(path) {
+        const nav = document.getElementById("fm-breadcrumbs");
+        nav.innerHTML = "";
+
+        if (!fileRoot || !path.toUpperCase().startsWith(fileRoot.toUpperCase())) {
+            nav.textContent = path;
+            return;
+        }
+
+        const rootSegments = fileRoot.split("\\").filter(Boolean);
+        const rest = path.slice(fileRoot.length).split("\\").filter(Boolean);
+        const rootLabel = rootSegments[rootSegments.length - 1] || fileRoot;
+
+        const crumbs = [{ label: rootLabel, path: fileRoot }];
+        let running = fileRoot;
+        rest.forEach(segment => {
+            running = `${running}\\${segment}`;
+            crumbs.push({ label: segment, path: running });
+        });
+
+        crumbs.forEach((crumb, index) => {
+            if (index > 0) {
+                const sep = document.createElement("span");
+                sep.className = "fm-breadcrumb-sep";
+                sep.textContent = "›";
+                nav.appendChild(sep);
+            }
+            const isLast = index === crumbs.length - 1;
+            const el = document.createElement(isLast ? "span" : "button");
+            el.className = "fm-breadcrumb" + (isLast ? " fm-breadcrumb-current" : "");
+            el.textContent = crumb.label;
+            if (!isLast) {
+                el.type = "button";
+                el.addEventListener("click", () => loadFolder(crumb.path));
+            }
+            nav.appendChild(el);
+        });
+    }
+
+    function clearStatus() {
+        const status = document.getElementById("fm-status");
+        status.textContent = "";
+        status.classList.remove("fm-status-error");
+    }
+
+    function setError(message) {
+        const status = document.getElementById("fm-status");
+        status.textContent = message;
+        status.classList.add("fm-status-error");
+    }
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    }
+
+    function showDetails(entry) {
+        const bar = document.getElementById("fm-details-bar");
+        if (!entry) {
+            bar.textContent = "Select an item to see its details.";
+            return;
+        }
+        const modified = entry.ModifiedUtc ? new Date(entry.ModifiedUtc).toLocaleString() : "Unknown";
+        const sizePart = entry.IsDirectory ? "" : ` · ${formatBytes(entry.SizeBytes)}`;
+        bar.textContent = `${entry.Name} · ${entry.IsDirectory ? "Folder" : "File"}${sizePart} · Modified ${modified}`;
+    }
+
+    function renderEntries(files) {
+        renderBreadcrumbs(files.Path);
+        showDetails(null);
+        currentEntries = files.Entries || [];
+        const grid = document.getElementById("fm-entries");
+        grid.innerHTML = "";
+
+        if (currentEntries.length === 0) {
+            grid.innerHTML = '<p class="fm-empty">This folder is empty.</p>';
+            return;
+        }
+
+        currentEntries.forEach(entry => {
+            const item = document.createElement("div");
+            item.className = "fm-item";
+            item.dataset.name = entry.Name;
+            item.dataset.isDir = entry.IsDirectory ? "1" : "0";
+            // FOLDER_ICON/FILE_ICON are fixed constants we wrote, safe for innerHTML; entry.Name is
+            // real data from the remote machine, so it goes in via textContent, never through HTML parsing
+            item.innerHTML = entry.IsDirectory ? FOLDER_ICON : FILE_ICON;
+            const nameSpan = document.createElement("span");
+            nameSpan.className = "fm-name";
+            nameSpan.textContent = entry.Name;
+            item.appendChild(nameSpan);
+
+            item.addEventListener("click", () => {
+                document.querySelectorAll(".fm-item.selected").forEach(el => el.classList.remove("selected"));
+                item.classList.add("selected");
+                showDetails(entry);
+            });
+            if (entry.IsDirectory) {
+                item.addEventListener("dblclick", () => loadFolder(`${files.Path}\\${entry.Name}`));
+            }
+
+            grid.appendChild(item);
+        });
+    }
+
+    // Bumped on every loadFolder call so an older, still in-flight load can tell it's been
+    // superseded and drop its result instead of overwriting a newer navigation with stale data -
+    // nothing stopped two loads (e.g. a double-click plus a breadcrumb click) from overlapping before.
+    let loadGeneration = 0;
+
+    function loadFolder(path) {
+        const generation = ++loadGeneration;
+        clearStatus();
+        showLoading("Loading folder contents…");
+        queueCommand("list_directory", path)
+            .then(queuedId => waitForListing(path, queuedId))
+            .then(files => {
+                if (generation !== loadGeneration) return;
+                currentPath = path;
+                renderEntries(files);
+            })
+            .catch(err => {
+                if (generation !== loadGeneration) return;
+                setError(err.message);
+            })
+            .finally(() => {
+                if (generation === loadGeneration) hideLoading();
+            });
+    }
+
+    function renameEntry(name) {
+        const newName = prompt("New name:", name);
+        if (!newName || newName === name) return;
+        const oldFull = `${currentPath}\\${name}`;
+        const newFull = `${currentPath}\\${newName}`;
+        clearStatus();
+        showLoading("Renaming…");
+        //waits on teh commands own result not just that it was queued, before reloading so a taken name or 
+        //invalid char, or locked file shows the real failure instead of just reloading the unchanged folder.
+        queueCommand("move_path", oldFull, newFull)
+            .then(queuedId => waitForCommandResult(queuedId))
+            .then(() => loadFolder(currentPath))
+            .catch(err => { hideLoading(); setError(err.message); });
+    }
+
+    function createFolder() {
+        const name = prompt("New folder name:");
+        if (!name) return;
+        clearStatus();
+        showLoading("Creating folder…");
+        queueCommand("create_folder", `${currentPath}\\${name}`)
+            .then(queuedId => waitForCommandResult(queuedId))
+            .then(() => loadFolder(currentPath))
+            .catch(err => { hideLoading(); setError(err.message); });
+    }
+
+    // Right-click behaves like File Explorer: on an entry it offers Rename, on empty
+    // space in the folder it offers New Folder - same two actions the toolbar had, just moved
+    // onto the context menu the way Explorer itself does it.
+    const grid = document.getElementById("fm-entries");
+    const menu = document.getElementById("fm-context-menu");
+    const renameMenuItem = menu.querySelector('[data-action="rename"]');
+    const newFolderMenuItem = menu.querySelector('[data-action="new-folder"]');
+
+    function closeContextMenu() {
+        menu.hidden = true;
+        contextTarget = null;
+        // Dismissing the menu (Escape, clicking elsewhere) without picking an action shouldn't
+        // leave the right-clicked item looking selected - same highlight-lingering bug as the
+        // click-outside case, just missed on this path.
+        document.querySelectorAll(".fm-item.selected").forEach(el => el.classList.remove("selected"));
+        showDetails(null);
+    }
+
+    grid.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        if (!currentPath) return;
+
+        const item = event.target.closest(".fm-item");
+        document.querySelectorAll(".fm-item.selected").forEach(el => el.classList.remove("selected"));
+
+        if (item) {
+            contextTarget = { name: item.dataset.name, isDir: item.dataset.isDir === "1" };
+            item.classList.add("selected");
+            showDetails(currentEntries.find(e => e.Name === item.dataset.name) || null);
+            renameMenuItem.hidden = false;
+            newFolderMenuItem.hidden = true;
+        } else {
+            contextTarget = null;
+            renameMenuItem.hidden = true;
+            newFolderMenuItem.hidden = false;
+        }
+
+        // Show first so its real size can be measured, then clamp so it never renders
+        // partially off-screen when right-clicking near the edge of the viewport.
+        menu.hidden = false;
+        const menuRect = menu.getBoundingClientRect();
+        const maxLeft = window.innerWidth - menuRect.width - 4;
+        const maxTop = window.innerHeight - menuRect.height - 4;
+        menu.style.left = `${Math.max(4, Math.min(event.clientX, maxLeft))}px`;
+        menu.style.top = `${Math.max(4, Math.min(event.clientY, maxTop))}px`;
+    });
+
+    menu.addEventListener("click", (event) => {
+        const action = event.target.dataset.action;
+        if (action === "rename" && contextTarget) {
+            renameEntry(contextTarget.name);
+        } else if (action === "new-folder") {
+            createFolder();
+        }
+        closeContextMenu();
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!menu.hidden && !menu.contains(event.target)) closeContextMenu();
+        if (!event.target.closest(".fm-item")) {
+            document.querySelectorAll(".fm-item.selected").forEach(el => el.classList.remove("selected"));
+            showDetails(null);
+        }
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeContextMenu();
+    });
+
+    document.getElementById("fm-up").addEventListener("click", () => {
+        if (!currentPath) return;
+        const parent = currentPath.substring(0, currentPath.lastIndexOf("\\"));
+        if (parent) loadFolder(parent);
+    });
+
+    document.getElementById("fm-refresh").addEventListener("click", () => {
+        if (currentPath) loadFolder(currentPath);
+    });
+
+    // File browsing genuinely can't work while the device is offline - every action (Up, Refresh,
+    // opening a folder) needs a fresh round trip the agent isn't there to answer, so there's nothing
+    // real to navigate, just whatever was last on screen. Rather than let that look interactive and
+    // fail on every click, the whole panel greys out and goes inert (pointer-events: none) whenever
+    // the device isn't online, and un-greys itself automatically once it reconnects.
+    let hasLoadedOnce = false;
+
+    function setOfflineState(isOffline, hasEverReported) {
+        const banner = document.getElementById("fm-offline-banner");
+        banner.hidden = !isOffline;
+        banner.textContent = hasEverReported
+            ? "Computer must be online to access File Management."
+            : "Waiting for this device's agent to report in before File Management can start…";
+        document.getElementById("fm-container").classList.toggle("fm-offline", isOffline);
+    }
+
+    function pollConnectivity() {
+        fetchStatus().then(data => {
+            const root = data.report && data.report.data && data.report.data.FileRoot;
+            const online = !!data.online;
+
+            if (online && root) {
+                fileRoot = root;
+                setOfflineState(false, true);
+                if (!hasLoadedOnce) {
+                    hasLoadedOnce = true;
+                    loadFolder(root);
+                }
+            } else {
+                setOfflineState(true, !!root);
+            }
+        }).catch(() => {
+            // A real network failure reaching Django itself (not the device being offline) - leave
+            // the last-known state on screen rather than guessing, the next tick will catch up.
+        }).finally(() => {
+            setTimeout(pollConnectivity, 3000);
+        });
+    }
+    pollConnectivity();
+})();
+</script>
+
 {% endblock %}
