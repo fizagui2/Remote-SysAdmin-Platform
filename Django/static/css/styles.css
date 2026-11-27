@@ -21,6 +21,7 @@
     /* DEVICE DETAILS */
     --dd-container-bg: #7e78f082;
     --dd-performance-text: #c2e7ffe6;
+    --dd-subtitles: #4fffd0;
     /* BANNER */
     --slide-col1: #166981;
     --slide-title: #28dff4e0;
@@ -197,6 +198,9 @@
     --button-services-border-var2: #c6e0ffdf;
     /* TABLES */
     --table-header: #2c5d9c;
+    --computer-line: rgba(90, 169, 247, 0.57);
+    --nav-button-border: #97a4f9;
+    --nav-button-bg: #170b2e;
     /* FOOTER */
     --footer-text: #7070da;
     --footer-text-transition: #c28cff;

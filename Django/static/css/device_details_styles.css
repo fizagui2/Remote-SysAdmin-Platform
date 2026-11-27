@@ -5,6 +5,10 @@
     text-shadow: var(--text-shadow1);
 }
 
+.dd-subtitle{
+    color: var(--dd-subtitles) !important;
+}
+
 .extra-info{
     color: var(--extra-info) !important;
 }
@@ -51,7 +55,7 @@
     margin-bottom: 20px;
 }
 .performance-card-header h3{
-    color: var(--container-title);
+    color: var(--white-col);
     margin: 0;
 }
 .performance-card-header span{
@@ -146,6 +150,7 @@
 .section-heading h3{
     margin: 0;
     font-weight: 700;
+    color: var(--dd-subtitles);
 }
 .section-subtitle{
     margin: 6px 0 0;

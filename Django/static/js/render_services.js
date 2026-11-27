@@ -6,6 +6,8 @@ export function renderServices(currentServices, serviceSortOrder){
     if(!serviceTable){ return; }
     const sortedServies = [...currentServices];
     sortedServies.sort((a, b) => {
+        const statusA = (a.Status ?? "").trim().toLowerCase();
+        const statusB = (b.Status ?? "").trim().toLowerCase();
         switch(serviceSortOrder){
             case "name-asc":
                 return (a.Name ?? "").localeCompare(b.Name ?? "");
@@ -16,9 +18,9 @@ export function renderServices(currentServices, serviceSortOrder){
             case "display-desc":
                 return (b.DisplayName ?? "").localeCompare(a.DisplayName ?? "");
             case "status-run":
-                return Number((a.Status.toLowerCase() === "running") - (b.Status.toLowerCase() === "running"));
+                return Number((statusB === "running") - (statusA === "running"));
             case "status-stop":
-                return Number((a.Status.toLowerCase() === "running") - (b.Status.toLowerCase() === "running"));
+                return Number((statusB === "stopped") - (statusA === "stopped"));
             default:
                 return 0;
         }

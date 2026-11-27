@@ -19,31 +19,41 @@
 <!-- SERVICES TABLE -->
 <h1>📋Device Services📋</h1><hr>
 <div class="computer_navigation">
-    <button id="gofirst-computer" disabled>First</button>
-    <button id="previous-computer" disabled>Previous</button>
+    <!-- NAVIGATION ROW -->
+    <div class="computer-navigation-row">
+        <div class="computer-nav-buttons">
+            <button id="gofirst-computer" class="computer-nav-btn" disabled><img src="{% static 'images/first.png' %}" alt="Go first computer" class="image-icon"></button>
+            <button id="previous-computer" class="computer-nav-btn" disabled><img src="{% static 'images/previous.png' %}" alt="Go previous computer" class="image-icon"></button>
+        </div>
+        <div class="computer-counter-container">
+            <span id="computer-counter"></span>
+            <div class="computer-counter-line"></div>
+        </div>
+        <div class="computer-nav-buttons">
+            <button id="next-computer" class="computer-nav-btn" disabled><img src="{% static 'images/next.png' %}" alt="Go next computer" class="image-icon"></button>
+            <button id="last-computer" class="computer-nav-btn" disabled><img src="{% static 'images/last.png' %}" alt="Go last computer" class="image-icon"></button>
+        </div>
+    </div>
     <div class="selected-computer">
         <h3 id="computer-hostname">Loading...</h3>
-        <span id="computer-counter"></span>
     </div>
-
-    <button id="next-computer" disabled>Next</button>
-    <button id="last-computer" disabled>Last</button>
 </div>
 
-
 <div id="services-card-container">
-    <label for="service-sort">Sort by:</label>
-    <select id="service-sort">
-        <option value="">Default</option>
-        <option value="name-asc">Name (A-Z)</option>
-        <option value="name-desc">Name (Z-A)</option>
-        <option value="display-asc">Display Name (A-Z)</option>
-        <option value="display-desc">Display Name (Z-A)</option>
-        <option value="status-run">Running First</option>
-        <option value="status-stop">Stopped First</option>
-    </select>
+    <div class="table-controls">
+        <label for="service-sort" class="label-process-sort bolded">Sort by:</label>
+        <select id="service-sort" class="table-sort-dropdown">
+            <option value="">Default</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="display-asc">Display Name (A-Z)</option>
+            <option value="display-desc">Display Name (Z-A)</option>
+            <option value="status-run">Running First</option>
+            <option value="status-stop">Stopped First</option>
+        </select>
+    </div>
 
-    <div class="table-container">
+    <div class="table-container scroll-container scroll-container-services-var1">
         <table class="webhost-table">
             <thead>
                 <tr>

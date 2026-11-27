@@ -12,16 +12,6 @@
     min-height: 120px;
 }
 
-/* 
-.image-medium{
-}
-.image-large{
-}
-
-.image-huge{
-} 
-*/
-
 .image-icon{
     width: 22px;
     height: 22px;
@@ -44,4 +34,12 @@
     height: auto;
     display: block;
     /* object-fit: contain; */
+}
+
+/* FOR SMALL SCREENS */
+@media (max-width: 380px){
+    .image-icon{
+        width: 15px;
+        height: 15px;
+    }
 }

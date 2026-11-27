@@ -25,6 +25,7 @@
     /* DEVICE DETAILS */
     --dd-container-bg: #7e78f082;
     --dd-performance-text: #f6f2feed;
+    --dd-subtitles: #151541;
     /* BANNER */
     --slide-col1: #9a86b3;
     --slide-title: #28dff4e0;
@@ -205,7 +206,10 @@
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
     /* TABLES */
-    --table-header: #131c52;
+    --table-header: #030a35d8;
+    --computer-line: rgba(13, 32, 51, 0.605);
+    --nav-button-border: #5067f8;
+    --nav-button-bg: #170b2e;
     /* FOOTER */
     --footer-text: #1d1d39;
     --footer-text-transition: #200045;

@@ -32,16 +32,19 @@ function CreateReportsCards(hostname, report){
     const uptimeHours = report?.UptimeHours ?? "N/A";
     const netAdapter = report?.NetworkAdapter ?? "N/A";
     const winVersion = report?.WindowsVersion ?? "Unknown";
+        
     //card devices-report-card mb-3
     card.className = "individual-report-card";
     card.innerHTML = `
         <!-- >> IMAGES FOR STATUS & ACTIONS -->
+        <!--
         <div class="device-report-options">
             <img src="${imagePaths.online}" alt="online" class="hide-bro image-icon">
             <img src="${imagePaths.offline}" alt="offline" class="image-icon">
             <img src="${imagePaths.selected}" alt="select item" class="hide-bro image-icon">
             <img src="${imagePaths.unselected}" alt="unselected item" class="select-item-icon image-icon">
         </div>
+        -->
         <!-- >> TITLE -->
         <div class="report-header-card">
            
