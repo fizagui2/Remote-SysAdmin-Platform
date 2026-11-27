@@ -43,18 +43,20 @@
         <option value="status-stop">Stopped First</option>
     </select>
 
-    <table class="webhost-table">
-        <thead>
-            <tr>
-                <th>Display Name</th>
-                <th>Status</th>
-                <th>Time Stamp</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="services-table-body">
-            <td colspan="4">Loading services...</td>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table class="webhost-table">
+            <thead>
+                <tr>
+                    <th>Display Name</th>
+                    <th>Status</th>
+                    <th>Time Stamp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="services-table-body">
+                <td colspan="4">Loading services...</td>
+            </tbody>
+        </table>    
+    </div>
 </div>
 {% endblock %}

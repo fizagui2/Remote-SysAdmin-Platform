@@ -5,6 +5,7 @@
     --base-variant1: #0b012af2;
     --base-variant2: #502497f8;
     --base-variant3: #240350d2;
+    --base-variant4: #020717f1;
     --accent-color:#0071ff;
     --accent-color2: #9bfff2d6;
     --accent-color3: #b3fff1;
@@ -100,6 +101,12 @@
     --heartbeat-card-bg: #8cd5e1;
     --heartbeat-card-title: #0b0f23;
     --heartbeat-card-glow: #141330;
+    /* PERFORMANCES PAGE */
+    --circle-color: #ffffff;
+    --progress: #ffffff;
+    --performance-card-title: #bbffd6;
+    --performance-circle-title: #a7ffd6;
+    --performance-extra-info: #f6ffa8fb;
     /* PROCESSES PAGE */
     --process-btn-bg: #c6f3ff;
     --process-btn-txt: #2c1e50;

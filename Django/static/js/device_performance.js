@@ -115,9 +115,9 @@ function CreatePerformanceCards(hostname, performance) {
 
         <!-- >> PERFORMANCE GRAPHS -->
         <div class="performance-metrics">
-            ${CreateCircleGraph("CPU", cpuUsage, "#2788e8", "Processor usage")}
-            ${CreateCircleGraph("RAM", memoryUsage, "#9b5de5", memoryDetails)}
-            ${CreateCircleGraph(diskLabel, diskUsage, "#16a36a", "Storage usage")}
+            ${CreateCircleGraph("CPU", cpuUsage, "#6dff74", "Processor usage")}
+            ${CreateCircleGraph("RAM", memoryUsage, "#dee55d", memoryDetails)}
+            ${CreateCircleGraph(diskLabel, diskUsage, "#4c7cf5", "Storage usage")}
         </div>
 
         <!-- >> STORAGE INFORMATION -->

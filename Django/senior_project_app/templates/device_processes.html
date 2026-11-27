@@ -28,31 +28,35 @@
 </div>
 
 <div id="processes-card-container">
-    <label for="process-sort">Sort by:</label>
-    <select id="process-sort">
-        <option value="">Default</option>
-        <option value="name-asc">Name (A-Z)</option>
-        <option value="name-desc">Name (Z-A)</option>
-        <option value="memory-asc">Memory (Low - High)</option>
-        <option value="memory-desc">Memory (High - Low)</option>
-        <option value="pid-asc">ID Ascending</option>
-        <option value="pid-desc">ID Descending</option>
-    </select>
+    <div class="table-controls">
+        <label for="process-sort" class="label-process-sort bolded">Sort by:</label>
+        <select id="process-sort" class="table-sort-dropdown">
+            <option value="">Default</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="memory-asc">Memory (Low - High)</option>
+            <option value="memory-desc">Memory (High - Low)</option>
+            <option value="pid-asc">ID Ascending</option>
+            <option value="pid-desc">ID Descending</option>
+        </select>
+    </div>
     
-    <table class="webhost-table">
-        <thead>
-            <tr>
-                <th>PID</th>
-                <th>Process Name</th>
-                <th>Memory Usage</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="processes-table-body">
-            <tr>
-                <td colspan="4">Loading processes...</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table class="webhost-table">
+            <thead>
+                <tr>
+                    <th>PID</th>
+                    <th>Process Name</th>
+                    <th>Memory Usage</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="processes-table-body">
+                <tr>
+                    <td colspan="4">Loading processes...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
