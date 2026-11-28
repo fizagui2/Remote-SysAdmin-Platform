@@ -35,7 +35,7 @@ export function renderServices(currentServices, serviceSortOrder){
             <td>
                 <div class="service-actions">
                     <button type="button" class="start-service banner-button banner-button-secondary bolded" data-command="start_service" data-service="${escapeHTML(service.Name)}" title="Start service"><img src="/static/images/play.png" class="button-services-icon" aria-hidden="true"><span>Start</span></button>
-                    <button type="button" class="stop-service banner-button banner-button-secondary bolded" data-command="stop_service" data-service="${escapeHTML(service.Name)}" title="Stop service"><img src="/static/images/stop.png" class="button-services-icon" aria-hidden="true"><span>Stop</span></button>
+                    <button type="button" class="add-device-button-var1 banner-button banner-button-secondary bolded" data-command="stop_service" data-service="${escapeHTML(service.Name)}" title="Stop service"><img src="/static/images/stop.png" class="button-services-icon" aria-hidden="true"><span>Stop</span></button>
                     <button type="button" class="restart-service banner-button banner-button-secondary bolded" data-command="restart_service" data-service="${escapeHTML(service.Name)}" title="Restart service"><img src="/static/images/restart.png" class="button-services-icon" aria-hidden="true"><span>Restart</span></button>
                 </div>
             </td>

@@ -39,8 +39,7 @@ function CreateReportsCards(hostname, report){
         <!-- >> IMAGES FOR STATUS & ACTIONS -->
         <!--
         <div class="device-report-options">
-            <img src="${imagePaths.online}" alt="online" class="hide-bro image-icon">
-            <img src="${imagePaths.offline}" alt="offline" class="image-icon">
+            
             <img src="${imagePaths.selected}" alt="select item" class="hide-bro image-icon">
             <img src="${imagePaths.unselected}" alt="unselected item" class="select-item-icon image-icon">
         </div>
