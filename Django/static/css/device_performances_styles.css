@@ -28,20 +28,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     gap: 15px;
     margin-bottom: 30px;
 }
 
 .performance-card-header h2{
-    color: var(--title);
+    color: var(--performance-card-title);
     font-size: 1.4rem;
     font-weight: bold;
     overflow-wrap: anywhere;
 }
 
 .performance-last-seen{
-    color: var(--extra-info);
+    color: var(--white-col);
     font-size: 0.85rem;
 }
 
@@ -97,21 +96,21 @@
     content: "";
     position: absolute;
     inset: 8px;
-    background: var(--base-variant);
+    background: var(--base-variant4);
     border-radius: 50%;
 }
 
 .circle-value{
     position: relative;
     z-index: 1;
-    color: var(--text-color);
+    color: var(--white-col);
     font-size: 1.15rem;
     font-weight: bold;
 }
 
 .performance-metric h3{
     margin-top: 12px;
-    color: var(--title);
+    color: var(--performance-circle-title);
     font-size: 1rem;
     font-weight: bold;
 }
@@ -127,7 +126,7 @@
     padding-top: 20px;
 }
 .performance-drives h3{
-    color: var(--title);
+    color: var(--white-col);
     font-size: 1.1rem;
     margin-bottom: 18px;
 }
@@ -141,7 +140,7 @@
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 8px;
-    color: var(--text-color);
+    color: var(--white-col);
     font-size: 0.9rem;
 }
 
@@ -163,7 +162,7 @@
 .drive-info small{
     display: block;
     margin-top: 6px;
-    color: var(--extra-info);
+    color: var(--performance-extra-info);
 }
 
 .no-drive-info{

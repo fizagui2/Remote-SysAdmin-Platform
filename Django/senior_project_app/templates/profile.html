@@ -2,43 +2,63 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/profile_styles.css'%}">
+<link rel="stylesheet" href="{% static 'css/profile_styles.css' %}">
 {% endblock %}
 
-{% block title %}👤Account{% endblock %}
+{% block title %}👤 Account{% endblock %}
 
 {% block content %}
 <div class="profile-container">
+    <!-- PROFILE HEADER -->
     <div class="profile-header">
         <div class="header-avatar" aria-hidden="true">
             {{ user.first_name|default:user.username|slice:":1"|upper }}
         </div>
         <div class="header-text">
             <h1 class="title bolded">Account Settings</h1>
-            <p class="subtitle">Manage your personal details and account security</p>
+            <p class="subtitle">
+                Manage your personal details and account security.
+            </p>
         </div>
     </div>
-
+    <!-- DJANGO MESSAGES -->
+    {% if messages %}
+    <div class="profile-alerts">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- PROFILE CARDS -->
     <div class="profile-grid">
-        <div class="profile-info-card">
+        <!-- PERSONAL INFORMATION -->
+        <section class="profile-info-card">
             <div class="card-header">
-                <h3>Personal information</h3>
+                <div>
+                    <h3>Personal Information</h3>
+                    <p>Update your personal details.</p>
+                </div>
                 <span class="badge-readonly">Username locked</span>
-            </div><hr>
-            <!--  -->
-            <form method="POST"  class="profile-form">
+            </div>
+            <hr class="section-divider">
+            <form method="POST" class="profile-form">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="update_info">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" value="{{ user.username }}" class="form-input readonly-input" readonly disabled>
-                    <small class="field-hint">Your username cannot be changed</small>
+                    <input type="text" id="username" value="{{ user.username }}" class="form-input readonly-input" disabled>
+                    <small class="field-hint">
+                        Your username cannot be changed.
+                    </small>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="first_name">First Name</label>
                         <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" placeholder="Enter first name" class="form-input" required>
                     </div>
+
                     <div class="form-group">
                         <label for="last_name">Last Name</label>
                         <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" placeholder="Enter last name" class="form-input" required>
@@ -48,45 +68,70 @@
                     <button type="submit" class="btn-primary-profile">Save Changes</button>
                 </div>
             </form>
-        </div>
-        <div class="profile-info-card">
+        </section>
+
+        <!-- PASSWORD / SECURITY -->
+        <section class="profile-info-card">
             <div class="card-header">
-                <h3>Security & Password</h3>
-            </div><hr>
+                <div>
+                    <h3>Security & Password</h3>
+                    <p>Keep your account protected.</p>
+                </div>
+                <span class="security-icon">🔒</span>
+            </div>
+            <hr class="section-divider">
             <form method="POST" class="profile-form">
                 {% csrf_token %}
-                <input type="hidden" name="action" value="reset_password">
-                <div class="form-group">
-                    <label for="current_password">Current Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="current_password" name="current_password" placeholder="••••••••" class="form-input" required>
-                        <button type="button" class="toggle-pw" onclick="togglePassword('current_password', this)" aria-label="Show password">Show</button>
+                <input type="hidden" name="action" value="change_password">
+                {% if password_form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ password_form.non_field_errors }}
                     </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="{{ password_form.old_password.id_for_label }}">Current Password</label>
+                    <div class="password-wrapper">
+                        {{ password_form.old_password }}
+                        <button type="button" class="toggle-pw" onclick="togglePassword('{{ password_form.old_password.id_for_label }}', this)">Show</button>
+                    </div>
+                    {% for error in password_form.old_password.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="new_password">New Password</label>
+                        <label for="{{ password_form.new_password1.id_for_label }}">New Password</label>
                         <div class="password-wrapper">
-                            <input type="password" id="new_password" name="new_password" placeholder="Min. 8 characters" minlength="8" class="form-input" required>
-                            <button type="button" class="toggle-pw" onclick="togglePassword('new_password', this)" aria-label="Show password">Show</button>
+                            {{ password_form.new_password1 }}
+                            <button type="button" class="toggle-pw" onclick="togglePassword('{{ password_form.new_password1.id_for_label }}', this)">Show</button>
                         </div>
+                        {% for error in password_form.new_password1.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        <label for="confirm_password">Confirm New Password</label>
+                        <label for="{{ password_form.new_password2.id_for_label }}">Confirm New Password</label>
                         <div class="password-wrapper">
-                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat new password" minlength="8" class="form-input" required>
-                            <button type="button" class="toggle-pw" onclick="togglePassword('confirm_password', this)" aria-label="Show password">Show</button>
+                            {{ password_form.new_password2 }}
+                            <button type="button" class="toggle-pw" onclick="togglePassword('{{ password_form.new_password2.id_for_label }}', this)">Show</button>
                         </div>
+                        {% for error in password_form.new_password2.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
                     </div>
                 </div>
-
+                {% if password_form.new_password1.help_text %}
+                <div class="password-help">
+                    {{ password_form.new_password1.help_text|safe }}
+                </div>
+                {% endif %}
                 <div class="form-actions">
                     <button type="submit" class="btn-primary-profile">Update Password</button>
                 </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>
 {% endblock %}

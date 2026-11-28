@@ -5,6 +5,7 @@
     --base-variant1: #0b012af2;
     --base-variant2: #502497f8;
     --base-variant3: #240350d2;
+    --base-variant4: #020717f1;
     --accent-color:#0071ff;
     --accent-color2: #9bfff2d6;
     --accent-color3: #b3fff1;
@@ -24,6 +25,7 @@
     /* DEVICE DETAILS */
     --dd-container-bg: #7e78f082;
     --dd-performance-text: #f6f2feed;
+    --dd-subtitles: #151541;
     /* BANNER */
     --slide-col1: #9a86b3;
     --slide-title: #28dff4e0;
@@ -100,6 +102,12 @@
     --heartbeat-card-bg: #8cd5e1;
     --heartbeat-card-title: #0b0f23;
     --heartbeat-card-glow: #141330;
+    /* PERFORMANCES PAGE */
+    --circle-color: #ffffff;
+    --progress: #ffffff;
+    --performance-card-title: #bbffd6;
+    --performance-circle-title: #a7ffd6;
+    --performance-extra-info: #f6ffa8fb;
     /* PROCESSES PAGE */
     --process-btn-bg: #c6f3ff;
     --process-btn-txt: #2c1e50;
@@ -198,7 +206,10 @@
     --button-services-border-var1: #ff9b9bdf;
     --button-services-border-var2: #c6e0ffdf;
     /* TABLES */
-    --table-header: #131c52;
+    --table-header: #030a35d8;
+    --computer-line: rgba(13, 32, 51, 0.605);
+    --nav-button-border: #5067f8;
+    --nav-button-bg: #170b2e;
     /* FOOTER */
     --footer-text: #1d1d39;
     --footer-text-transition: #200045;
